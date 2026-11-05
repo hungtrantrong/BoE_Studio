@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoE Studio – Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --line:#e4e7ec; --line2:#eef0f3;
+  --text:#1d2433; --muted:#667085; --faint:#98a2b3;
+  --accent:#1f5fbf; --accent-soft:#eaf1fb;
+  --ok:#147a4b; --ok-soft:#e6f4ec; --bad:#b42318; --bad-soft:#fdecea;
+  --warn:#9a6700; --warn-soft:#fff6e0; --ovr:#7a3db8; --ovr-soft:#f3ecfb;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;font-size:13px;color:var(--text);background:var(--bg)}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh;min-width:1180px}
+aside{background:#fff;border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:0;height:100vh}
+.brand{font-weight:700;font-size:15px;padding:0 10px 18px;display:flex;gap:8px;align-items:center}
+.lang{display:inline-flex;margin:0 10px 14px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang a{padding:4px 12px;font-size:12px;cursor:pointer;color:var(--muted);font-weight:500}
+.lang a.active{background:var(--accent);color:#fff}
+.brand i{width:26px;height:26px;border-radius:6px;background:var(--accent);display:inline-block}
+.nav a{display:block;padding:9px 10px;border-radius:6px;color:var(--text);text-decoration:none;cursor:pointer;margin-bottom:2px}
+.nav a:hover{background:var(--bg)}
+.nav a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.nav .sec{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;padding:14px 10px 6px}
+.nav a.dis{color:var(--faint)}
+.user{position:absolute;bottom:16px;left:22px;font-size:12px;color:var(--muted)}
+main{padding:20px 28px 40px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.crumb{color:var(--muted);font-size:12px}
+h1{font-size:20px;margin:4px 0 0;font-weight:600}
+h2{font-size:14px;margin:0 0 12px;font-weight:600}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 12px;font:inherit;cursor:pointer;color:var(--text);white-space:nowrap}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btns{display:flex;gap:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.g-3-2{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+table{border-collapse:collapse;width:100%}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:12px;background:#fafbfc;white-space:normal}
+td:first-child,th:first-child{text-align:left}
+tr.b td{font-weight:600}
+tr.sub td{color:var(--muted)}
+tr.hl td{background:#fafbfc;font-weight:600}
+.neg{color:var(--bad)}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}.t-grey{background:#f0f2f5;color:var(--muted)}
+.t-ovr{background:var(--ovr-soft);color:var(--ovr)}.t-acc{background:var(--accent-soft);color:var(--accent)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tabs a{padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.active{color:var(--accent);border-color:var(--accent);font-weight:600}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .v{font-size:22px;font-weight:600;margin:6px 0 4px}
+.kpi .s{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.kpi.bad{border-color:#f3c1bc}
+.form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 16px}
+.f label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px}
+.f .in{border:1px solid var(--line);border-radius:6px;padding:7px 9px;background:#fff;display:flex;justify-content:space-between}
+.f .in.calc{background:#f7f8fa;color:var(--muted)}
+.f .in.ovr{border-color:#cdb4ec;background:var(--ovr-soft)}
+.f .u{color:var(--faint)}
+.hint{font-size:11px;color:var(--faint);margin-top:3px}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--muted);align-items:center;flex-wrap:wrap}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.alert{border-radius:6px;padding:10px 12px;font-size:12px;margin-bottom:12px;display:block}
+.alert.w{background:var(--warn-soft);color:#6b4a00;border:1px solid #f2dca6}
+.alert.i{background:var(--accent-soft);color:#174a94;border:1px solid #c9dbf4}
+.scroll{overflow-x:auto}
+.filters{display:flex;gap:8px;margin-bottom:12px}
+.filters .in{border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:#fff;color:var(--muted);min-width:140px}
+.screen{display:none}.screen.on{display:block}
+.pane{display:none}.pane.on{display:block}
+.slider{display:flex;align-items:center;gap:10px;margin:10px 0}
+.slider input{flex:1}
+.slider b{width:56px;text-align:right}
+.heat td{text-align:center;font-weight:500}
+.muted{color:var(--muted)}
+.right{text-align:right}
+.note{font-size:11px;color:var(--faint)}
+svg text{font-family:Inter,system-ui,sans-serif}
+.diff{background:var(--warn-soft)}
+.ph{border:1px dashed var(--line);border-radius:8px;padding:40px;text-align:center;color:var(--muted);background:#fff}
+.kpi .fx{font-size:10.5px;color:var(--faint);margin-top:8px;border-top:1px dashed var(--line2);padding-top:6px;line-height:1.4}
+.kpi.warn{border-color:#f2dca6}
+.rng{position:relative;height:6px;background:#eef0f3;border-radius:3px;width:110px;display:inline-block;vertical-align:middle}
+.rng b{position:absolute;top:0;height:6px;background:#c9dbf4;border-radius:3px}
+.rng i{position:absolute;top:-3px;width:3px;height:12px;border-radius:1px;background:#1d2433}
+.rng i.out{background:var(--bad)}
+.grp td{background:#f4f6f9;font-weight:600;color:var(--muted);font-size:12px}
+.chk{display:inline-block;width:14px;height:14px;border:1.5px solid #98a2b3;border-radius:3px;vertical-align:-2px;text-align:center;line-height:11px;font-size:10px}
+.chk.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.stabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.stabs a{padding:6px 12px;border:1px solid var(--line);border-radius:16px;cursor:pointer;color:var(--muted);background:#fff;font-size:12px}
+.stabs a.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.spane{display:none}.spane.on{display:block}
+td.l,th.l{text-align:left}
+.fxcell{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#344054;white-space:normal;text-align:left}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand"><i></i>BoE Studio</div>
+  <div class="lang" id="langSw"><a data-l="vi" class="active">VI</a><a data-l="en">EN</a></div>
+  <div class="nav">
+    <a data-s="list" class="active">Danh sách BoE</a>
+    <a data-s="detail">Hồ sơ BoE</a>
+    <div class="sec">Cấu hình</div>
+    <a data-s="params">Bảng tham chiếu Format × Vùng</a>
+    <a data-s="kpidef">Định nghĩa KPI</a>
+    <a data-s="mapping">Ánh xạ tài khoản Netsuite</a>
+    <div class="sec">Phase 2</div>
+    <a data-s="actual" class="dis">Đối chiếu thực tế vs BoE</a>
+  </div>
+  <div class="user">Finance · Nguyễn A<br><span class="note">Mockup – dữ liệu Kon Tum thật, store khác minh họa</span></div>
+</aside>
+
+<main>
+<!-- ============ LIST ============ -->
+<section class="screen on" id="s-list">
+  <div class="top">
+    <div><div class="crumb">BoE Studio</div><h1>Danh sách BoE</h1></div>
+    <div class="btns"><button class="btn">Xuất danh sách</button><button class="btn pri">+ Tạo BoE mới</button></div>
+  </div>
+  <div class="filters">
+    <div class="in">Tìm store / mã Netsuite…</div><div class="in">Format: Tất cả ▾</div><div class="in">Vùng: Tất cả ▾</div><div class="in">Trạng thái: Tất cả ▾</div><div class="in">Kết quả: Tất cả ▾</div>
+  </div>
+  <div class="card" style="padding:0">
+  <table>
+    <thead><tr><th>Store</th><th style="text-align:left">Format · Vùng</th><th>Khai trương</th><th>Tổng vốn (tr)</th><th>ADS (tr)</th><th>IRR 10Y</th><th>ROIC 1Y</th><th>Payback</th><th>Sales/CAPEX</th><th style="text-align:left">Đạt ngưỡng</th><th style="text-align:left">Trạng thái</th><th>Phiên bản</th></tr></thead>
+    <tbody id="listBody"></tbody>
+  </table>
+  </div>
+  <div class="note">KPI tính theo định nghĩa thống nhất (ROIC, Sales/CAPEX: định nghĩa đề xuất, chờ kế toán). Dĩ An: số thật từ file v2, CAPEX chưa cộng 327 tr hạng mục hiện trạng. Các store khác là minh họa.<br>Hệ thống không có bước duyệt. Trạng thái chỉ đánh dấu bản đã chốt để xuất trình duyệt bên ngoài: Nháp → Đã chốt (khóa, chụp lại bộ tham số).</div>
+</section>
+
+<!-- ============ DETAIL ============ -->
+<section class="screen" id="s-detail">
+  <div class="top">
+    <div><div class="crumb">Danh sách BoE / 30897 Buu Dien Kon Tum</div>
+      <h1>30897 Bưu Điện Kon Tum <span class="tag t-grey" style="vertical-align:3px">v4 · Nháp</span></h1>
+      <div class="muted" style="margin-top:4px">Core · Tây Nguyên · HC · 70 Lê Hồng Phong, P. Kon Tum, Quảng Ngãi · Khai trương 17/09/2026 · Bộ tham số: <span class="tag t-acc">Core × Tây Nguyên (hiệu lực 01/07/2026)</span></div>
+    </div>
+    <div class="btns"><button class="btn">Nhân bản</button><button class="btn">Xuất Excel</button><button class="btn">Xuất PDF</button><button class="btn pri">Tính lại</button></div>
+  </div>
+  <div class="tabs" id="dtabs">
+    <a data-p="in" class="active">1. Giả định đầu vào</a>
+    <a data-p="capex">2. CAPEX & Pre-opening</a>
+    <a data-p="lt">3. Giả định 10 năm & Tài chính</a>
+    <a data-p="res">4. Kết quả</a>
+    <a data-p="sens">5. Độ nhạy</a>
+    <a data-p="ver">6. Phiên bản</a>
+  </div>
+
+  <!-- 1 inputs -->
+  <div class="pane on" id="p-in">
+    <div class="legend" style="margin-bottom:12px">
+      <span><span class="sw" style="background:#fff;border:1px solid var(--line)"></span>Nhập tay</span>
+      <span><span class="sw" style="background:#f7f8fa;border:1px solid var(--line)"></span>Tự tính</span>
+      <span><span class="sw" style="background:var(--ovr-soft);border:1px solid #cdb4ec"></span>Ghi đè so với bộ tham số chuẩn</span>
+    </div>
+    <div class="card"><h2>Thông tin store & hợp đồng</h2>
+      <div class="form">
+        <div class="f"><label>Mã Netsuite</label><div class="in">30897</div></div>
+        <div class="f"><label>Tên store</label><div class="in">Bưu Điện Kon Tum</div></div>
+        <div class="f"><label>Entity</label><div class="in">HC ▾</div></div>
+        <div class="f"><label>Format</label><div class="in">Core ▾</div></div>
+        <div class="f"><label>Vùng</label><div class="in">Tây Nguyên ▾</div></div>
+        <div class="f"><label>Khu vực thương mại</label><div class="in">Residential ▾</div></div>
+        <div class="f"><label>Ngày bàn giao</label><div class="in">13/08/2026</div></div>
+        <div class="f"><label>Ngày thanh toán đầu tiên</label><div class="in">17/09/2026</div></div>
+        <div class="f"><label>Ngày khai trương</label><div class="in">17/09/2026</div></div>
+        <div class="f"><label>Thời hạn hợp đồng</label><div class="in">5 <span class="u">năm</span></div></div>
+        <div class="f"><label>Giá thuê tháng</label><div class="in">30 <span class="u">tr</span></div></div>
+        <div class="f"><label>Kỳ thanh toán · Đặt cọc</label><div class="in">Quý · 3 tháng (90 tr)</div></div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><h2>Doanh thu & kênh bán <span class="tag t-acc">Finance ước tính</span></h2>
+        <div class="form" style="grid-template-columns:repeat(2,1fr)">
+          <div class="f"><label>ADTC (bill/ngày)</label><div class="in">203</div></div>
+          <div class="f"><label>AC (nghìn VND)</label><div class="in">78</div></div>
+          <div class="f"><label>ADS</label><div class="in calc">15,83 <span class="u">tr/ngày</span></div></div>
+          <div class="f"><label>Doanh thu tháng</label><div class="in calc">475,0 <span class="u">tr</span></div></div>
+          <div class="f"><label>% In-store</label><div class="in">85%</div></div>
+          <div class="f"><label>% 3P (Grab, ShopeeFood…)</label><div class="in">5%</div></div>
+          <div class="f"><label>% 1P</label><div class="in calc">10%</div></div>
+          <div class="f"><label>Hoa hồng 3P bình quân</label><div class="in">11%</div></div>
+          <div class="f"><label>Group size / bill dine-in</label><div class="in">1,7</div></div>
+          <div class="f"><label>Chi tiêu / khách</label><div class="in calc">45,9 <span class="u">nghìn</span></div></div>
+        </div>
+      </div>
+      <div class="card"><h2>Cơ cấu chi phí (% doanh thu)</h2>
+        <table>
+          <thead><tr><th>Chỉ tiêu</th><th style="text-align:center">Khoảng Min – Chuẩn – Max</th><th>Store</th><th class="l">Trạng thái</th></tr></thead>
+          <tbody id="costRows"></tbody>
+        </table>
+        <div class="hint" style="margin-top:8px">Khoảng lấy từ Bảng tham chiếu Core × Tây Nguyên. Ngoài khoảng → bắt buộc nhập lý do. Lý do LC: <i>“Thị trường Kon Tum thiếu nhân sự, phải trả cao hơn mặt bằng”</i>.</div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><h2>Mặt bằng & sức chứa</h2>
+        <div class="form" style="grid-template-columns:repeat(3,1fr)">
+          <div class="f"><label>DT thuê</label><div class="in">300 <span class="u">m²</span></div></div>
+          <div class="f"><label>DT đầu tư – trong</label><div class="in">150 <span class="u">m²</span></div></div>
+          <div class="f"><label>DT đầu tư – ngoài</label><div class="in">50 <span class="u">m²</span></div></div>
+          <div class="f"><label>% BOH</label><div class="in">28%</div></div>
+          <div class="f"><label>% Dead space FOH</label><div class="in">15%</div></div>
+          <div class="f"><label>m²/khách</label><div class="in">1,5</div></div>
+          <div class="f"><label>Giá thuê/m²</label><div class="in calc">100.000</div></div>
+          <div class="f"><label>FOH net</label><div class="in calc">122,4 <span class="u">m²</span></div></div>
+          <div class="f"><label>Số ghế</label><div class="in calc">82</div></div>
+        </div>
+      </div>
+      <div class="card"><h2>Ramp-up 6 tháng đầu (% ADS mục tiêu)</h2>
+        <svg id="rampSvg" width="100%" height="150" viewBox="0 0 520 150"></svg>
+        <div class="hint">Mặc định từ bộ tham số Core × Tây Nguyên, sửa được theo store. Không trộn mùa vụ.</div>
+      </div>
+    </div>
+    <div class="card"><h2>Daypart – kiểm tra sức chứa giờ cao điểm</h2>
+      <table id="daypart"></table>
+      <div class="hint">Utilization 80%. Ghế cần lớn nhất = 73 / 82 ghế có sẵn → <span class="tag t-ok">Đủ ghế</span></div>
+    </div>
+  </div>
+
+  <!-- 2 capex -->
+  <div class="pane" id="p-capex">
+    <div class="grid" style="grid-template-columns:minmax(0,1fr) 330px">
+      <div>
+      <div class="alert w">⚠ 2 hạng mục xử lý hiện trạng có giá trị nhưng đang <b>không tính vào CAPEX</b> (Phá dỡ 75 tr, Cầu thang 100 tr). Dòng “Phát sinh khác” 471 tr đang gộp, cần tách chi tiết.</div>
+      <div class="card"><h2>A. Xây dựng cơ bản <span class="tag t-grey">Khấu hao 5 năm</span></h2>
+        <table>
+          <thead><tr><th>Hạng mục</th><th>ĐVT</th><th>KL</th><th>Đơn giá</th><th style="text-align:center">Khoảng chuẩn</th><th>Thành tiền (tr)</th><th style="text-align:center">Tính CAPEX</th></tr></thead>
+          <tbody id="consRows"></tbody>
+        </table>
+      </div>
+      <div class="card"><h2>B. Gói thiết bị chuẩn – Core × Tây Nguyên <span class="tag t-acc">Từ Bảng tham chiếu</span></h2>
+        <table>
+          <thead><tr><th>Nhóm</th><th>Min – Chuẩn – Max (tr)</th><th style="text-align:center">Khoảng</th><th>Store này (tr)</th><th>Khấu hao</th></tr></thead>
+          <tbody id="eqRows"></tbody>
+        </table>
+        <div class="hint">Mockup: số chuẩn lấy từ file Dĩ An (H80:H83). File Kon Tum chỉ có tổng 1.203 tr, nên tab Kết quả vẫn tính theo 1.203 tr. Thời gian khấu hao theo nhóm là đề xuất, chờ kế toán.</div>
+      </div>
+      <div class="card"><h2>C. Cảnh quan <span class="tag t-grey">Khấu hao 3 năm</span></h2>
+        <table><thead><tr><th>Hạng mục</th><th>m²</th><th>Đơn giá (tr/m²)</th><th>Thành tiền (tr)</th></tr></thead><tbody>
+          <tr><td>Cảnh quan trong nhà</td><td>150</td><td>0,16</td><td>24,0</td></tr>
+          <tr><td>Cảnh quan ngoài trời</td><td>50</td><td>0,22</td><td>11,0</td></tr>
+          <tr><td>Cây lớn</td><td>0 cây</td><td>20,0 / cây</td><td>0,0</td></tr>
+          <tr class="hl"><td>Tổng CAPEX (A + B + C)</td><td></td><td></td><td>3.488,6</td></tr>
+        </tbody></table>
+      </div>
+      </div>
+      <div>
+        <div class="card"><h2>Tổng tiền cần</h2>
+          <svg id="capexSvg" width="100%" height="300" viewBox="0 0 300 300"></svg>
+        </div>
+        <div class="card"><h2>Đặt cọc</h2>
+          <table><tbody>
+            <tr><td>3 tháng tiền thuê</td><td>90,0</td></tr>
+            <tr><td>Điện & nước (cố định)</td><td>50,0</td></tr>
+            <tr class="hl"><td>Tổng đặt cọc</td><td>140,0</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+    <div class="card"><h2>Chi phí pre-opening (phân bổ Opex / vốn hóa)</h2>
+      <table>
+        <thead><tr><th>Khoản mục</th><th style="text-align:left">Nhóm</th><th>Số tiền (tr)</th><th>% Opex</th><th>Opex – tháng 1 (tr)</th><th>Vốn hóa – KH 3 năm (tr)</th></tr></thead>
+        <tbody id="preop"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3 long-term -->
+  <div class="pane" id="p-lt">
+    <div class="alert w">⚠ Bảng tăng giá thuê (Y3 +10%, Y5 +10%) không khớp điều khoản hợp đồng “Năm 3–5: 33 tr/tháng” (chỉ tăng 1 lần). Hợp đồng 5 năm nhưng mô hình chạy 10 năm, cần nhập giả định gia hạn.</div>
+    <div class="card"><h2>Giả định 10 năm</h2>
+      <div class="scroll"><table id="ltTable"></table></div>
+      <div class="hint">Tái đầu tư năm N = Tổng CAPEX ban đầu (3.488,6 tr) × tỷ lệ năm N, khấu hao 5 năm từ năm phát sinh.</div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><h2>Tài chính</h2>
+        <div class="form" style="grid-template-columns:repeat(3,1fr)">
+          <div class="f"><label>Tỷ giá</label><div class="in">25.000</div></div>
+          <div class="f"><label>Thuế TNDN</label><div class="in">20%</div></div>
+          <div class="f"><label>Lãi vay</label><div class="in">10%</div></div>
+          <div class="f"><label>Tỷ lệ nợ</label><div class="in">70%</div></div>
+          <div class="f"><label>Tỷ lệ vốn chủ</label><div class="in calc">30%</div></div>
+          <div class="f"><label>Kỳ hạn vay</label><div class="in">5 <span class="u">năm</span></div></div>
+        </div>
+      </div>
+      <div class="card"><h2>Vốn lưu động</h2>
+        <div class="form" style="grid-template-columns:repeat(3,1fr)">
+          <div class="f"><label>Số ngày AR</label><div class="in">1</div></div>
+          <div class="f"><label>Số ngày AP</label><div class="in">27</div></div>
+          <div class="f"><label>Số ngày tồn kho</label><div class="in">10</div></div>
+        </div>
+        <div class="hint" style="margin-top:10px">Toàn bộ mục này lấy mặc định từ bộ tham số, thường không sửa.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 results -->
+  <div class="pane" id="p-res">
+    <div class="grid g6" id="kpis"></div>
+    <div style="height:16px"></div>
+    <div class="grid g-3-2">
+      <div class="card"><h2>Doanh thu, EBITDA & dòng tiền lũy kế 10 năm (tr VND)</h2>
+        <div class="legend" style="margin-bottom:6px"><span><span class="sw" style="background:#c9dbf4"></span>Doanh thu</span><span><span class="sw" style="background:#1f5fbf"></span>EBITDA</span><span><span class="sw" style="background:#147a4b"></span>FCF lũy kế</span></div>
+        <svg id="chart10" width="100%" height="260" viewBox="0 0 640 260"></svg>
+      </div>
+      <div class="card"><h2>P&L năm 1 (12 tháng ổn định)</h2>
+        <table>
+          <thead><tr><th>Chỉ tiêu</th><th>tr VND</th><th>% DT</th></tr></thead>
+          <tbody id="y1"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card"><h2>P&L theo tháng – 6 tháng ramp-up (Y0) + 12 tháng năm 1</h2>
+      <div class="scroll"><table id="monthly"></table></div>
+    </div>
+    <div class="card"><h2>Dự phóng 10 năm & dòng tiền</h2>
+      <div class="scroll"><table id="tenY"></table></div>
+      <div class="hint">Bảng cân đối, khấu hao chi tiết, lịch trả nợ mở trong mục “Xem chi tiết” (ẩn mặc định).</div>
+    </div>
+  </div>
+
+  <!-- 5 sensitivity -->
+  <div class="pane" id="p-sens">
+    <div class="alert i">Kéo thanh trượt để xem KPI thay đổi theo ADTC / AC. Đây là ước tính nhanh. Bấm “Lưu thành kịch bản” để engine chạy đầy đủ và lưu lại.</div>
+    <div class="grid g2">
+      <div class="card"><h2>Kịch bản nhanh</h2>
+        <div class="slider"><span style="width:90px">ADTC</span><input type="range" id="sA" min="-30" max="30" value="0" step="5"><b id="vA">0%</b></div>
+        <div class="slider"><span style="width:90px">AC</span><input type="range" id="sB" min="-20" max="20" value="0" step="5"><b id="vB">0%</b></div>
+        <div class="muted" id="sDesc" style="margin:4px 0 14px"></div>
+        <div class="grid g2" id="sK"></div>
+        <div style="margin-top:12px"><button class="btn">Lưu thành kịch bản</button></div>
+      </div>
+      <div class="card"><h2>Ma trận IRR 10Y theo ADTC × AC</h2>
+        <table class="heat" id="heat"></table>
+        <div class="hint">Xanh: đạt ngưỡng 22%. Đỏ: không đạt. Ô viền đậm là phương án hiện tại.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 versions -->
+  <div class="pane" id="p-ver">
+    <div class="card"><h2>So sánh phiên bản</h2>
+      <table>
+        <thead><tr><th>Chỉ tiêu</th><th>v1 · 12/08</th><th>v2 · 25/08</th><th>v3 · 02/09</th><th>v4 · 09/09 (hiện tại)</th></tr></thead>
+        <tbody>
+          <tr><td>ADTC</td><td>230</td><td class="diff">215</td><td>215</td><td class="diff">203</td></tr>
+          <tr><td>AC (nghìn)</td><td>75</td><td>75</td><td class="diff">78</td><td>78</td></tr>
+          <tr><td>% LC</td><td>12,0%</td><td>12,0%</td><td class="diff">14,2%</td><td>14,2%</td></tr>
+          <tr><td>Tổng vốn (tr)</td><td>3.650</td><td class="diff">3.890</td><td>3.890</td><td class="diff">3.962</td></tr>
+          <tr class="hl"><td>IRR 10Y</td><td>52%</td><td>47%</td><td>46%</td><td>45%</td></tr>
+          <tr class="hl"><td>Payback (năm)</td><td>1,9</td><td>2,1</td><td>2,2</td><td>2,26</td></tr>
+          <tr><td>Người sửa</td><td>Finance · A</td><td>Finance · A</td><td>Finance · B</td><td>Finance · A</td></tr>
+          <tr><td>Ghi chú</td><td style="text-align:right">Bản đầu</td><td>Cập nhật báo giá XD</td><td>Điều chỉnh LC</td><td>Giảm ADTC theo khảo sát</td></tr>
+        </tbody>
+      </table>
+      <div class="hint">Ô vàng = thay đổi so với phiên bản trước (số v1–v3 là minh họa). Mỗi phiên bản lưu đầy đủ input và snapshot bộ tham số.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARAMS ============ -->
+<section class="screen" id="s-params">
+  <div class="top">
+    <div><div class="crumb">Cấu hình</div><h1>Bảng tham chiếu Format × Vùng</h1></div>
+    <div class="btns"><button class="btn">Lịch sử thay đổi</button><button class="btn pri">+ Tạo phiên bản hiệu lực mới</button></div>
+  </div>
+  <div class="grid" style="grid-template-columns:330px minmax(0,1fr)">
+    <div class="card"><h2>Format × Vùng</h2>
+      <table>
+        <thead><tr><th>Format</th><th>Bắc</th><th>Trung</th><th>T.Nguyên</th><th>Nam</th></tr></thead>
+        <tbody>
+          <tr><td>Core</td><td>✓</td><td>✓</td><td style="background:var(--accent-soft);color:var(--accent);font-weight:600">✓</td><td>✓</td></tr>
+          <tr><td>Kiosk</td><td>✓</td><td>✓</td><td>—</td><td>✓</td></tr>
+          <tr><td>Flagship</td><td>✓</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td>Drive-thru</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+        </tbody>
+      </table>
+      <div class="hint" style="margin-top:8px">“—” = chưa có bộ riêng, dùng bộ mặc định của Format.</div>
+    </div>
+    <div class="card"><h2>Core × Tây Nguyên <span class="tag t-ok">Hiệu lực từ 01/07/2026</span> <span class="tag t-grey">Phiên bản 3</span></h2>
+      <div class="stabs" id="ptabs">
+        <a data-q="thr" class="active">Ngưỡng KPI</a><a data-q="cap">Đơn giá xây dựng</a><a data-q="eq">Gói thiết bị</a><a data-q="cost">Chi phí & kênh</a><a data-q="lt">Ramp-up & 10 năm</a><a data-q="fin">Tài chính</a>
+      </div>
+      <div class="spane on" id="q-thr">
+        <table>
+          <thead><tr><th>KPI</th><th style="text-align:center">Áp dụng</th><th style="text-align:center">Chiều</th><th>Ngưỡng đạt</th><th>Vùng “sát ngưỡng” (vàng)</th><th class="l">Công thức (xem Định nghĩa KPI)</th></tr></thead>
+          <tbody id="thrRows"></tbody>
+        </table>
+        <div class="hint" style="margin-top:8px">Ngưỡng là <b>giá trị cố định</b> theo Format × Vùng, người lập BoE không sửa được. Đối chiếu: Core × Nam (theo file Dĩ An) dùng IRR 10Y 24,4% · ROIC 50,7% · Sales/CAPEX 2,14.</div>
+      </div>
+      <div class="spane" id="q-cap"><table><thead><tr><th>Hạng mục</th><th>ĐVT</th><th>Min</th><th>Chuẩn</th><th>Max</th><th class="l">Nhóm</th></tr></thead><tbody id="capRows"></tbody></table>
+        <div class="hint" style="margin-top:8px">Danh mục hạng mục dùng chung; Bảng tham chiếu chỉ quy định khoảng đơn giá theo vùng. Hạng mục xử lý hiện trạng không có đơn giá chuẩn, nhập theo báo giá.</div></div>
+      <div class="spane" id="q-eq"><table><thead><tr><th>Nhóm thiết bị</th><th>Min (tr)</th><th>Chuẩn (tr)</th><th>Max (tr)</th><th>Khấu hao</th></tr></thead><tbody id="eqParam"></tbody></table>
+        <div class="hint" style="margin-top:8px">Số chuẩn minh họa lấy từ file Dĩ An (H80:H83). Khoảng ±10% là giả định của mockup.</div></div>
+      <div class="spane" id="q-cost"><table><thead><tr><th>Chỉ tiêu</th><th>Min</th><th>Chuẩn</th><th>Max</th></tr></thead><tbody id="costParam"></tbody></table></div>
+      <div class="spane" id="q-lt"><div class="scroll"><table id="paramLT"></table></div><div class="hint">Ramp-up: store được sửa trong khoảng ±15 điểm % so với chuẩn.</div></div>
+      <div class="spane" id="q-fin"><table><thead><tr><th>Tham số</th><th>Giá trị (cố định)</th></tr></thead><tbody>
+        <tr><td>Tỷ giá USD/VND</td><td>25.000</td></tr><tr><td>Thuế TNDN</td><td>20%</td></tr><tr><td>Lãi vay</td><td>10%</td></tr>
+        <tr><td>Nợ / Vốn chủ</td><td>70% / 30%</td></tr><tr><td>Kỳ hạn vay</td><td>5 năm</td></tr><tr><td>AR / AP / Tồn kho</td><td>1 / 27 / 10 ngày</td></tr>
+        <tr><td>Tái đầu tư – đóng cửa</td><td>1 tháng · tiết kiệm 35% LC & OCE</td></tr></tbody></table></div>
+      <div class="note" style="margin-top:10px">Số trong Bảng tham chiếu là minh họa cho mockup, trừ các giá trị lấy từ file Kon Tum.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KPI DEF ============ -->
+<section class="screen" id="s-kpidef">
+  <div class="top">
+    <div><div class="crumb">Cấu hình</div><h1>Định nghĩa KPI</h1></div>
+    <div class="btns"><button class="btn">Lịch sử phiên bản</button><button class="btn pri">+ Phiên bản công thức mới</button></div>
+  </div>
+  <div class="alert i">Công thức KPI áp dụng <b>chung cho mọi store</b>; chỉ Admin Finance sửa được và mỗi lần sửa tạo phiên bản mới. Ngưỡng đạt thì thiết lập riêng theo Format × Vùng trong Bảng tham chiếu. BoE đã chốt giữ nguyên phiên bản công thức tại thời điểm chốt.</div>
+  <div class="card" style="padding:0"><table>
+    <thead><tr><th>KPI</th><th class="l">Công thức (phiên bản 1)</th><th class="l">Ghi chú</th><th class="l">Trạng thái</th></tr></thead>
+    <tbody id="kdefRows"></tbody></table></div>
+  <div class="card"><h2>Tham khảo: cách tính đang dùng trong file Excel (không thống nhất)</h2>
+    <table><thead><tr><th>KPI</th><th class="l">Kon Tum v4</th><th class="l">Dĩ An v2</th></tr></thead><tbody>
+      <tr><td>ROIC 1Y</td><td class="fxcell">EBITDA Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)</td><td class="fxcell">EBITDA Y1 ÷ (Xây dựng + Thiết bị)</td></tr>
+      <tr><td>Sales/CAPEX</td><td class="fxcell">Doanh thu Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)</td><td class="fxcell">Doanh thu Y1 ÷ (Xây dựng + Thiết bị)</td></tr>
+      <tr><td>Kiểm tra Payback</td><td class="fxcell">Không có</td><td class="fxcell">Payback ≥ ngưỡng (sai chiều), ngưỡng = 0</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ============ MAPPING ============ -->
+<section class="screen" id="s-mapping">
+  <div class="top"><div><div class="crumb">Cấu hình</div><h1>Ánh xạ tài khoản Netsuite → dòng BoE</h1></div><div class="btns"><button class="btn">Import từ Excel</button></div></div>
+  <div class="alert i">Chuẩn bị cho Phase 2. Mỗi tài khoản P&L của Netsuite gán vào 1 dòng BoE, để sau này kéo số thực tế theo mã store và so sánh.</div>
+  <div class="card" style="padding:0"><table>
+    <thead><tr><th>Dòng BoE</th><th style="text-align:left">Tài khoản Netsuite (ví dụ)</th><th>Số TK đã gán</th><th style="text-align:left">Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td>Revenue</td><td style="text-align:left">511x – Doanh thu bán hàng</td><td>6</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+      <tr><td>COGS</td><td style="text-align:left">632x – Giá vốn</td><td>4</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+      <tr><td>Rent</td><td style="text-align:left">6417 – Thuê mặt bằng</td><td>2</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+      <tr><td>LC</td><td style="text-align:left">6411, 6412 – Lương, BHXH</td><td>5</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+      <tr><td>MKT</td><td style="text-align:left">6418x – Marketing</td><td>1</td><td style="text-align:left"><span class="tag t-warn">Cần xác nhận</span></td></tr>
+      <tr><td>CMS</td><td style="text-align:left">—</td><td>0</td><td style="text-align:left"><span class="tag t-bad">Chưa gán</span></td></tr>
+      <tr><td>OCE</td><td style="text-align:left">6413–6419 – Chi phí vận hành khác</td><td>12</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+      <tr><td>Depreciation</td><td style="text-align:left">6414 – Khấu hao</td><td>1</td><td style="text-align:left"><span class="tag t-ok">Đủ</span></td></tr>
+    </tbody></table></div>
+  <div class="note">Mã tài khoản trong bảng chỉ là minh họa.</div>
+</section>
+
+<!-- ============ ACTUAL (phase 2) ============ -->
+<section class="screen" id="s-actual">
+  <div class="top"><div><div class="crumb">Phase 2</div><h1>Đối chiếu thực tế vs BoE</h1></div></div>
+  <div class="ph">
+    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px">Phase 2 – chưa làm trong bản này</div>
+    Store mở trong 24 tháng gần nhất · KPI theo tháng: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · CAPEX thực chi · Ngày khai trương thực tế<br>
+    Cảnh báo theo ngoại lệ (ví dụ ADS thấp hơn BoE quá 15% sau tháng 6) · Tính lại IRR bằng số thực tế
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+const fmt=(v,d=1)=>v==null?'':new Intl.NumberFormat('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+const pct=(v,d=1)=>fmt(v*100,d)+'%';
+const cell=(v,d=1)=>`<td class="${v<0?'neg':''}">${fmt(v,d)}</td>`;
+
+/* ---------- data from Excel (Kon Tum v4) ---------- */
+const M={ADS:[12.67,14.25,15.04,15.83,14.25,15.04,15.83,15.83,15.83,15.83,15.83,15.83,15.83,15.83,15.83,15.83,15.83,15.83],
+ADTC:[162.4,182.7,192.85,203,182.7,192.85,203,203,203,203,203,203,203,203,203,203,203,203],
+Revenue:[380.02,427.52,451.27,475.02,427.52,451.27,475.02,475.02,475.02,475.02,475.02,475.02,475.02,475.02,475.02,475.02,475.02,475.02],
+COGS:[109.46,123.14,129.98,136.82,123.14,129.98,136.82,136.82,136.82,136.82,136.82,136.82,136.82,136.82,136.82,136.82,136.82,136.82],
+GP:[270.56,304.38,321.29,338.2,304.38,321.29,338.2,338.2,338.2,338.2,338.2,338.2,338.2,338.2,338.2,338.2,338.2,338.2],
+Rent:Array(18).fill(30),
+LC:[142.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35,67.35],
+MKT:[37.9,14.51,15.32,16.12,14.51,15.32,16.12,16.12,16.12,16.12,16.12,16.12,16.12,16.12,16.12,16.12,16.12,16.12],
+CMS:[2.09,2.35,2.48,2.61,2.35,2.48,2.61,2.61,2.61,2.61,2.61,2.61,2.61,2.61,2.61,2.61,2.61,2.61],
+OCE:[148.2,39.6,41.8,44,39.6,41.8,44,44,44,44,44,44,44,44,44,44,44,44],
+EBITDA:[-89.98,150.57,164.34,178.12,150.57,164.34,178.12,178.12,178.12,178.12,178.12,178.12,178.12,178.12,178.12,178.12,178.12,178.12],
+Depreciation:Array(18).fill(65.02),
+NOI:[-155,85.55,99.32,113.09,85.55,99.32,113.09,113.09,113.09,113.09,113.09,113.09,113.09,113.09,113.09,113.09,113.09,113.09]};
+const Y={Revenue:[2612.61,5700.24,6099.26,6526.2,6983.04,7471.85,7994.88,8394.63,8814.36,9255.07,9717.83],
+ADTC:[186.08,203,217.21,232.41,248.68,266.09,284.72,298.95,313.9,329.6,346.08],
+COGS:[752.51,1641.85,1756.78,1879.75,2011.34,2152.13,2302.78,2417.92,2538.81,2665.76,2799.04],
+Rent:[180,360,360,396,396,435.6,435.6,435.6,435.6,435.6,435.6],
+LC:[479.08,808.16,888.98,888.98,977.88,977.88,1075.66,1075.66,1183.23,1183.23,1301.55],
+EBITDA:[717.96,2137.39,2287.96,2499.54,2675.56,2919.42,3124.94,3356.75,3492.58,3748.16,3898.18],
+Depreciation:[410.13,822.34,845.37,745.23,645.08,499.76,233.74,701.21,701.21,784.93,666.32],
+NOI:[307.84,1315.04,1442.59,1754.32,2030.48,2419.66,2891.2,2655.54,2791.38,2963.22,3231.86],
+Interest:[119.99,202.37,155.3,110.27,63.63,44.62,45.18,102.32,143.1,113.8,85.71],
+CIT:[37.57,222.53,257.46,328.81,393.37,475.01,569.21,510.64,529.66,569.89,629.23],
+NI:[150.28,890.14,1029.84,1315.24,1573.48,1900.03,2276.82,2042.58,2118.62,2279.54,2516.92],
+CFO:[560.41,1473.1,1619.63,1785.55,1925.02,2084.11,2173.46,2388.58,2448.12,2672.8,2773.36],
+CFI:[-3961.59,-10.47,-115.12,-115.12,-115.12,-708.18,-115.12,-2452.48,-115.12,-533.75,-115.12],
+FCF:[-3401.18,1462.63,1504.51,1670.43,1809.9,1375.93,2058.34,-63.9,2332.99,2139.04,2658.23]};
+const cum=a=>a.reduce((acc,v,i)=>(acc.push((acc[i-1]||0)+v),acc),[]);
+Y.CUM=cum(Y.FCF);
+
+/* ---------- nav ---------- */
+document.querySelectorAll('.nav a[data-s]').forEach(a=>a.onclick=()=>{
+  document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+a.dataset.s).classList.add('on');});
+document.querySelectorAll('#dtabs a').forEach(a=>a.onclick=()=>{
+  document.querySelectorAll('#dtabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+a.dataset.p).classList.add('on');});
+function openDetail(){document.querySelector('.nav a[data-s=detail]').click()}
+
+/* ---------- list ---------- */
+const rows=[
+ ['30897 Bưu Điện Kon Tum','Core · Tây Nguyên','17/09/2026',3962,15.83,.45,.559,2.26,1.63,'5/6','Nháp','v4',true],
+ ['HCSBDU0037 Nguyễn Tri Phương Dĩ An','Core · Nam','10/01/2026',4079,12.48,.202,.369,3.84,1.27,'0/6','Đã chốt','v2'],
+ ['30912 Nguyễn Huệ Pleiku','Core · Tây Nguyên','05/11/2026',3720,17.10,.51,.61,2.05,2.12,'6/6','Đã chốt','v2'],
+ ['30915 Vincom Quy Nhơn','Kiosk · Trung','20/11/2026',1450,9.80,.38,.72,1.70,2.40,'6/6','Đã chốt','v3'],
+ ['30920 Phạm Văn Đồng Đà Nẵng','Core · Trung','01/12/2026',4210,14.20,.19,.38,4.10,1.35,'2/6','Nháp','v1'],
+ ['30921 Aeon Bình Tân','Kiosk · Nam','15/12/2026',1620,11.50,.47,.80,1.60,2.55,'6/6','Nháp','v2'],
+ ['30925 Ecopark Văn Giang','Flagship · Bắc','10/01/2027',6850,24.60,.28,.47,3.20,1.95,'4/6','Nháp','v1']];
+document.getElementById('listBody').innerHTML=rows.map(r=>`<tr style="cursor:pointer" onclick="openDetail()">
+ <td><b>${r[0]}</b></td><td style="text-align:left">${r[1]}</td><td>${r[2]}</td><td>${fmt(r[3],0)}</td><td>${fmt(r[4],2)}</td>
+ <td>${pct(r[5],0)}</td><td>${pct(r[6],0)}</td><td>${fmt(r[7],2)}</td><td>${fmt(r[8],2)}</td>
+ <td style="text-align:left"><span class="tag ${r[9]=='6/6'?'t-ok':(parseInt(r[9])>=4?'t-warn':'t-bad')}">${r[9]} KPI</span></td>
+ <td style="text-align:left"><span class="tag ${r[10]=='Đã chốt'?'t-acc':'t-grey'}">${r[10]}</span></td><td>${r[11]}</td></tr>`).join('');
+
+/* ---------- ramp svg ---------- */
+(function(){const v=[.8,.9,.95,1,.9,.95];const s=document.getElementById('rampSvg');let h='';
+ const x0=40,w=78,base=125,sc=100;
+ [0.5,0.75,1].forEach(g=>{const y=base-(g-0.5)*2*sc;h+=`<line x1="${x0}" x2="510" y1="${y}" y2="${y}" stroke="#eef0f3"/><text x="${x0-6}" y="${y+4}" font-size="10" fill="#98a2b3" text-anchor="end">${g*100}%</text>`});
+ v.forEach((p,i)=>{const bh=(p-0.5)*2*sc;const x=x0+10+i*w;h+=`<rect x="${x}" y="${base-bh}" width="${w-24}" height="${bh}" rx="3" fill="#1f5fbf" opacity="${.45+p*.5}"/><text x="${x+(w-24)/2}" y="${base-bh-5}" font-size="11" text-anchor="middle" fill="#1d2433">${Math.round(p*100)}%</text><text x="${x+(w-24)/2}" y="${base+16}" font-size="10" text-anchor="middle" fill="#667085">T${i+1}</text>`});
+ s.innerHTML=h;})();
+
+/* ---------- daypart ---------- */
+(function(){const d=[['01. Sáng (6:00–8:59)',.17,29.3,49.9,2,31.2],['02. Giữa sáng (9:00–10:59)',.20,34.5,58.7,1,73.3],['03. Trưa (11:00–13:59)',.18,31.1,52.8,1,66.0],['04. Tea time (14:00–15:59)',.13,22.4,38.1,2,23.8],['05. Chiều tối (16:00–18:59)',.13,22.4,38.1,2,23.8],['06. Hangout (19:00–20:59)',.17,29.3,49.9,1,62.3],['07. Khuya (21:00–5:59)',.02,3.5,5.9,1,7.3]];
+ document.getElementById('daypart').innerHTML='<thead><tr><th>Khung giờ</th><th>% traffic</th><th>Bill dine-in</th><th>Lượt khách</th><th>Vòng quay</th><th>Ghế cần</th><th style="width:220px;text-align:left">so với 82 ghế</th></tr></thead><tbody>'+
+ d.map(r=>`<tr><td>${r[0]}</td><td>${pct(r[1],0)}</td><td>${fmt(r[2])}</td><td>${fmt(r[3])}</td><td>${r[4]}</td><td>${fmt(r[5])}</td><td style="text-align:left"><div style="background:#eef0f3;border-radius:3px;height:8px;width:200px"><div style="background:${r[5]/82>.85?'#9a6700':'#1f5fbf'};height:8px;border-radius:3px;width:${r[5]/82*200}px"></div></div></td></tr>`).join('')+'</tbody>';})();
+
+/* ---------- capex donut ---------- */
+(function(){const parts=[['Xây dựng',2250.59,'#1f5fbf'],['Thiết bị & cảnh quan',1238,'#6f9be0'],['Pre-opening',333,'#b8cdee'],['Đặt cọc',140,'#dfe7f3']];
+ const tot=parts.reduce((a,p)=>a+p[1],0);let a0=-Math.PI/2,h='';const cx=150,cy=90,r=75,ri=50;
+ parts.forEach((p,i)=>{const a1=a0+p[1]/tot*2*Math.PI;const lg=a1-a0>Math.PI?1:0;
+  const P=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const [x1,y1]=P(a0,r),[x2,y2]=P(a1,r),[x3,y3]=P(a1,ri),[x4,y4]=P(a0,ri);
+  h+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg} 1 ${x2},${y2} L${x3},${y3} A${ri},${ri} 0 ${lg} 0 ${x4},${y4} Z" fill="${p[2]}" stroke="#fff" stroke-width="2"/>`;
+  h+=`<rect x="20" y="${190+i*24}" width="10" height="10" rx="2" fill="${p[2]}"/><text x="36" y="${199+i*24}" font-size="12" fill="#667085">${p[0]}</text><text x="285" y="${199+i*24}" font-size="12" text-anchor="end" fill="#1d2433">${fmt(p[1])}</text>`;a0=a1;});
+ h+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="15" font-weight="600" fill="#1d2433">${fmt(tot)}</text><text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="10" fill="#667085">tr VND</text>`;
+ document.getElementById('capexSvg').innerHTML=h;})();
+
+/* ---------- preopening ---------- */
+(function(){const p=[['Phí marketing khai trương','MKT',25,1],['Phí giấy phép xây dựng','OCE',20,0],['Công tác phí','OCE',113,1],['Lương nhân sự pre-opening','LC',50,1],['Phí thiết kế','OCE',75,0],['Hoa hồng NSO','LC',50,.5],['PCCC, mở rộng, công chứng, điện nước, khác','OCE',0,1]];
+ let to=0,tc=0,tt=0;const b=p.map(r=>{const o=r[2]*r[3],c=r[2]-o;to+=o;tc+=c;tt+=r[2];return `<tr><td>${r[0]}</td><td style="text-align:left"><span class="tag t-grey">${r[1]}</span></td><td>${fmt(r[2])}</td><td>${pct(r[3],0)}</td><td>${fmt(o)}</td><td>${fmt(c)}</td></tr>`}).join('');
+ document.getElementById('preop').innerHTML=b+`<tr class="hl"><td>Tổng</td><td></td><td>${fmt(tt)}</td><td></td><td>${fmt(to)}</td><td>${fmt(tc)}</td></tr>`;})();
+
+/* ---------- long-term assumptions ---------- */
+const LT={g:[.07,.07,.07,.07,.07,.07,.05,.05,.05,.05],r:[0,0,.1,0,.1,0,0,0,0,0],w:[0,.1,0,.1,0,.1,0,.1,0,.1],ri:[.003,.033,.033,.033,.203,.033,.703,.033,.153,.033]};
+function ltTable(withRamp){const hd='<thead><tr><th>Giả định</th>'+[...Array(10)].map((_,i)=>`<th>Y${i+1}</th>`).join('')+'</tr></thead>';
+ const row=(n,a,cls='')=>`<tr><td>${n}</td>`+a.map((v,i)=>`<td class="${cls&&cls(i)?'diff':''}">${pct(v)}</td>`).join('')+'</tr>';
+ let b=row('Tăng trưởng sales',LT.g)+row('Tăng giá thuê',LT.r,withRamp?null:i=>i==4)+row('Tăng lương',LT.w)+row('Tái đầu tư (% CAPEX ban đầu)',LT.ri);
+ if(!withRamp)b+=`<tr class="sub"><td>→ Số tiền tái đầu tư (tr)</td>`+LT.ri.map(v=>`<td>${fmt(v*3488.59)}</td>`).join('')+'</tr>';
+ if(withRamp)b='<tr><td>Ramp-up T1–T6 (% ADS)</td><td>80%</td><td>90%</td><td>95%</td><td>100%</td><td>90%</td><td>95%</td><td colspan="4" class="muted" style="text-align:left">từ T7: 100%</td></tr>'+b;
+ return hd+'<tbody>'+b+'</tbody>';}
+document.getElementById('ltTable').innerHTML=ltTable(false);
+document.getElementById('paramLT').innerHTML=ltTable(true);
+
+/* ---------- results ---------- */
+/* KPI: [name, value, threshold, type, dir, warnEdge, formula, pending, note] */
+const K=[
+ ['IRR 10Y',.45,.22,'pct','≥',.25,'IRR(FCF Y0…Y10), có tái đầu tư'],
+ ['IRR 5Y',.36,.08,'pct','≥',.10,'IRR(FCF Y0…Y5)'],
+ ['ROIC 1Y',.559,.43,'pct','≥',.48,'EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)',1,'File Excel: 56,3%'],
+ ['Payback (tái ĐT)',2.26,3.81,'yr','≤',3.5,'Năm FCF lũy kế (có tái ĐT) chuyển dương, nội suy'],
+ ['Payback (ban đầu)',1.90,2.83,'yr','≤',2.6,'Như trên, chỉ tính đầu tư ban đầu'],
+ ['Sales / CAPEX',1.634,2.07,'x','≥',2.2,'Doanh thu Y1 ÷ (Xây dựng + Thiết bị + Cảnh quan)',1,'File Excel: 1,50']];
+const showV=(v,t)=>t=='pct'?pct(v,0):t=='yr'?fmt(v,2)+' năm':fmt(v,2)+'x';
+const kStat=(v,thr,dir,w)=>{const ok=dir=='≥'?v>=thr:v<=thr;if(!ok)return 'bad';const near=dir=='≥'?v<w:v>w;return near?'warn':'ok'};
+document.getElementById('kpis').innerHTML=K.map(k=>{const s=kStat(k[1],k[2],k[4],k[5]);
+ return `<div class="kpi ${s=='ok'?'':s}"><div class="l">${k[0]}</div><div class="v">${showV(k[1],k[3])}</div><div class="s"><span>Ngưỡng ${k[4]} ${showV(k[2],k[3])}</span><span class="tag ${s=='ok'?'t-ok':s=='warn'?'t-warn':'t-bad'}">${s=='ok'?'Đạt':s=='warn'?'Sát ngưỡng':'Không đạt'}</span></div>
+ <div class="fx">= ${k[6]}${k[7]?`<br><span style="color:#9a6700">Định nghĩa đề xuất, chờ kế toán · ${k[8]}</span>`:''}</div></div>`}).join('');
+
+/* ---------- cost ranges ---------- */
+function rng(min,std,max,val,lo,hi){const p=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100));const out=val<min||val>max;
+ return `<span class="rng"><b style="left:${p(min)}%;width:${p(max)-p(min)}%"></b><i style="left:calc(${p(std)}% - 1px);background:#98a2b3"></i><i class="${out?'out':''}" style="left:calc(${p(val)}% - 1px)"></i></span>`}
+const COST=[['% COGS',.26,.288,.30,.288],['% LC (Labor)',.11,.12,.14,.142],['% MKT',.03,.034,.04,.034],['% OCE',.08,.093,.10,.093]];
+document.getElementById('costRows').innerHTML=COST.map(c=>{const out=c[4]<c[1]||c[4]>c[3];
+ return `<tr><td>${c[0]}</td><td style="text-align:center">${rng(c[1],c[2],c[3],c[4],c[1]-(c[3]-c[1])*.6,c[3]+(c[3]-c[1])*.6)}<div class="note">${pct(c[1])} – ${pct(c[2])} – ${pct(c[3])}</div></td><td><b>${pct(c[4])}</b></td><td class="l">${out?'<span class="tag t-warn">Ngoài khoảng</span>':'<span class="tag t-ok">Trong khoảng</span>'}</td></tr>`}).join('')+
+ `<tr class="sub"><td>% CMS (= %3P × hoa hồng)</td><td style="text-align:center">—</td><td>0,55%</td><td></td></tr><tr class="sub"><td>Rent (số tuyệt đối)</td><td style="text-align:center">—</td><td>30 tr</td><td class="l">${'<span class="tag t-grey">= 6,3% DT</span>'}</td></tr>`;
+document.getElementById('costParam').innerHTML=COST.map(c=>`<tr><td>${c[0]}</td><td>${pct(c[1])}</td><td><b>${pct(c[2])}</b></td><td>${pct(c[3])}</td></tr>`).join('')+
+ '<tr><td>Kênh IS / 3P / 1P (chuẩn)</td><td colspan="3" style="text-align:center">85% / 5% / 10%</td></tr><tr><td>Hoa hồng 3P</td><td colspan="3" style="text-align:center">11% (cố định)</td></tr>';
+
+/* ---------- construction line items ---------- */
+const CONS=[
+ ['g','Hoàn thiện'],
+ ['Hoàn thiện trong nhà','m²',150,'343 USD',[320,343,400],343,1286.25,1],
+ ['Hoàn thiện ngoài trời','m²',50,'3,25 tr',[2.5,3.25,3.5],3.25,162.5,1],
+ ['Vận chuyển','m²',200,'0,75 tr',[.6,.75,.9],.75,150,1],
+ ['FSC','gói',1,'50 tr',null,0,50,1],
+ ['Façade','m',18,'2,05 tr',[1.7,2.05,2.5],2.05,36.9,1],
+ ['Vách kính','m',36,'2,6 tr',[2.2,2.6,3],2.6,93.6,1],
+ ['g','Xử lý hiện trạng (theo báo giá)'],
+ ['Phá dỡ hiện trạng','gói',1,'75 tr',null,0,75,0],
+ ['Cầu thang','gói',1,'100 tr',null,0,100,0],
+ ['Nâng cấp điện · Gia cố kết cấu · Sửa mái','gói',0,'—',null,0,0,1],
+ ['Phát sinh khác (Add-in, đang gộp)','gói',1,'471,3 tr',null,0,471.34,1,'warn']];
+let consTot=0;
+document.getElementById('consRows').innerHTML=CONS.map(r=>{if(r[0]=='g')return `<tr class="grp"><td colspan="7">${r[1]}</td></tr>`;
+ if(r[7])consTot+=r[6];const R=r[4];
+ return `<tr style="${r[7]?'':'color:#98a2b3'}"><td>${r[0]}${r[8]?' <span class="tag t-warn">Cần tách chi tiết</span>':''}${!r[7]&&r[6]?' <span class="tag t-warn">Chưa tính</span>':''}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td>
+ <td style="text-align:center">${R?rng(R[0],R[1],R[2],r[5],R[0]-(R[2]-R[0])*.5,R[2]+(R[2]-R[0])*.5):'<span class="note">báo giá</span>'}</td><td>${fmt(r[6])}</td><td style="text-align:center"><span class="chk ${r[7]?'on':''}">${r[7]?'✓':''}</span></td></tr>`}).join('')+
+ `<tr class="hl"><td>Tổng xây dựng (tính CAPEX)</td><td></td><td></td><td></td><td></td><td>${fmt(consTot)}</td><td></td></tr>`;
+
+/* ---------- equipment package ---------- */
+const EQ=[['Equipment (bếp, bar)',1165.7,'5 năm'],['Tools',44.7,'3 năm'],['Setup',174.8,'3 năm'],['IT Equipment',281.2,'3 năm']];
+document.getElementById('eqRows').innerHTML=EQ.map(e=>`<tr><td>${e[0]}</td><td>${fmt(e[1]*.9)} – ${fmt(e[1])} – ${fmt(e[1]*1.1)}</td><td style="text-align:center">${rng(e[1]*.9,e[1],e[1]*1.1,e[1],e[1]*.75,e[1]*1.25)}</td><td class="muted">—</td><td>${e[2]}</td></tr>`).join('')+
+ `<tr class="hl"><td>Tổng gói chuẩn</td><td>${fmt(1666.4*.9)} – ${fmt(1666.4)} – ${fmt(1666.4*1.1)}</td><td></td><td>1.203,0 <span class="tag t-warn">Ngoài khoảng</span></td><td></td></tr>`;
+document.getElementById('eqParam').innerHTML=EQ.map(e=>`<tr><td>${e[0]}</td><td>${fmt(e[1]*.9)}</td><td><b>${fmt(e[1])}</b></td><td>${fmt(e[1]*1.1)}</td><td>${e[2]}</td></tr>`).join('')+`<tr class="hl"><td>Tổng</td><td>${fmt(1666.4*.9)}</td><td>${fmt(1666.4)}</td><td>${fmt(1666.4*1.1)}</td><td></td></tr>`;
+document.getElementById('capRows').innerHTML=CONS.filter(r=>r[0]!='g').map(r=>{const R=r[4];const grp=CONS.indexOf(r)>7?'Xử lý hiện trạng':'Hoàn thiện';
+ const u=r[3].includes('USD')?'USD/'+r[1]:'tr/'+r[1];
+ return `<tr><td>${r[0].replace(' (Add-in, đang gộp)','')}</td><td>${R?u:'—'}</td><td>${R?fmt(R[0],2):'—'}</td><td><b>${R?fmt(R[1],2):'—'}</b></td><td>${R?fmt(R[2],2):'—'}</td><td class="l"><span class="tag t-grey">${grp}</span></td></tr>`}).join('');
+
+/* ---------- thresholds & KPI definitions ---------- */
+document.getElementById('thrRows').innerHTML=K.map(k=>`<tr><td>${k[0]}</td><td style="text-align:center"><span class="chk on">✓</span></td><td style="text-align:center">${k[4]}</td><td><b>${showV(k[2],k[3])}</b></td><td>${k[4]=='≥'?showV(k[2],k[3])+' – '+showV(k[5],k[3]):showV(k[5],k[3])+' – '+showV(k[2],k[3])}</td><td class="fxcell">${k[6]}</td></tr>`).join('');
+document.getElementById('kdefRows').innerHTML=K.map(k=>`<tr><td><b>${k[0]}</b></td><td class="fxcell">${k[6]}</td><td class="l muted" style="white-space:normal">${k[7]?'Mẫu số thống nhất cho mọi store, chưa chốt':'Giữ như logic Excel hiện tại'}</td><td class="l">${k[7]?'<span class="tag t-warn">Chờ kế toán xác nhận</span>':'<span class="tag t-ok">Đang áp dụng</span>'}</td></tr>`).join('')+
+ `<tr><td><b>CAPEX</b></td><td class="fxcell">Σ Xây dựng (hoàn thiện + xử lý hiện trạng) + Σ Gói thiết bị + Cảnh quan</td><td class="l muted">Dùng chung cho các KPI trên</td><td class="l"><span class="tag t-ok">Đang áp dụng</span></td></tr>`;
+document.querySelectorAll('#ptabs a').forEach(a=>a.onclick=()=>{document.querySelectorAll('#ptabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');
+ document.querySelectorAll('.spane').forEach(p=>p.classList.remove('on'));document.getElementById('q-'+a.dataset.q).classList.add('on')});
+
+(function(){const r=[['Doanh thu',5700.24],['COGS',1641.85],['Lợi nhuận gộp',4058.39,1],['Rent',360],['LC',808.16],['MKT',193.49],['CMS',31.35],['OCE',528],['EBITDA',2137.39,1],['Khấu hao',780.25],['NOI',1357.14,1]];
+ document.getElementById('y1').innerHTML=r.map(x=>`<tr class="${x[2]?'hl':''}"><td>${x[0]}</td><td>${fmt(x[1])}</td><td>${pct(x[1]/5700.24)}</td></tr>`).join('');})();
+
+(function(){const hd=['T1','T2','T3','T4','T5','T6'].map(x=>`<th>${x}</th>`).join('')+[...Array(12)].map((_,i)=>`<th>Y1·T${i+1}</th>`).join('');
+ const lines=[['ADTC','ADTC',0],['ADS','ADS',2],['Revenue','Revenue',1,'b'],['COGS','COGS',1],['GP','GP',1,'hl'],['Rent','Rent',1],['LC','LC',1],['MKT','MKT',1],['CMS','CMS',1],['OCE','OCE',1],['EBITDA','EBITDA',1,'hl'],['Khấu hao','Depreciation',1],['NOI','NOI',1,'hl']];
+ document.getElementById('monthly').innerHTML=`<thead><tr><th>tr VND</th>${hd}<th>Năm 1</th></tr></thead><tbody>`+lines.map(l=>{const a=M[l[1]];const tot=['ADTC','ADS'].includes(l[1])?a.slice(6).reduce((x,y)=>x+y)/12:a.slice(6).reduce((x,y)=>x+y);
+  return `<tr class="${l[3]||''}"><td>${l[0]}</td>${a.map(v=>cell(v,l[2])).join('')}<td><b>${fmt(tot,l[2])}</b></td></tr>`}).join('')+'</tbody>';
+ const n=['Y0 (6T)','Y1','Y2','Y3','Y4','Y5','Y6','Y7','Y8','Y9','Y10'];
+ const L2=[['ADTC','ADTC',0],['Doanh thu','Revenue',0,'b'],['COGS','COGS',0],['Rent','Rent',0],['LC','LC',0],['EBITDA','EBITDA',0,'hl'],['Khấu hao','Depreciation',0],['NOI','NOI',0],['Chi phí lãi vay','Interest',0],['Thuế TNDN','CIT',0],['Lợi nhuận ròng','NI',0,'hl'],['CFO','CFO',0],['CFI','CFI',0],['FCF','FCF',0,'hl'],['FCF lũy kế','CUM',0,'b']];
+ document.getElementById('tenY').innerHTML=`<thead><tr><th>tr VND</th>${n.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`+L2.map(l=>`<tr class="${l[3]||''}"><td>${l[0]}</td>${Y[l[1]].map(v=>cell(v,l[2])).join('')}</tr>`).join('')+'</tbody>';})();
+
+(function(){const s=document.getElementById('chart10');const W=640,H=260,l=52,r=14,t=12,b=34;const n=11,bw=(W-l-r)/n;
+ const max=10000,min=-4000;const y=v=>t+(max-v)/(max-min)*(H-t-b);let h='';
+ [-4000,-2000,0,2000,4000,6000,8000,10000].forEach(g=>{h+=`<line x1="${l}" x2="${W-r}" y1="${y(g)}" y2="${y(g)}" stroke="${g==0?'#c8ced8':'#eef0f3'}"/><text x="${l-6}" y="${y(g)+4}" font-size="10" fill="#98a2b3" text-anchor="end">${fmt(g/1000,0)}k</text>`});
+ Y.Revenue.forEach((v,i)=>{const x=l+i*bw+bw*.15;h+=`<rect x="${x}" y="${y(v)}" width="${bw*.35}" height="${y(0)-y(v)}" fill="#c9dbf4" rx="2"/><rect x="${x+bw*.35}" y="${y(Y.EBITDA[i])}" width="${bw*.35}" height="${y(0)-y(Y.EBITDA[i])}" fill="#1f5fbf" rx="2"/><text x="${l+i*bw+bw/2}" y="${H-12}" font-size="10" fill="#667085" text-anchor="middle">${i==0?'Y0':'Y'+i}</text>`});
+ const pts=Y.CUM.map((v,i)=>`${l+i*bw+bw/2},${y(v)}`).join(' ');
+ h+=`<polyline points="${pts}" fill="none" stroke="#147a4b" stroke-width="2"/>`;
+ Y.CUM.forEach((v,i)=>h+=`<circle cx="${l+i*bw+bw/2}" cy="${y(v)}" r="3" fill="#fff" stroke="#147a4b" stroke-width="2"/>`);
+ const px=l+(2.26+0.5)*bw;h+=`<line x1="${px}" x2="${px}" y1="${t}" y2="${H-b}" stroke="#147a4b" stroke-dasharray="3 3"/><text x="${px+4}" y="${t+10}" font-size="10" fill="#147a4b">Hoàn vốn 2,26 năm</text>`;
+ h+=`<text x="${l+7*bw+bw/2}" y="${y(Y.CUM[7])+18}" font-size="10" fill="#9a6700" text-anchor="middle">Y7 tái ĐT 70%</text>`;
+ s.innerHTML=h;})();
+
+/* ---------- sensitivity (quick estimate) ---------- */
+const VM=(1-.288-.0339-.0055-.0926)*(1-.2); // variable margin after tax
+function irr(cf){let lo=-.9,hi=5;const npv=r=>cf.reduce((a,v,i)=>a+v/Math.pow(1+r,i),0);if(npv(lo)*npv(hi)>0)return NaN;for(let k=0;k<100;k++){const m=(lo+hi)/2;npv(m)>0?lo=m:hi=m}return (lo+hi)/2}
+function payback(cf){let c=0;for(let i=0;i<cf.length;i++){const p=c;c+=cf[i];if(c>=0&&i>0)return i-1+(-p)/cf[i]}return NaN}
+function scen(a,b){const f=(1+a)*(1+b)-1;const cf=Y.FCF.map((v,i)=>v+Y.Revenue[i]*f*VM);
+ const y1=5700.24*(1+f);return {i10:irr(cf),i5:irr(cf.slice(0,6)),pb:payback(cf),sc:y1/3488.59,rev:y1}}
+function upd(){const a=+sA.value/100,b=+sB.value/100;vA.textContent=(a>0?'+':'')+Math.round(a*100)+'%';vB.textContent=(b>0?'+':'')+Math.round(b*100)+'%';
+ const s=scen(a,b);sDesc.textContent=`ADTC ${fmt(203*(1+a),0)} · AC ${fmt(78*(1+b),1)}k → ADS ${fmt(15.83*(1+a)*(1+b),2)} tr/ngày · DT năm 1 ${fmt(s.rev,0)} tr`;
+ const it=[['IRR 10Y',s.i10,.22,'pct','≥'],['IRR 5Y',s.i5,.08,'pct','≥'],['Payback (tái ĐT)',s.pb,3.81,'yr','≤'],['Sales / CAPEX',s.sc,2.07,'x','≥']];
+ sK.innerHTML=it.map(k=>{const ok=k[4]=='≥'?k[1]>=k[2]:k[1]<=k[2];return `<div class="kpi ${ok?'':'bad'}"><div class="l">${k[0]}</div><div class="v">${isNaN(k[1])?'n/a':showV(k[1],k[3])}</div><div class="s"><span>Ngưỡng ${k[4]} ${showV(k[2],k[3])}</span><span class="tag ${ok?'t-ok':'t-bad'}">${ok?'Đạt':'Không đạt'}</span></div></div>`}).join('');}
+sA.oninput=sB.oninput=upd;upd();
+(function(){const A=[-.2,-.1,0,.1,.2],B=[-.1,-.05,0,.05,.1];
+ let h='<thead><tr><th>ADTC \\ AC</th>'+B.map(b=>`<th style="text-align:center">${fmt(78*(1+b),1)}k</th>`).join('')+'</tr></thead><tbody>';
+ A.map(a=>{h+=`<tr><td>${fmt(203*(1+a),0)} (${a>0?'+':''}${a*100}%)</td>`+B.map(b=>{const v=scen(a,b).i10;const ok=v>=.22;const cur=a==0&&b==0;
+  return `<td style="background:${ok?'#e6f4ec':'#fdecea'};color:${ok?'#147a4b':'#b42318'};${cur?'outline:2px solid #1d2433;outline-offset:-2px':''}">${pct(v,0)}</td>`}).join('')+'</tr>'});
+ heat.innerHTML=h+'</tbody>';})();
+</script>
+<script>
+/* ================= i18n: VI ⇄ EN ================= */
+const EN={
+"Danh sách BoE":"BoE list","Hồ sơ BoE":"BoE record","Cấu hình":"Settings","Bảng tham chiếu Format × Vùng":"Format × Region reference",
+"Định nghĩa KPI":"KPI definitions","Ánh xạ tài khoản Netsuite":"Netsuite account mapping","Đối chiếu thực tế vs BoE":"Actual vs BoE",
+"Mockup – dữ liệu Kon Tum thật, store khác minh họa":"Mockup – Kon Tum data is real, other stores are illustrative",
+"Xuất danh sách":"Export list","+ Tạo BoE mới":"+ New BoE","Tìm store / mã Netsuite…":"Search store / Netsuite code…",
+"Format: Tất cả ▾":"Format: All ▾","Vùng: Tất cả ▾":"Region: All ▾","Trạng thái: Tất cả ▾":"Status: All ▾","Kết quả: Tất cả ▾":"Result: All ▾",
+"Format · Vùng":"Format · Region","Khai trương":"Opening","Tổng vốn (tr)":"Total cash (M)","ADS (tr)":"ADS (M)","Đạt ngưỡng":"KPIs met",
+"Trạng thái":"Status","Phiên bản":"Version","Nháp":"Draft","Đã chốt":"Locked",
+"KPI tính theo định nghĩa thống nhất (ROIC, Sales/CAPEX: định nghĩa đề xuất, chờ kế toán). Dĩ An: số thật từ file v2, CAPEX chưa cộng 327 tr hạng mục hiện trạng. Các store khác là minh họa.":"KPIs use the unified definitions (ROIC, Sales/CAPEX: proposed, pending Accounting). Dĩ An: real figures from file v2, CAPEX excludes 327M of site-condition works. Other stores are illustrative.",
+"Hệ thống không có bước duyệt. Trạng thái chỉ đánh dấu bản đã chốt để xuất trình duyệt bên ngoài: Nháp → Đã chốt (khóa, chụp lại bộ tham số).":"No approval workflow in the system. Status only marks the version locked for external approval: Draft → Locked (frozen, parameter snapshot taken).",
+"Danh sách BoE / 30897 Buu Dien Kon Tum":"BoE list / 30897 Buu Dien Kon Tum","v4 · Nháp":"v4 · Draft",
+"Core · Tây Nguyên · HC · 70 Lê Hồng Phong, P. Kon Tum, Quảng Ngãi · Khai trương 17/09/2026 · Bộ tham số:":"Core · Central Highlands · HC · 70 Lê Hồng Phong, P. Kon Tum, Quảng Ngãi · Opening 17/09/2026 · Parameter set:",
+"Core × Tây Nguyên (hiệu lực 01/07/2026)":"Core × Central Highlands (effective 01/07/2026)",
+"Nhân bản":"Duplicate","Xuất Excel":"Export Excel","Xuất PDF":"Export PDF","Tính lại":"Recalculate",
+"1. Giả định đầu vào":"1. Input assumptions","3. Giả định 10 năm & Tài chính":"3. 10-year & financing","4. Kết quả":"4. Results","5. Độ nhạy":"5. Sensitivity","6. Phiên bản":"6. Versions",
+"Nhập tay":"Manual input","Tự tính":"Calculated","Ghi đè so với bộ tham số chuẩn":"Override vs. standard",
+"Thông tin store & hợp đồng":"Store & lease information","Mã Netsuite":"Netsuite code","Tên store":"Store name","Vùng":"Region",
+"Tây Nguyên ▾":"Central Highlands ▾","Khu vực thương mại":"Trade area","Ngày bàn giao":"Handover date","Ngày thanh toán đầu tiên":"First payment date",
+"Ngày khai trương":"Opening date","Thời hạn hợp đồng":"Lease term","năm":"yrs","Giá thuê tháng":"Monthly rent","tr":"M",
+"Kỳ thanh toán · Đặt cọc":"Payment term · Deposit","Quý · 3 tháng (90 tr)":"Quarterly · 3 months (90M)",
+"Doanh thu & kênh bán":"Sales & channels","Finance ước tính":"Finance estimate","ADTC (bill/ngày)":"ADTC (tickets/day)","AC (nghìn VND)":"AC (k VND)",
+"tr/ngày":"M/day","Doanh thu tháng":"Monthly sales","Hoa hồng 3P bình quân":"Avg. 3P commission","Group size / bill dine-in":"Group size / dine-in ticket",
+"Chi tiêu / khách":"Spend / guest","nghìn":"k","Cơ cấu chi phí (% doanh thu)":"Cost structure (% of sales)","Chỉ tiêu":"Line item",
+"Khoảng Min – Chuẩn – Max":"Range Min – Std – Max","Trong khoảng":"In range","Ngoài khoảng":"Out of range","% CMS (= %3P × hoa hồng)":"% CMS (= %3P × commission)",
+"Rent (số tuyệt đối)":"Rent (absolute)","30 tr":"30M","= 6,3% DT":"= 6.3% of sales",
+"Khoảng lấy từ Bảng tham chiếu Core × Tây Nguyên. Ngoài khoảng → bắt buộc nhập lý do. Lý do LC:":"Ranges come from the Core × Central Highlands reference. Out of range → justification required. LC reason:",
+"“Thị trường Kon Tum thiếu nhân sự, phải trả cao hơn mặt bằng”":"“Labour shortage in Kon Tum, wages above market”",
+"Mặt bằng & sức chứa":"Space & capacity","DT thuê":"Leased area","DT đầu tư – trong":"Fit-out area – inside","DT đầu tư – ngoài":"Fit-out area – outside",
+"m²/khách":"m²/guest","Giá thuê/m²":"Rent/m²","Số ghế":"Seats","Ramp-up 6 tháng đầu (% ADS mục tiêu)":"Ramp-up, first 6 months (% of target ADS)",
+"Mặc định từ bộ tham số Core × Tây Nguyên, sửa được theo store. Không trộn mùa vụ.":"Default from Core × Central Highlands, editable per store. No seasonality mixed in.",
+"Daypart – kiểm tra sức chứa giờ cao điểm":"Daypart – peak capacity check","Khung giờ":"Daypart","Bill dine-in":"Dine-in tickets","Lượt khách":"Guests",
+"Vòng quay":"Turns","Ghế cần":"Seats needed","so với 82 ghế":"vs. 82 seats","01. Sáng (6:00–8:59)":"01. Breakfast (6:00–8:59)",
+"02. Giữa sáng (9:00–10:59)":"02. Mid-morning (9:00–10:59)","03. Trưa (11:00–13:59)":"03. Lunch (11:00–13:59)","05. Chiều tối (16:00–18:59)":"05. Dinner (16:00–18:59)",
+"07. Khuya (21:00–5:59)":"07. Late night (21:00–5:59)","Utilization 80%. Ghế cần lớn nhất = 73 / 82 ghế có sẵn →":"Utilization 80%. Peak seats needed = 73 / 82 available →",
+"Đủ ghế":"Enough seats","⚠ 2 hạng mục xử lý hiện trạng có giá trị nhưng đang":"⚠ 2 site-condition items have amounts but are currently",
+"không tính vào CAPEX":"excluded from CAPEX","(Phá dỡ 75 tr, Cầu thang 100 tr). Dòng “Phát sinh khác” 471 tr đang gộp, cần tách chi tiết.":"(Demolition 75M, Staircase 100M). The “Other works” line of 471M is a lump sum and must be itemised.",
+"A. Xây dựng cơ bản":"A. Construction","Khấu hao 5 năm":"Depreciated 5 yrs","Khấu hao 3 năm":"Depreciated 3 yrs","Hạng mục":"Item","ĐVT":"Unit","KL":"Qty",
+"Đơn giá":"Unit price","Khoảng chuẩn":"Standard range","Thành tiền (tr)":"Amount (M)","Tính CAPEX":"In CAPEX","Hoàn thiện":"Fit-out",
+"Hoàn thiện trong nhà":"Fit-out – inside","Hoàn thiện ngoài trời":"Fit-out – outside","Vận chuyển":"Shipping","gói":"lot","báo giá":"quotation",
+"Vách kính":"Glass wall","Xử lý hiện trạng (theo báo giá)":"Site-condition works (per quotation)","Phá dỡ hiện trạng":"Demolition","Chưa tính":"Excluded",
+"Cầu thang":"Staircase","Nâng cấp điện · Gia cố kết cấu · Sửa mái":"Power upgrade · Structural reinforcement · Roof repair",
+"Phát sinh khác (Add-in, đang gộp)":"Other works (Add-in, lump sum)","Cần tách chi tiết":"Needs breakdown","Tổng xây dựng (tính CAPEX)":"Total construction (in CAPEX)",
+"B. Gói thiết bị chuẩn – Core × Tây Nguyên":"B. Standard equipment package – Core × Central Highlands","Từ Bảng tham chiếu":"From reference table","Nhóm":"Group",
+"Min – Chuẩn – Max (tr)":"Min – Std – Max (M)","Khoảng":"Range","Store này (tr)":"This store (M)","Khấu hao":"Depreciation","Equipment (bếp, bar)":"Equipment (kitchen, bar)",
+"5 năm":"5 yrs","3 năm":"3 yrs","Tổng gói chuẩn":"Standard package total",
+"Mockup: số chuẩn lấy từ file Dĩ An (H80:H83). File Kon Tum chỉ có tổng 1.203 tr, nên tab Kết quả vẫn tính theo 1.203 tr. Thời gian khấu hao theo nhóm là đề xuất, chờ kế toán.":"Mockup: standard values taken from the Dĩ An file (H80:H83). The Kon Tum file only has a 1,203M total, so Results still use 1,203M. Depreciation life per group is proposed, pending Accounting.",
+"C. Cảnh quan":"C. Landscape","Đơn giá (tr/m²)":"Unit price (M/m²)","Cảnh quan trong nhà":"Landscape – inside","Cảnh quan ngoài trời":"Landscape – outside",
+"Cây lớn":"Large trees","0 cây":"0 trees","20,0 / cây":"20.0 / tree","Tổng CAPEX (A + B + C)":"Total CAPEX (A + B + C)","Tổng tiền cần":"Total cash required",
+"Xây dựng":"Construction","Thiết bị & cảnh quan":"Equipment & landscape","Đặt cọc":"Deposit","tr VND":"M VND","3 tháng tiền thuê":"3 months' rent",
+"Điện & nước (cố định)":"Power & water (fixed)","Tổng đặt cọc":"Total deposit","Chi phí pre-opening (phân bổ Opex / vốn hóa)":"Pre-opening costs (Opex / capitalised split)",
+"Khoản mục":"Item","Số tiền (tr)":"Amount (M)","Opex – tháng 1 (tr)":"Opex – month 1 (M)","Vốn hóa – KH 3 năm (tr)":"Capitalised – 3-yr depr. (M)",
+"Phí marketing khai trương":"Opening marketing fee","Phí giấy phép xây dựng":"Construction permit fee","Công tác phí":"Travel","Lương nhân sự pre-opening":"Pre-opening labour",
+"Phí thiết kế":"Design fee","Hoa hồng NSO":"NSO commission","PCCC, mở rộng, công chứng, điện nước, khác":"Fire safety, expansion, notarisation, utilities, other","Tổng":"Total",
+"⚠ Bảng tăng giá thuê (Y3 +10%, Y5 +10%) không khớp điều khoản hợp đồng “Năm 3–5: 33 tr/tháng” (chỉ tăng 1 lần). Hợp đồng 5 năm nhưng mô hình chạy 10 năm, cần nhập giả định gia hạn.":"⚠ Rent escalation (Y3 +10%, Y5 +10%) does not match the lease clause “Years 3–5: 33M/month” (single increase). Lease is 5 years but the model runs 10 years – a renewal assumption is required.",
+"Giả định 10 năm":"10-year assumptions","Giả định":"Assumption","Tăng trưởng sales":"Sales growth","Tăng giá thuê":"Rent increase","Tăng lương":"Wage increase",
+"Tái đầu tư (% CAPEX ban đầu)":"Reinvestment (% of initial CAPEX)","→ Số tiền tái đầu tư (tr)":"→ Reinvestment amount (M)",
+"Tái đầu tư năm N = Tổng CAPEX ban đầu (3.488,6 tr) × tỷ lệ năm N, khấu hao 5 năm từ năm phát sinh.":"Reinvestment year N = initial CAPEX (3,488.6M) × rate N, depreciated over 5 years from the year incurred.",
+"Tài chính":"Financing","Tỷ giá":"FX rate","Thuế TNDN":"Corporate income tax","Lãi vay":"Interest rate","Chi phí lãi vay":"Interest expense","Tỷ lệ nợ":"Debt ratio","Tỷ lệ vốn chủ":"Equity ratio",
+"Kỳ hạn vay":"Loan tenor","Vốn lưu động":"Working capital","Số ngày AR":"AR days","Số ngày AP":"AP days","Số ngày tồn kho":"Inventory days",
+"Toàn bộ mục này lấy mặc định từ bộ tham số, thường không sửa.":"All values default from the parameter set and are rarely changed.",
+"Đạt":"Pass","Không đạt":"Fail","Sát ngưỡng":"Near threshold","= IRR(FCF Y0…Y10), có tái đầu tư":"= IRR(FCF Y0…Y10), incl. reinvestment",
+"IRR(FCF Y0…Y10), có tái đầu tư":"IRR(FCF Y0…Y10), incl. reinvestment",
+"Định nghĩa đề xuất, chờ kế toán · File Excel: 56,3%":"Proposed definition, pending Accounting · Excel file: 56.3%",
+"Định nghĩa đề xuất, chờ kế toán · File Excel: 1,50":"Proposed definition, pending Accounting · Excel file: 1.50",
+"Payback (tái ĐT)":"Payback (w/ reinvest.)","Payback (ban đầu)":"Payback (initial)",
+"= Năm FCF lũy kế (có tái ĐT) chuyển dương, nội suy":"= Year cumulative FCF (w/ reinvest.) turns positive, interpolated",
+"Năm FCF lũy kế (có tái ĐT) chuyển dương, nội suy":"Year cumulative FCF (w/ reinvest.) turns positive, interpolated",
+"= Như trên, chỉ tính đầu tư ban đầu":"= Same, initial investment only","Như trên, chỉ tính đầu tư ban đầu":"Same, initial investment only",
+"= Doanh thu Y1 ÷ (Xây dựng + Thiết bị + Cảnh quan)":"= Y1 sales ÷ (Construction + Equipment + Landscape)",
+"Doanh thu Y1 ÷ (Xây dựng + Thiết bị + Cảnh quan)":"Y1 sales ÷ (Construction + Equipment + Landscape)",
+"Doanh thu, EBITDA & dòng tiền lũy kế 10 năm (tr VND)":"Sales, EBITDA & cumulative cash flow, 10 years (M VND)","Doanh thu":"Sales","FCF lũy kế":"Cumulative FCF",
+"P&L năm 1 (12 tháng ổn định)":"Year-1 P&L (12 stable months)","% DT":"% sales","Lợi nhuận gộp":"Gross profit",
+"P&L theo tháng – 6 tháng ramp-up (Y0) + 12 tháng năm 1":"Monthly P&L – 6 ramp-up months (Y0) + 12 months of Y1","Năm 1":"Year 1",
+"Dự phóng 10 năm & dòng tiền":"10-year projection & cash flow","Y0 (6T)":"Y0 (6M)","Lợi nhuận ròng":"Net income","Khấu hao ":"Depreciation",
+"Bảng cân đối, khấu hao chi tiết, lịch trả nợ mở trong mục “Xem chi tiết” (ẩn mặc định).":"Balance sheet, depreciation detail and debt schedule open under “Show details” (hidden by default).",
+"Kéo thanh trượt để xem KPI thay đổi theo ADTC / AC. Đây là ước tính nhanh. Bấm “Lưu thành kịch bản” để engine chạy đầy đủ và lưu lại.":"Drag the sliders to see KPIs respond to ADTC / AC. This is a quick estimate; click “Save as scenario” to run the full engine and store it.",
+"Kịch bản nhanh":"Quick scenario","Lưu thành kịch bản":"Save as scenario","Ma trận IRR 10Y theo ADTC × AC":"IRR 10Y matrix by ADTC × AC",
+"Xanh: đạt ngưỡng 22%. Đỏ: không đạt. Ô viền đậm là phương án hiện tại.":"Green: meets 22% threshold. Red: fails. Bold border = current case.",
+"So sánh phiên bản":"Version comparison","v4 · 09/09 (hiện tại)":"v4 · 09/09 (current)","AC (nghìn)":"AC (k)","Payback (năm)":"Payback (yrs)","Người sửa":"Edited by",
+"Ghi chú":"Notes","Bản đầu":"First draft","Cập nhật báo giá XD":"Updated construction quote","Điều chỉnh LC":"Adjusted LC","Giảm ADTC theo khảo sát":"Lowered ADTC per survey",
+"Ô vàng = thay đổi so với phiên bản trước (số v1–v3 là minh họa). Mỗi phiên bản lưu đầy đủ input và snapshot bộ tham số.":"Yellow = changed vs. previous version (v1–v3 are illustrative). Each version stores all inputs and a parameter snapshot.",
+"Lịch sử thay đổi":"Change history","+ Tạo phiên bản hiệu lực mới":"+ New effective version","Format × Vùng":"Format × Region","Bắc":"North","Trung":"Central",
+"T.Nguyên":"C. Highlands","Nam":"South","“—” = chưa có bộ riêng, dùng bộ mặc định của Format.":"“—” = no dedicated set; the Format default applies.",
+"Core × Tây Nguyên":"Core × Central Highlands","Hiệu lực từ 01/07/2026":"Effective from 01/07/2026","Phiên bản 3":"Version 3","Ngưỡng KPI":"KPI thresholds",
+"Đơn giá xây dựng":"Construction rates","Gói thiết bị":"Equipment package","Chi phí & kênh":"Costs & channels","Ramp-up & 10 năm":"Ramp-up & 10 years",
+"Áp dụng":"Applies","Chiều":"Direction","Ngưỡng đạt":"Pass threshold","Vùng “sát ngưỡng” (vàng)":"“Near threshold” band (amber)","Công thức (xem Định nghĩa KPI)":"Formula (see KPI definitions)",
+"EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)":"EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)",
+"Ngưỡng là":"Thresholds are","giá trị cố định":"fixed values",
+"theo Format × Vùng, người lập BoE không sửa được. Đối chiếu: Core × Nam (theo file Dĩ An) dùng IRR 10Y 24,4% · ROIC 50,7% · Sales/CAPEX 2,14.":"per Format × Region and cannot be changed by the BoE preparer. For comparison: Core × South (Dĩ An file) uses IRR 10Y 24.4% · ROIC 50.7% · Sales/CAPEX 2.14.",
+"Chuẩn":"Std","tr/m²":"M/m²","tr/m":"M/m","Xử lý hiện trạng":"Site-condition works","Phát sinh khác":"Other works",
+"Danh mục hạng mục dùng chung; Bảng tham chiếu chỉ quy định khoảng đơn giá theo vùng. Hạng mục xử lý hiện trạng không có đơn giá chuẩn, nhập theo báo giá.":"The item catalogue is shared; the reference table only sets rate ranges per region. Site-condition items have no standard rate and are entered per quotation.",
+"Nhóm thiết bị":"Equipment group","Min (tr)":"Min (M)","Chuẩn (tr)":"Std (M)","Max (tr)":"Max (M)",
+"Số chuẩn minh họa lấy từ file Dĩ An (H80:H83). Khoảng ±10% là giả định của mockup.":"Illustrative standard values from the Dĩ An file (H80:H83). The ±10% range is a mockup assumption.",
+"Kênh IS / 3P / 1P (chuẩn)":"Channel IS / 3P / 1P (std)","Hoa hồng 3P":"3P commission","11% (cố định)":"11% (fixed)","Ramp-up T1–T6 (% ADS)":"Ramp-up M1–M6 (% ADS)",
+"từ T7: 100%":"from M7: 100%","Ramp-up: store được sửa trong khoảng ±15 điểm % so với chuẩn.":"Ramp-up: stores may adjust within ±15 pp of the standard.",
+"Tham số":"Parameter","Giá trị (cố định)":"Value (fixed)","Tỷ giá USD/VND":"USD/VND rate","Nợ / Vốn chủ":"Debt / Equity","AR / AP / Tồn kho":"AR / AP / Inventory",
+"1 / 27 / 10 ngày":"1 / 27 / 10 days","Tái đầu tư – đóng cửa":"Reinvestment – closure","1 tháng · tiết kiệm 35% LC & OCE":"1 month · saves 35% of LC & OCE",
+"Số trong Bảng tham chiếu là minh họa cho mockup, trừ các giá trị lấy từ file Kon Tum.":"Reference values are illustrative for the mockup, except those taken from the Kon Tum file.",
+"Lịch sử phiên bản":"Version history","+ Phiên bản công thức mới":"+ New formula version","Công thức KPI áp dụng":"KPI formulas apply",
+"chung cho mọi store":"uniformly to all stores",
+"; chỉ Admin Finance sửa được và mỗi lần sửa tạo phiên bản mới. Ngưỡng đạt thì thiết lập riêng theo Format × Vùng trong Bảng tham chiếu. BoE đã chốt giữ nguyên phiên bản công thức tại thời điểm chốt.":"; only Finance Admin can change them, and every change creates a new version. Pass thresholds are set per Format × Region in the reference table. Locked BoEs keep the formula version in force when locked.",
+"Công thức (phiên bản 1)":"Formula (version 1)","Giữ như logic Excel hiện tại":"Same as current Excel logic","Đang áp dụng":"Active",
+"Mẫu số thống nhất cho mọi store, chưa chốt":"Single denominator for all stores, not yet final","Chờ kế toán xác nhận":"Pending Accounting",
+"Σ Xây dựng (hoàn thiện + xử lý hiện trạng) + Σ Gói thiết bị + Cảnh quan":"Σ Construction (fit-out + site works) + Σ Equipment package + Landscape",
+"Dùng chung cho các KPI trên":"Shared by the KPIs above","Tham khảo: cách tính đang dùng trong file Excel (không thống nhất)":"Reference: current Excel calculations (inconsistent)",
+"EBITDA Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)":"EBITDA Y1 ÷ (Key money + Construction + Equipment + Pre-opening − MKT fee)",
+"EBITDA Y1 ÷ (Xây dựng + Thiết bị)":"EBITDA Y1 ÷ (Construction + Equipment)",
+"Doanh thu Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)":"Y1 sales ÷ (Key money + Construction + Equipment + Pre-opening − MKT fee)",
+"Doanh thu Y1 ÷ (Xây dựng + Thiết bị)":"Y1 sales ÷ (Construction + Equipment)","Kiểm tra Payback":"Payback check","Không có":"None",
+"Payback ≥ ngưỡng (sai chiều), ngưỡng = 0":"Payback ≥ threshold (wrong direction), threshold = 0",
+"Ánh xạ tài khoản Netsuite → dòng BoE":"Netsuite account → BoE line mapping","Import từ Excel":"Import from Excel",
+"Chuẩn bị cho Phase 2. Mỗi tài khoản P&L của Netsuite gán vào 1 dòng BoE, để sau này kéo số thực tế theo mã store và so sánh.":"Preparation for Phase 2. Each Netsuite P&L account maps to one BoE line so actuals can later be pulled by store code and compared.",
+"Dòng BoE":"BoE line","Tài khoản Netsuite (ví dụ)":"Netsuite account (example)","Số TK đã gán":"Accounts mapped","511x – Doanh thu bán hàng":"511x – Sales revenue",
+"Đủ":"Complete","632x – Giá vốn":"632x – Cost of goods sold","6417 – Thuê mặt bằng":"6417 – Rent","6411, 6412 – Lương, BHXH":"6411, 6412 – Salaries, social insurance",
+"Cần xác nhận":"To confirm","Chưa gán":"Not mapped","6413–6419 – Chi phí vận hành khác":"6413–6419 – Other operating costs","6414 – Khấu hao":"6414 – Depreciation",
+"Mã tài khoản trong bảng chỉ là minh họa.":"Account codes are illustrative only.","Phase 2 – chưa làm trong bản này":"Phase 2 – not in this release",
+"Store mở trong 24 tháng gần nhất · KPI theo tháng: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · CAPEX thực chi · Ngày khai trương thực tế":"Stores opened in the last 24 months · Monthly KPIs: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · Actual CAPEX · Actual opening date",
+"Cảnh báo theo ngoại lệ (ví dụ ADS thấp hơn BoE quá 15% sau tháng 6) · Tính lại IRR bằng số thực tế":"Exception alerts (e.g. ADS more than 15% below BoE after month 6) · IRR recalculated on actuals",
+"Hoàn vốn 2,26 năm":"Payback 2.26 yrs","Y7 tái ĐT 70%":"Y7 reinvest 70%","Khấu hao":"Depreciation"
+};
+/* fragment rules for dynamic strings */
+const FR=[[/Ngưỡng/g,'Threshold'],[/DT năm 1/g,'Y1 sales'],[/tr\/ngày/g,'M/day'],[/ năm\b/g,' yrs'],[/(\d) tr\b/g,'$1M'],[/(\d)k\b/g,'$1k'],
+ [/Tây Nguyên/g,'Central Highlands'],[/· Nam$/,'· South'],[/· Trung$/,'· Central'],[/· Bắc$/,'· North'],[/^T(\d+)$/,'M$1'],[/·T(\d+)$/,'·M$1'],[/ KPI$/,' KPIs']];
+const swapNum=s=>s.replace(/\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+,\d+/g,m=>m.replace(/[.,]/g,c=>c=='.'?',':'.'));
+let LANG='vi';const ORIG=new WeakMap();
+function trText(v){const t=v.trim().replace(/\s+/g,' ');if(!t)return v;let e=EN[t];
+ if(e===undefined){e=t;FR.forEach(([r,x])=>e=e.replace(r,x));e=swapNum(e);}const lead=v.match(/^\s*/)[0],trail=v.match(/\s*$/)[0];return lead+e+trail}
+function applyLang(root){const w=document.createTreeWalker(root||document.body,NodeFilter.SHOW_TEXT);let n;const list=[];
+ while(n=w.nextNode()){const pt=n.parentNode&&n.parentNode.tagName;if(pt=='SCRIPT'||pt=='STYLE')continue;list.push(n)}
+ list.forEach(n=>{if(!ORIG.has(n))ORIG.set(n,n.nodeValue);const o=ORIG.get(n);
+  if(LANG=='en'){const t=trText(o);n.nodeValue=t;ORIG.set(n,o)}else n.nodeValue=o;});
+ document.documentElement.lang=LANG}
+document.querySelectorAll('#langSw a').forEach(a=>a.onclick=()=>{LANG=a.dataset.l;
+ document.querySelectorAll('#langSw a').forEach(x=>x.classList.toggle('active',x==a));
+ applyLang();try{localStorage.setItem('boeLang',LANG)}catch(e){}});
+/* re-translate dynamic sensitivity output */
+['sA','sB'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(LANG=='en'){applyLang(document.getElementById('p-sens'))}}));
+try{if(localStorage.getItem('boeLang')=='en')document.querySelector('#langSw a[data-l=en]').click()}catch(e){}
+</script>
+
+</body>
+</html>

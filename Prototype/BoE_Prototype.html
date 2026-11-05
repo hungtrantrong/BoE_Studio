@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoE Studio – Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>:root{--bg:#f6f7f9;--panel:#fff;--line:#e4e7ec;--line2:#eef0f3;--text:#1d2433;--muted:#667085;--faint:#98a2b3;--accent:#1f5fbf;--accent-soft:#eaf1fb;
+ --ok:#147a4b;--ok-soft:#e6f4ec;--bad:#b42318;--bad-soft:#fdecea;--warn:#9a6700;--warn-soft:#fff6e0;--ovr:#7a3db8;--ovr-soft:#f3ecfb}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;font-size:13px;color:var(--text);background:var(--bg)}
+#app{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh;min-width:1200px}
+aside{background:#fff;border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto}
+.brand{font-weight:700;font-size:15px;padding:0 10px 12px;display:flex;gap:8px;align-items:center}.brand i{width:26px;height:26px;border-radius:6px;background:var(--accent);display:inline-block}
+.lang{display:inline-flex;margin:0 10px 14px;border:1px solid var(--line);border-radius:6px;overflow:hidden;align-self:flex-start}.lang a{padding:4px 12px;font-size:12px;cursor:pointer;color:var(--muted);font-weight:500}.lang a.active{background:var(--accent);color:#fff}
+.nav a{display:block;padding:9px 10px;border-radius:6px;color:var(--text);text-decoration:none;cursor:pointer;margin-bottom:2px}.nav a:hover{background:var(--bg)}.nav a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}.nav a.dis{color:var(--faint)}
+.sec{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;padding:14px 10px 6px}
+.side-foot{margin-top:auto;padding:0 10px}.side-foot .sec{padding-left:0}.side-foot .lnk{display:block;padding:4px 0}
+main{padding:20px 28px 40px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px}.crumb{color:var(--muted);font-size:12px}.crumb a{cursor:pointer;color:var(--accent)}
+h1{font-size:20px;margin:4px 0 0;font-weight:600}h2{font-size:14px;margin:0 0 12px;font-weight:600}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 12px;font:inherit;cursor:pointer;color:var(--text);white-space:nowrap}.btn:hover{border-color:#c8ced8}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}.btn:disabled{opacity:.45;cursor:not-allowed}.btns{display:flex;gap:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g6{grid-template-columns:repeat(6,minmax(0,1fr))}.g-3-2{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+table{border-collapse:collapse;width:100%}th,td{padding:6px 7px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:12px;background:#fafbfc;white-space:normal}td:first-child,th:first-child{text-align:left}td.l,th.l{text-align:left}.nowrap{white-space:nowrap}
+tr.b td{font-weight:600}tr.sub td{color:var(--muted)}tr.hl td{background:#fafbfc;font-weight:600}tr.grp td{background:#f4f6f9;font-weight:600;color:var(--muted);font-size:12px}tr.off td{color:var(--faint)}
+tr.clk{cursor:pointer}tr.clk:hover td{background:#fafbfc}.neg{color:var(--bad)}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-bad{background:var(--bad-soft);color:var(--bad)}.t-warn{background:var(--warn-soft);color:var(--warn)}.t-grey{background:#f0f2f5;color:var(--muted)}.t-ovr{background:var(--ovr-soft);color:var(--ovr)}.t-acc{background:var(--accent-soft);color:var(--accent)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px}.tabs a{padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}.tabs a.active{color:var(--accent);border-color:var(--accent);font-weight:600}
+.stabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}.stabs a{padding:6px 12px;border:1px solid var(--line);border-radius:16px;cursor:pointer;color:var(--muted);background:#fff;font-size:12px}.stabs a.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff;min-width:0}.kpi .l{font-size:12px;color:var(--muted)}.kpi .v{font-size:22px;font-weight:600;margin:6px 0 4px}
+.kpi .s{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:4px}.kpi.bad{border-color:#f3c1bc}.kpi.warn{border-color:#f2dca6}
+.kpi .fx{font-size:10.5px;color:var(--faint);margin-top:8px;border-top:1px dashed var(--line2);padding-top:6px;line-height:1.4}
+.kstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.ks{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted)}.ks b{font-size:16px;color:var(--text)}.ks .tag{align-self:flex-start}.ks.bad{border-color:#f3c1bc}.ks.warn{border-color:#f2dca6}
+.form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 16px}.f label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}.u{color:var(--faint);font-size:11px}
+.fi{border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fff;font:inherit;color:var(--text);width:100%}.fi:focus{outline:2px solid #c9dbf4;border-color:var(--accent)}.fi:disabled{background:#f7f8fa;color:var(--muted)}
+.fi.num{text-align:right}select.fi{padding:5px 6px}
+.fiw{display:inline-flex;align-items:center;position:relative;max-width:100%}.fiw i{position:absolute;right:7px;font-style:normal;color:var(--faint);font-size:11px;pointer-events:none}.fiw input{padding-right:20px}
+.f .fiw{display:flex}.f .fiw input{width:100%}
+.fi.ovr{background:var(--ovr-soft);border-color:#cdb4ec}.fi.out{background:var(--warn-soft);border-color:#e9c46a}.fi.need{border-color:#e9c46a;background:#fffaf0}
+.in.calc{border:1px solid var(--line);border-radius:6px;padding:6px 9px;background:#f7f8fa;color:var(--muted);text-align:right}
+.cb{width:15px;height:15px;accent-color:var(--accent)}
+.hint{font-size:11px;color:var(--faint);margin-top:6px}.note{font-size:11px;color:var(--faint)}.muted{color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--muted);align-items:center;flex-wrap:wrap}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.alert{border-radius:6px;padding:10px 12px;font-size:12px;margin-bottom:12px}.alert.w{background:var(--warn-soft);color:#6b4a00;border:1px solid #f2dca6}.alert.i{background:var(--accent-soft);color:#174a94;border:1px solid #c9dbf4}.alert.ok{background:var(--ok-soft);color:var(--ok);border:1px solid #bfe3cd}
+.scroll{overflow-x:auto}.filters{display:flex;gap:8px;margin-bottom:12px}.filters .fi{width:auto;min-width:150px}
+.rng{position:relative;height:6px;background:#eef0f3;border-radius:3px;width:110px;display:inline-block;vertical-align:middle}.rng b{position:absolute;top:0;height:6px;background:#c9dbf4;border-radius:3px}.rng i{position:absolute;top:-3px;width:3px;height:12px;border-radius:1px;background:#1d2433}.rng i.out{background:var(--bad)}
+.bar{background:#eef0f3;border-radius:3px;height:8px;width:180px}.bar div{height:8px;border-radius:3px}
+.ramp{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;text-align:center}.rb{height:90px;background:#f4f6f9;border-radius:4px;display:flex;align-items:flex-end;margin-bottom:6px}.rb div{width:100%;background:#1f5fbf;border-radius:4px;opacity:.85}
+.ramp .fiw input{width:62px}
+.addrow{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}.addrow .fi{width:auto}
+.ic,.lnk{cursor:pointer;color:var(--accent);text-decoration:none}.ic{color:var(--faint);padding:0 3px}.ic:hover{color:var(--bad)}
+td.mx{cursor:pointer}td.mx:hover{background:#f4f6f9}td.mx.sel{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.heat td{text-align:center;font-weight:500}.slider{display:flex;align-items:center;gap:10px;margin:10px 0}.slider input{flex:1}.slider b{width:56px;text-align:right}
+.fxcell{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#344054;white-space:normal;text-align:left}
+.diff{background:var(--warn-soft)}.ph{border:1px dashed var(--line);border-radius:8px;padding:40px;text-align:center;color:var(--muted);background:#fff}
+details summary{cursor:pointer;color:var(--accent);margin-top:10px;font-size:12px}
+.exc table td,.exc table th{padding:5px 7px}
+.modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.35);display:flex;align-items:center;justify-content:center;z-index:10}.modal{background:#fff;border-radius:10px;padding:20px;width:560px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+</style></head><body><div id="app"></div>
+<script>
+const EN={
+"Danh sách BoE":"BoE list","Hồ sơ BoE":"BoE record","Cấu hình":"Settings","Bảng tham chiếu Format × Vùng":"Format × Region reference","Định nghĩa KPI":"KPI definitions",
+"Ánh xạ tài khoản Netsuite":"Netsuite account mapping","Đối chiếu thực tế vs BoE":"Actual vs BoE","Dữ liệu":"Data","Xuất dữ liệu (JSON)":"Export data (JSON)","Nhập dữ liệu (JSON)":"Import data (JSON)",
+"Khôi phục dữ liệu mẫu":"Restore sample data","Prototype: dữ liệu lưu trong trình duyệt của máy này.":"Prototype: data is stored in this browser on this computer.",
+"Xuất danh sách (CSV)":"Export list (CSV)","Tạo BoE mới":"New BoE","Tìm store / mã Netsuite…":"Search store / Netsuite code…","Format: Tất cả":"Format: All","Vùng: Tất cả":"Region: All","Trạng thái: Tất cả":"Status: All",
+"Nháp":"Draft","Đã chốt":"Locked","Format · Vùng":"Format · Region","Khai trương":"Opening","Tổng vốn (tr)":"Total cash (M)","ADS (tr)":"ADS (M)","Đạt ngưỡng":"KPIs met","Trạng thái":"Status","Phiên bản":"Version",
+"Nhân bản":"Duplicate","Xóa":"Delete","Chưa có bảng tham chiếu":"No reference set","Không có BoE nào.":"No BoEs.",
+"KPI được tính trực tiếp bằng engine khi mở danh sách. BoE đã chốt dùng ngưỡng đã chụp lại tại thời điểm chốt; BoE nháp dùng ngưỡng hiện hành của Bảng tham chiếu.":"KPIs are computed live by the engine. Locked BoEs use the thresholds captured at lock time; drafts use the current reference thresholds.",
+"Mã Netsuite":"Netsuite code","Tên store":"Store name","Vùng":"Region","Ngày khai trương":"Opening date",
+"Các giá trị mặc định (đơn giá xây dựng, gói thiết bị, % chi phí, ramp-up, giả định 10 năm, tài chính) sẽ được lấy từ Bảng tham chiếu":"Defaults (construction rates, equipment package, cost %, ramp-up, 10-year assumptions, financing) will be taken from the reference set",
+"Chưa có Bảng tham chiếu cho tổ hợp này. Hãy tạo trong màn hình Bảng tham chiếu trước.":"No reference set exists for this combination. Create it on the reference screen first.","Hủy":"Cancel","Tạo BoE":"Create BoE",
+"Bắc":"North","Trung":"Central","Tây Nguyên":"Central Highlands","Nam":"South",
+"Bảng tham chiếu":"Reference set","đã chụp lại":"captured","hiệu lực":"effective","Chưa có bảng tham chiếu cho tổ hợp này":"No reference set for this combination","Xuất Excel (CSV)":"Export Excel (CSV)","Mở khóa":"Unlock","Chốt BoE":"Lock BoE",
+"BoE đã chốt: dữ liệu bị khóa, ngưỡng KPI lấy từ bản chụp Bảng tham chiếu tại thời điểm chốt. Bấm “Mở khóa” để sửa.":"Locked BoE: inputs are frozen and KPI thresholds come from the reference snapshot taken at lock time. Click “Unlock” to edit.",
+"1. Giả định đầu vào":"1. Input assumptions","2. CAPEX & Pre-opening":"2. CAPEX & Pre-opening","3. Giả định 10 năm & Tài chính":"3. 10-year & financing","4. Kết quả":"4. Results","5. Độ nhạy":"5. Sensitivity","6. Phiên bản":"6. Versions",
+"Nhập tay":"Manual input","Tự tính":"Calculated","Khác giá trị chuẩn":"Differs from standard","Ngoài khoảng – cần lý do":"Out of range – reason required",
+"Thông tin store & hợp đồng":"Store & lease information","Khu vực thương mại":"Trade area","Địa chỉ":"Address","Ngày bàn giao":"Handover date","Thời hạn hợp đồng":"Lease term","năm":"yrs","Giá thuê tháng":"Monthly rent","tr":"M",
+"Điều khoản tăng giá thuê":"Rent escalation clause","Doanh thu & kênh bán":"Sales & channels","Finance ước tính":"Finance estimate","ADTC (bill/ngày)":"ADTC (tickets/day)","AC (nghìn VND)":"AC (k VND)","tr/ngày":"M/day",
+"Doanh thu tháng mục tiêu":"Target monthly sales","% 3P (Grab, ShopeeFood…)":"% 3P (Grab, ShopeeFood…)","Hoa hồng 3P bình quân":"Avg. 3P commission","Group size / bill dine-in":"Group size / dine-in ticket","Chi tiêu / khách":"Spend / guest","nghìn":"k",
+"Cơ cấu chi phí (% doanh thu)":"Cost structure (% of sales)","Chỉ tiêu":"Line item","Khoảng Min – Chuẩn – Max":"Range Min – Std – Max","Store này":"This store","hoa hồng":"commission",
+"LC tháng (cố định theo doanh thu mục tiêu)":"Monthly LC (fixed on target sales)","Rent (số tuyệt đối)":"Rent (absolute)","DT":"of sales","Mặt bằng & sức chứa":"Space & capacity","DT thuê":"Leased area","DT đầu tư – trong":"Fit-out area – inside","DT đầu tư – ngoài":"Fit-out area – outside",
+"m²/khách":"m²/guest","Giá thuê/m²":"Rent/m²","Số ghế":"Seats","DT đầu tư trong/ngoài tự cập nhật khối lượng hạng mục hoàn thiện và cảnh quan ở tab CAPEX.":"Inside/outside areas automatically drive fit-out and landscape quantities in the CAPEX tab.",
+"Ramp-up 6 tháng đầu (% ADS mục tiêu)":"Ramp-up, first 6 months (% of target ADS)","T":"M","Mặc định từ Bảng tham chiếu, sửa được theo store (±15 điểm % so với chuẩn). Từ tháng 7: 100%.":"Defaults from the reference set; editable per store (±15 pp vs standard). From month 7: 100%.",
+"Daypart – kiểm tra sức chứa giờ cao điểm":"Daypart – peak capacity check","Khung giờ":"Daypart","Bill dine-in":"Dine-in tickets","Lượt khách":"Guests","Vòng quay":"Turns","Ghế cần":"Seats needed","so với số ghế":"vs. available seats",
+"01. Sáng (6:00–8:59)":"01. Breakfast (6:00–8:59)","02. Giữa sáng (9:00–10:59)":"02. Mid-morning (9:00–10:59)","03. Trưa (11:00–13:59)":"03. Lunch (11:00–13:59)","04. Tea time (14:00–15:59)":"04. Tea time (14:00–15:59)","05. Chiều tối (16:00–18:59)":"05. Dinner (16:00–18:59)","06. Hangout (19:00–20:59)":"06. Hangout (19:00–20:59)","07. Khuya (21:00–5:59)":"07. Late night (21:00–5:59)",
+"Ghế cần lớn nhất":"Peak seats needed","ghế":"seats","Đủ ghế":"Enough seats","Thiếu ghế":"Not enough seats",
+"Xây dựng cơ bản":"Construction","Khấu hao 5 năm":"Depreciated 5 yrs","Hạng mục":"Item","ĐVT":"Unit","KL":"Qty","Đơn giá":"Unit price","Khoảng chuẩn":"Standard range","Thành tiền (tr)":"Amount (M)","Tính CAPEX":"In CAPEX",
+"Hoàn thiện":"Fit-out","Xử lý hiện trạng (theo báo giá)":"Site-condition works (per quotation)","Tổng xây dựng (tính CAPEX)":"Total construction (in CAPEX)","Thêm hạng mục":"Add item","Tự lấy từ diện tích":"Taken from area",
+"Hoàn thiện trong nhà":"Fit-out – inside","Hoàn thiện ngoài trời":"Fit-out – outside","Vận chuyển":"Shipping","Vách kính":"Glass wall","Phá dỡ hiện trạng":"Demolition","Nâng cấp điện":"Power upgrade","Gia cố kết cấu":"Structural reinforcement","Cầu thang":"Staircase","Sửa mái":"Roof repair","Phát sinh khác":"Other works",
+"gói":"lot","báo giá":"quotation","Add-in – đang gộp, cần tách chi tiết":"Add-in – lump sum, needs breakdown",
+"Gói thiết bị chuẩn":"Standard equipment package","Từ Bảng tham chiếu":"From reference set","Nhóm":"Group","Min – Chuẩn – Max (tr)":"Min – Std – Max (M)","Khoảng":"Range","Store này (tr)":"This store (M)","Tổng thiết bị":"Total equipment",
+"Equipment (bếp, bar)":"Equipment (kitchen, bar)","Thiết bị & cảnh quan khấu hao theo tỷ lệ 5 năm / 3 năm trong mục Tài chính (mặc định 50/50 như file Excel).":"Equipment & landscape are depreciated by the 5-yr / 3-yr split set under Financing (default 50/50 as in the Excel file).",
+"Cảnh quan":"Landscape","Đơn giá (tr)":"Unit price (M)","Cảnh quan trong nhà":"Landscape – inside","Cảnh quan ngoài trời":"Landscape – outside","Cây lớn":"Large trees","Tổng CAPEX (A + B + C)":"Total CAPEX (A + B + C)",
+"Tổng tiền cần":"Total cash required","Đặt cọc & Key money":"Deposit & key money","Tiền thuê":"Rent","tháng":"months","Điện & nước (cố định)":"Power & water (fixed)","Tổng đặt cọc":"Total deposit",
+"Chi phí pre-opening (phân bổ Opex / vốn hóa)":"Pre-opening costs (Opex / capitalised split)","Khoản mục":"Item","Số tiền (tr)":"Amount (M)","Opex – tháng 1 (tr)":"Opex – month 1 (M)","Vốn hóa – KH 3 năm (tr)":"Capitalised – 3-yr depr. (M)","Tổng":"Total","Thêm khoản mục":"Add item","Khoản mục mới":"New item",
+"Phí marketing khai trương":"Opening marketing fee","Phí giấy phép xây dựng":"Construction permit fee","PCCC":"Fire safety","Phí mở rộng":"Expansion fee","Công chứng hợp đồng":"Lease notarisation","Công tác phí":"Travel","Lương nhân sự pre-opening":"Pre-opening labour",
+"Nâng cấp điện nước":"Utilities upgrade","Tiền thuê trước khai trương":"Pre-opening rent","Phí thiết kế":"Design fee","Quan hệ":"Relationship","Hoa hồng NSO":"NSO commission","Khác":"Other",
+"Xây dựng":"Construction","Thiết bị & cảnh quan":"Equipment & landscape","Đặt cọc":"Deposit","tr VND":"M VND",
+"hạng mục có giá trị nhưng đang":"items have amounts but are currently","không tính vào CAPEX":"excluded from CAPEX","Tick “Tính CAPEX” để đưa vào.":"Tick “In CAPEX” to include them.",
+"Hợp đồng":"Lease is","năm nhưng mô hình chạy 10 năm – các năm sau hợp đồng là giả định gia hạn.":"years but the model runs 10 years – years after expiry assume renewal.","Điều khoản tăng giá":"Escalation clause","đối chiếu với dòng “Tăng giá thuê”.":"check against the “Rent increase” row.",
+"Giả định 10 năm":"10-year assumptions","Giả định":"Assumption","Tăng trưởng sales":"Sales growth","Tăng giá thuê":"Rent increase","Tăng lương":"Wage increase","Tái đầu tư (% CAPEX ban đầu)":"Reinvestment (% of initial CAPEX)","Số tiền tái đầu tư (tr)":"Reinvestment amount (M)",
+"Logic giữ như Excel: giả định “Y1” của tăng trưởng/giá thuê/lương không dùng (năm 1 lấy từ P&L tháng); tái đầu tư năm N = CAPEX ban đầu × tỷ lệ năm N, khấu hao 5 năm; năm có tái đầu tư tính đóng cửa 1 tháng.":"Same logic as Excel: the “Y1” growth/rent/wage assumptions are not used (year 1 comes from the monthly P&L); reinvestment year N = initial CAPEX × rate N, depreciated over 5 years; reinvestment years assume a 1-month closure.",
+"Tài chính":"Financing","Tỷ giá USD/VND":"USD/VND rate","Thuế TNDN":"Corporate income tax","Lãi suất vay":"Interest rate","Tỷ lệ nợ":"Debt ratio","Kỳ hạn vay (năm)":"Loan tenor (yrs)","Số ngày AR":"AR days","Số ngày AP":"AP days","Số ngày tồn kho":"Inventory days",
+"Thiết bị & cảnh quan: % khấu hao 5 năm":"Equipment & landscape: % depreciated over 5 yrs","Đặt cọc: số tháng tiền thuê":"Deposit: months of rent","Đặt cọc điện nước (tr)":"Utilities deposit (M)","Năm tái đầu tư: % LC & OCE tiết kiệm khi đóng 1 tháng":"Reinvestment year: % of LC & OCE saved during 1-month closure",
+"Mặc định lấy từ Bảng tham chiếu; ô tím là giá trị khác chuẩn.":"Defaults come from the reference set; purple cells differ from standard.",
+"Không áp dụng":"N/A","Đạt":"Pass","Sát ngưỡng":"Near threshold","Không đạt":"Fail","Ngưỡng":"Threshold","Định nghĩa đề xuất, chờ kế toán":"Proposed definition, pending Accounting","Cách tính Excel cũ":"Old Excel method",
+"IRR(FCF Y0…Y10), có tái đầu tư":"IRR(FCF Y0…Y10), incl. reinvestment","EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)":"EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)","Payback (tái ĐT)":"Payback (w/ reinvest.)","Payback (ban đầu)":"Payback (initial)",
+"Năm FCF lũy kế (có tái ĐT) chuyển dương, nội suy":"Year cumulative FCF (w/ reinvest.) turns positive, interpolated","Như trên, chỉ tính đầu tư ban đầu":"Same, initial investment only","Doanh thu Y1 ÷ (Xây dựng + Thiết bị + Cảnh quan)":"Y1 sales ÷ (Construction + Equipment + Landscape)",
+"Không tính được – kiểm tra dữ liệu đầu vào.":"Cannot calculate – check the inputs.","Doanh thu":"Sales","Lợi nhuận gộp":"Gross profit","Khấu hao":"Depreciation","Doanh thu, EBITDA & dòng tiền lũy kế 10 năm (tr VND)":"Sales, EBITDA & cumulative cash flow, 10 years (M VND)",
+"FCF lũy kế":"Cumulative FCF","P&L năm 1 (12 tháng ổn định)":"Year-1 P&L (12 stable months)","P&L theo tháng – 6 tháng ramp-up (Y0) + 12 tháng năm 1":"Monthly P&L – 6 ramp-up months (Y0) + 12 months of Y1","Năm 1":"Year 1",
+"Dự phóng 10 năm & dòng tiền":"10-year projection & cash flow","Y0 (6T)":"Y0 (6M)","Chi phí lãi vay":"Interest expense","Lợi nhuận ròng":"Net income","Ảnh hưởng đóng cửa tái đầu tư":"Reinvestment closure effect",
+"Chi tiết: khấu hao, tái đầu tư, lịch vay nợ, kịch bản chỉ đầu tư ban đầu":"Details: depreciation, reinvestment, debt schedule, initial-investment-only case","Khấu hao – đầu tư ban đầu":"Depreciation – initial investment","Khấu hao – tái đầu tư":"Depreciation – reinvestment","Tái đầu tư":"Reinvestment",
+"Dư nợ đầu kỳ":"Opening debt","Vay thêm":"New borrowing","Trả gốc":"Principal repaid","Dư nợ cuối kỳ":"Closing debt","NOI (chỉ đầu tư ban đầu)":"NOI (initial investment only)","FCF (chỉ đầu tư ban đầu)":"FCF (initial investment only)","FCF lũy kế (chỉ đầu tư ban đầu)":"Cumulative FCF (initial only)",
+"Hoàn vốn":"Payback","Kéo thanh trượt: engine tính lại đầy đủ (P&L, dòng tiền 10 năm, KPI) với ADTC / AC thay đổi. Dữ liệu BoE không bị sửa.":"Drag the sliders: the engine fully recalculates (P&L, 10-year cash flow, KPIs) with the changed ADTC / AC. The BoE itself is not modified.",
+"Kịch bản nhanh":"Quick scenario","Áp dụng vào BoE":"Apply to BoE","Ma trận IRR 10Y theo ADTC × AC":"IRR 10Y matrix by ADTC × AC","Xanh: đạt ngưỡng. Vàng: sát ngưỡng. Đỏ: không đạt. Ô viền đậm là phương án hiện tại.":"Green: pass. Amber: near threshold. Red: fail. Bold border = current case.",
+"DT năm 1":"Y1 sales","Hiện tại (chưa lưu)":"Current (unsaved)","hiện tại":"current","AC (nghìn)":"AC (k)","Lịch sử phiên bản":"Version history","Ngày":"Date","Ghi chú":"Notes","Người sửa":"Edited by","Khôi phục":"Restore","Ghi chú phiên bản…":"Version note…","Lưu phiên bản":"Save version",
+"So sánh phiên bản":"Version comparison","Ô vàng = khác nhau giữa hai phiên bản. KPI được tính lại bằng engine từ dữ liệu đã lưu của từng phiên bản.":"Yellow = differs between versions. KPIs are recalculated by the engine from each version's saved data.",
+"Bản đầu":"First draft","Cập nhật báo giá XD":"Updated construction quote","Điều chỉnh LC":"Adjusted LC","Chốt BoE ":"Lock BoE",
+"Tất cả giá trị đang theo chuẩn của Bảng tham chiếu.":"All values follow the reference standard.","Khác chuẩn":"Differs from standard","ngoài khoảng":"out of range","ghi đè trong khoảng":"overrides within range","Trường":"Field","Chuẩn":"Std",
+"Lý do (bắt buộc nếu ngoài khoảng)":"Reason (required if out of range)","Ngoài khoảng":"Out of range","Nhập lý do…":"Enter reason…","Không bắt buộc":"Optional","Lấy lại giá trị chuẩn":"Reset to standard","Thiết bị":"Equipment",
+"Thị trường Kon Tum thiếu nhân sự, phải trả cao hơn mặt bằng":"Labour shortage in Kon Tum, wages above market","Theo mức lương thực tế khu vực Bình Dương cũ":"Based on actual wages in the former Bình Dương area",
+"Ngưỡng KPI":"KPI thresholds","Chi phí & kênh":"Costs & channels","Đơn giá xây dựng & cảnh quan":"Construction & landscape rates","Gói thiết bị":"Equipment package","Ramp-up & 10 năm":"Ramp-up & 10 years",
+"Chưa có bộ tham số cho tổ hợp này.":"No parameter set for this combination yet.","Tạo từ bộ gần nhất":"Create from nearest set","Áp dụng":"Applies","Chiều":"Direction","Ngưỡng đạt":"Pass threshold","Biên “sát ngưỡng”":"“Near threshold” margin","Công thức (xem Định nghĩa KPI)":"Formula (see KPI definitions)",
+"Ngưỡng là giá trị cố định theo Format × Vùng. BoE nháp dùng ngưỡng hiện hành; BoE đã chốt giữ ngưỡng tại thời điểm chốt. “Sát ngưỡng”: KPI đạt nhưng chưa vượt biên này → hiển thị màu vàng.":"Thresholds are fixed per Format × Region. Drafts use the current thresholds; locked BoEs keep those in force at lock time. “Near threshold”: the KPI passes but has not cleared this margin → shown in amber.",
+"AC mặc định (nghìn VND)":"Default AC (k VND)","Danh mục hạng mục dùng chung cho mọi store. Hạng mục xử lý hiện trạng (phá dỡ, cầu thang, điện, gia cố, mái…) không có đơn giá chuẩn, nhập theo báo giá trong từng BoE.":"The item catalogue is shared across stores. Site-condition items (demolition, staircase, power, reinforcement, roof…) have no standard rate and are entered per quotation in each BoE.",
+"Nhóm thiết bị":"Equipment group","tr/m²":"M/m²","tr/m":"M/m","tr/cây":"M/tree","Lưu thành phiên bản hiệu lực mới":"Save as new effective version","Bấm ô để xem / sửa. Ô “+” chưa có bộ tham số.":"Click a cell to view / edit. “+” cells have no parameter set yet.",
+"Thêm format…":"Add format…","Thêm vùng…":"Add region…","BoE đang dùng bộ này":"BoEs using this set","Chưa có.":"None yet.",
+"Sửa bảng tham chiếu không làm thay đổi số đã nhập trong BoE; BoE sẽ hiển thị trường nào đang khác chuẩn để người lập quyết định có áp lại hay không.":"Editing the reference set does not change figures already entered in BoEs; each BoE shows which fields differ from standard so the preparer can decide whether to reset them.",
+"Hiệu lực từ":"Effective from",
+"Công thức KPI áp dụng chung cho mọi store; chỉ Admin Finance sửa được và mỗi lần sửa tạo phiên bản mới. Ngưỡng đạt thiết lập riêng theo Format × Vùng trong Bảng tham chiếu.":"KPI formulas apply uniformly to all stores; only Finance Admin can change them and every change creates a new version. Pass thresholds are set per Format × Region in the reference set.",
+"Công thức (phiên bản 1)":"Formula (version 1)","Chờ kế toán xác nhận":"Pending Accounting","Đang áp dụng":"Active","Σ Xây dựng (hoàn thiện + xử lý hiện trạng được tick) + Σ Gói thiết bị + Cảnh quan":"Σ Construction (fit-out + ticked site works) + Σ Equipment package + Landscape",
+"Tham khảo: cách tính trong file Excel cũ (không thống nhất)":"Reference: calculations in the old Excel files (inconsistent)","EBITDA Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)":"EBITDA Y1 ÷ (Key money + Construction + Equipment + Pre-opening − MKT fee)",
+"EBITDA Y1 ÷ (Xây dựng + Thiết bị)":"EBITDA Y1 ÷ (Construction + Equipment)","Doanh thu Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)":"Y1 sales ÷ (Key money + Construction + Equipment + Pre-opening − MKT fee)","Doanh thu Y1 ÷ (Xây dựng + Thiết bị)":"Y1 sales ÷ (Construction + Equipment)",
+"Kiểm chứng engine: với dữ liệu của hai file Excel, IRR 10Y, IRR 5Y, Payback và toàn bộ dòng P&L / dòng tiền 10 năm khớp file gốc (sai số < 0,000001 tr).":"Engine check: with the data from both Excel files, IRR 10Y, IRR 5Y, Payback and every 10-year P&L / cash-flow line match the source files (difference < 0.000001M).",
+"Ánh xạ tài khoản Netsuite → dòng BoE":"Netsuite account → BoE line mapping","Chuẩn bị cho Phase 2. Mỗi tài khoản P&L của Netsuite gán vào 1 dòng BoE, để sau này kéo số thực tế theo mã store và so sánh.":"Preparation for Phase 2. Each Netsuite P&L account maps to one BoE line so actuals can later be pulled by store code and compared.",
+"Dòng BoE":"BoE line","Tài khoản Netsuite (ví dụ)":"Netsuite account (example)","Số TK đã gán":"Accounts mapped","Đủ":"Complete","Cần xác nhận":"To confirm","Chưa gán":"Not mapped","Mã tài khoản trong bảng chỉ là minh họa.":"Account codes are illustrative only.",
+"511x – Doanh thu bán hàng":"511x – Sales revenue","632x – Giá vốn":"632x – Cost of goods sold","6417 – Thuê mặt bằng":"6417 – Rent","6411, 6412 – Lương, BHXH":"6411, 6412 – Salaries, social insurance","6418x – Marketing":"6418x – Marketing","6413–6419 – Chi phí vận hành khác":"6413–6419 – Other operating costs","6414 – Khấu hao":"6414 – Depreciation",
+"Phase 2 – chưa làm trong bản này":"Phase 2 – not in this release","Store mở trong 24 tháng gần nhất · KPI theo tháng: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · CAPEX thực chi · Ngày khai trương thực tế":"Stores opened in the last 24 months · Monthly KPIs: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · Actual CAPEX · Actual opening date",
+"Xóa BoE":"Delete BoE","Cần nhập lý do cho các trường ngoài khoảng trước khi chốt":"Enter a reason for every out-of-range field before locking","Mở khóa BoE để sửa? Ngưỡng KPI sẽ quay về theo Bảng tham chiếu hiện hành.":"Unlock this BoE for editing? KPI thresholds will revert to the current reference set.",
+"Khôi phục dữ liệu của":"Restore the data of","Áp dụng ADTC / AC của kịch bản vào BoE?":"Apply the scenario's ADTC / AC to the BoE?","Xóa toàn bộ dữ liệu đang có và nạp lại dữ liệu mẫu (Kon Tum, Dĩ An)?":"Delete all current data and reload the sample data (Kon Tum, Dĩ An)?","File không hợp lệ.":"Invalid file.",
+"Chưa có BoE.":"No BoE yet.","Năm 1–2: 30 tr/tháng; năm 3–5: 33 tr/tháng":"Years 1–2: 30M/month; years 3–5: 33M/month","Tăng 10% sau mỗi 2 năm":"+10% every 2 years","Chốt BoE":"Lock BoE","Định nghĩa KPI ":"KPI definitions",
+"Utilization":"Utilization","Bản đã chốt":"Locked version","Hiện tại (chưa lưu)":"Current (unsaved)","Tổng tiền cần ":"Total cash required"
+};
+
+/* ===== BoE calculation engine (port of Excel "Core" sheet, KPI definitions unified) ===== */
+function boeEngine(p){
+  const DAYS_M=30, DAYS_Y=360, sum=a=>a.reduce((x,y)=>x+y,0);
+  const eqP5 = p.eqP5==null?0.5:p.eqP5, closeSave = p.closeSave==null?0.35:p.closeSave;
+  // ---- pre-opening split
+  const preOpex={Rent:0,LC:0,MKT:0,CMS:0,OCE:0}; let preTotal=0, preCap=0;
+  (p.pre||[]).forEach(x=>{const a=+x.amt||0, o=x.opex==null?1:+x.opex; preTotal+=a; preCap+=a*(1-o); preOpex[x.grp]=(preOpex[x.grp]||0)+a*o;});
+  const deposit = p.rent*p.depMonths + p.depUtil;
+  const capex = p.cons + p.eqland;                       // construction + equipment + landscape
+  const totalCash = p.key + capex + preTotal + deposit;  // D32
+  const capexInit = capex + preCap;                      // U105 (asset base for depreciation & debt)
+  const cmsPct = p.p3*p.comm;
+  const revT = p.adtc*p.ac/1000*DAYS_M, lcM = revT*p.lc;
+  const depMonthly = p.cons/5/12 + p.eqland*eqP5/5/12 + p.eqland*(1-eqP5)/3/12;
+  // ---- monthly (6 ramp-up + 12)
+  const M=[];
+  for(let i=0;i<18;i++){
+    const r=i<6?p.ramp[i]:1, adtc=p.adtc*r, ads=adtc*p.ac/1000, rev=ads*DAYS_M, f=i==0;
+    const m={i,r,adtc,ads,tc:adtc*DAYS_M,rev,cogs:rev*p.cogs,rent:p.rent+(f?preOpex.Rent:0),lc:lcM+(f?preOpex.LC:0),
+      mkt:rev*p.mkt+(f?preOpex.MKT:0),cms:rev*cmsPct+(f?preOpex.CMS:0),oce:rev*p.oce+(f?preOpex.OCE:0),dep:depMonthly};
+    m.gp=m.rev-m.cogs; m.ebitda=m.gp-m.rent-m.lc-m.mkt-m.cms-m.oce; m.noi=m.ebitda-m.dep; M.push(m);
+  }
+  // ---- yearly P&L
+  const Y=[];
+  const agg=(a,b)=>{const s=M.slice(a,b),o={};['tc','rev','cogs','rent','lc','mkt','cms','oce'].forEach(k=>o[k]=sum(s.map(x=>x[k])));return o};
+  Y[0]=agg(0,6); Y[0].adtc=Y[0].tc/180;
+  Y[1]=agg(6,18); Y[1].adtc=Y[1].rev/DAYS_Y/p.ac*1000;
+  for(let y=2;y<=10;y++){const pr=Y[y-1],adtc=pr.adtc*(1+p.g[y-1]),rev=adtc*p.ac/1000*DAYS_Y;
+    Y[y]={adtc,tc:adtc*DAYS_Y,rev,cogs:rev*p.cogs,rent:pr.rent*(1+p.ri[y-1]),lc:pr.lc*(1+p.w[y-1]),mkt:rev*p.mkt,cms:rev*cmsPct,oce:rev*p.oce};}
+  Y.forEach(y=>{y.ads=y.adtc*p.ac/1000; y.gp=y.rev-y.cogs; y.ebitda=y.gp-y.rent-y.lc-y.mkt-y.cms-y.oce;});
+  // ---- depreciation
+  const straight=(U,life,start,half)=>{const d=Array(11).fill(0);let rem=U;for(let y=start;y<=10&&rem>1e-9;y++){const v=Math.min(rem,U/life*(half&&y==start?0.5:1));d[y]=v;rem-=v;}return d};
+  const initAssets=[[p.cons,5],[p.eqland*eqP5,5],[p.eqland*(1-eqP5),3],[preCap,3]];
+  const depInit=Array(11).fill(0); initAssets.forEach(([U,l])=>straight(U,l,0,true).forEach((v,i)=>depInit[i]+=v));
+  const reinv=Array(11).fill(0); for(let y=1;y<=10;y++) reinv[y]=capex*p.rrr[y-1];
+  const depRe=Array(11).fill(0); for(let k=1;k<=10;k++) for(let y=k;y<=Math.min(10,k+4);y++) depRe[y]+=reinv[k]/5;
+  // ---- debt (each year's investment financed debt%, repaid over tenor)
+  const inv=[capexInit,...reinv.slice(1)], tr=inv.map(v=>v*p.debt), repay=Array(11).fill(0);
+  tr.forEach((T,k)=>{let rem=T;for(let y=k;y<=10&&rem>1e-9;y++){const v=Math.min(rem,T/p.tenor*(y==0?0.5:1));repay[y]+=v;rem-=v;}});
+  let cb=0; const debt=[];
+  for(let y=0;y<=10;y++){const ob=y==0?tr[0]:cb, add=y==0?0:tr[y]; cb=ob+add-repay[y];
+    debt.push({ob,add,repay:repay[y],cb,int:(ob+cb)/2*p.rate*(y==0?0.5:1)});}
+  // ---- cash flow (with re-investment) & initial-only
+  let acc=0, acci=0;
+  Y.forEach((o,y)=>{
+    o.depInit=depInit[y]; o.depRe=depRe[y]; o.dep=depInit[y]+depRe[y]; o.noi=o.ebitda-o.dep; o.int=debt[y].int;
+    o.cit=Math.max(0,o.noi-o.int)*p.cit; o.ni=o.noi-o.int-o.cit;
+    o.eff = y>0 && p.rrr[y-1]>0 ? (-o.gp+o.lc*closeSave+o.oce*closeSave)/12*(1-p.cit) : 0;   // 1-month renovation closure
+    o.reinv=reinv[y]; o.cfo=o.ni+o.dep+o.eff; o.cfi= y==0?-totalCash:-reinv[y]; o.fcf=o.cfo+o.cfi;
+    o.acc = y==0?o.fcf:(acc<0?o.fcf+acc:0); acc=o.acc; o.cum=(y==0?0:Y[y-1].cum)+o.fcf;
+    o.noiI=o.ebitda-o.depInit; o.citI=Math.max(0,o.noiI-o.int)*p.cit; o.niI=o.noiI-o.int-o.citI;
+    o.fcfI=o.niI+o.depInit+(y==0?-totalCash:0); o.accI= y==0?o.fcfI:(acci<0?o.fcfI+acci:0); acci=o.accI;
+    o.debt=debt[y];
+  });
+  // ---- KPIs
+  const irr=cf=>{const npv=r=>cf.reduce((a,v,i)=>a+v/Math.pow(1+r,i),0);let lo=-0.99,hi=10;if(npv(lo)*npv(hi)>0)return null;
+    for(let k=0;k<200;k++){const m=(lo+hi)/2;npv(m)>0?lo=m:hi=m;}return (lo+hi)/2};
+  const payback=(accs,fcf)=>{let mx=-Infinity,ix=-1;accs.forEach((v,i)=>{if(v>mx){mx=v;ix=i}});if(mx<=0)return null;
+    return (ix-1)+(fcf[ix]-mx)/fcf[ix]};   // same convention as Excel D6/D7
+  const kpi={
+    irr10:irr(Y.map(y=>y.fcf)), irr5:irr(Y.slice(0,6).map(y=>y.fcf)),
+    roic: Y[1].ebitda/(capex+p.key+preTotal),            // unified definition (proposed)
+    sc: Y[1].rev/capex,                                   // unified definition (proposed)
+    pb: payback(Y.map(y=>y.acc),Y.map(y=>y.fcf)), pbi: payback(Y.map(y=>y.accI),Y.map(y=>y.fcfI)),
+    roicXL: Y[1].ebitda/(p.key+capex+preTotal-(p.mktFee||0))  // Kon Tum Excel definition, for reconciliation only
+  };
+  return {M,Y,kpi,cap:{cons:p.cons,eqland:p.eqland,capex,preTotal,preCap,preOpex,deposit,totalCash,capexInit,reinvTotal:sum(reinv)},cmsPct,revT,lcM};
+}
+if(typeof module!=='undefined') module.exports=boeEngine;
+
+/* ============ BoE Studio prototype — state, i18n, helpers, seed ============ */
+const LS_KEY='boeStudio.v1';
+let S;                      // app state
+let LANG='vi';
+const MISSING=new Set();    // i18n keys without EN (debug)
+const t=s=>{ if(LANG=='vi')return s; const e=EN[s]; if(e===undefined){MISSING.add(s);return s} return e; };
+const clone=o=>JSON.parse(JSON.stringify(o));
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const loc=()=>LANG=='vi'?'vi-VN':'en-US';
+const fmt=(v,d=1)=>(v==null||!isFinite(v))?'–':new Intl.NumberFormat(loc(),{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+const pct=(v,d=1)=>(v==null||!isFinite(v))?'–':fmt(v*100,d)+'%';
+const raw=(v,d)=>{ if(v==null||v==='')return ''; if(typeof v!='number')return v; let s=String(+v.toFixed(d==null?3:d)); return LANG=='vi'?s.replace('.',','):s; };
+const parseNum=s=>{ s=String(s).trim().replace(/\s/g,''); if(s==='')return null;
+  if(LANG=='vi'){ s=s.replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.'); } else { s=s.replace(/,(?=\d{3}(\D|$))/g,''); }
+  const v=parseFloat(s); return isFinite(v)?v:null; };
+const getP=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+const setP=(o,p,v)=>{const ks=p.split('.');let a=o;ks.slice(0,-1).forEach(k=>a=a[k]);a[ks[ks.length-1]]=v;};
+const today=()=>new Date().toISOString().slice(0,10);
+const dmy=s=>s?s.split('-').reverse().join('/'):'–';
+
+/* ---------- construction catalogue (shared) ---------- */
+const CATALOG=[
+ {k:'in',  name:'Hoàn thiện trong nhà', unit:'m²', cur:'USD', grp:'fit', auto:'in'},
+ {k:'out', name:'Hoàn thiện ngoài trời', unit:'m²', cur:'M', grp:'fit', auto:'out'},
+ {k:'ship',name:'Vận chuyển', unit:'m²', cur:'M', grp:'fit', auto:'all'},
+ {k:'fsc', name:'FSC', unit:'gói', cur:'M', grp:'fit'},
+ {k:'facade',name:'Façade', unit:'m', cur:'M', grp:'fit'},
+ {k:'glass',name:'Vách kính', unit:'m', cur:'M', grp:'fit'},
+ {k:'demo',name:'Phá dỡ hiện trạng', unit:'gói', cur:'M', grp:'site'},
+ {k:'power',name:'Nâng cấp điện', unit:'gói', cur:'M', grp:'site'},
+ {k:'struct',name:'Gia cố kết cấu', unit:'gói', cur:'M', grp:'site'},
+ {k:'stair',name:'Cầu thang', unit:'gói', cur:'M', grp:'site'},
+ {k:'roof',name:'Sửa mái', unit:'gói', cur:'M', grp:'site'},
+ {k:'other',name:'Phát sinh khác', unit:'gói', cur:'M', grp:'site'}];
+const RATE_KEYS=[['in','Hoàn thiện trong nhà','USD/m²'],['out','Hoàn thiện ngoài trời','tr/m²'],['ship','Vận chuyển','tr/m²'],['facade','Façade','tr/m'],['glass','Vách kính','tr/m'],
+ ['landIn','Cảnh quan trong nhà','tr/m²'],['landOut','Cảnh quan ngoài trời','tr/m²'],['tree','Cây lớn','tr/cây']];
+const EQ_GROUPS=[['Equipment','Equipment (bếp, bar)'],['Tools','Tools'],['Setup','Setup'],['IT','IT Equipment']];
+const DAYPARTS=['01. Sáng (6:00–8:59)','02. Giữa sáng (9:00–10:59)','03. Trưa (11:00–13:59)','04. Tea time (14:00–15:59)','05. Chiều tối (16:00–18:59)','06. Hangout (19:00–20:59)','07. Khuya (21:00–5:59)'];
+const PRE_GROUPS=['MKT','OCE','LC','Rent','CMS'];
+const KPI_DEF=[
+ {k:'irr10',n:'IRR 10Y',type:'pct',dir:'≥',fx:'IRR(FCF Y0…Y10), có tái đầu tư'},
+ {k:'irr5',n:'IRR 5Y',type:'pct',dir:'≥',fx:'IRR(FCF Y0…Y5)'},
+ {k:'roic',n:'ROIC 1Y',type:'pct',dir:'≥',fx:'EBITDA Y1 ÷ (CAPEX + Key money + Pre-opening)',pending:1},
+ {k:'pb',n:'Payback (tái ĐT)',type:'yr',dir:'≤',fx:'Năm FCF lũy kế (có tái ĐT) chuyển dương, nội suy'},
+ {k:'pbi',n:'Payback (ban đầu)',type:'yr',dir:'≤',fx:'Như trên, chỉ tính đầu tư ban đầu'},
+ {k:'sc',n:'Sales / CAPEX',type:'x',dir:'≥',fx:'Doanh thu Y1 ÷ (Xây dựng + Thiết bị + Cảnh quan)',pending:1}];
+
+/* ---------- seed data ---------- */
+function comboTN(){ return {ver:3, eff:'2026-07-01',
+  thr:{irr10:{on:1,v:.22,w:.25},irr5:{on:1,v:.08,w:.10},roic:{on:1,v:.43,w:.48},pb:{on:1,v:3.81,w:3.5},pbi:{on:1,v:2.83,w:2.6},sc:{on:1,v:2.07,w:2.2}},
+  cost:{cogs:[.26,.2880317184056853,.30],lc:[.11,.12,.14],mkt:[.03,.033944909504533466,.04],oce:[.08,.0926269207471917,.10]},
+  chan:{pIS:.85,p3:.05,comm:.11,ac:78},
+  rates:{in:[320,343,400],out:[2.5,3.25,3.5],ship:[.6,.75,.9],facade:[1.7,2.05,2.5],glass:[2.2,2.6,3.0],landIn:[.14,.16,.2],landOut:[.2,.22,.26],tree:[15,20,25]},
+  equip:{Equipment:[1049.1,1165.7,1282.3],Tools:[40.2,44.7,49.2],Setup:[157.3,174.8,192.3],IT:[253.1,281.2,309.3]},
+  ramp:[.8,.9,.95,1,.9,.95],
+  lt:{g:[.07,.07,.07,.07,.07,.07,.05,.05,.05,.05],ri:[0,0,.1,0,.1,0,0,0,0,0],w:[0,.1,0,.1,0,.1,0,.1,0,.1],rrr:[.003,.033,.033,.033,.203,.033,.703,.033,.153,.033]},
+  fin:{fx:25000,cit:.2,rate:.1,debt:.7,tenor:5,ar:1,ap:27,inv:10,eqP5:.5,depMonths:3,depUtil:50,closeSave:.35}}; }
+function seed(){
+  const tn=comboTN();
+  const nam=clone(tn); Object.assign(nam,{ver:2,eff:'2025-11-01'});
+  nam.thr={irr10:{on:1,v:.244,w:.27},irr5:{on:1,v:.08,w:.10},roic:{on:1,v:.507,w:.55},pb:{on:1,v:3.81,w:3.5},pbi:{on:1,v:2.83,w:2.6},sc:{on:1,v:2.142,w:2.3}};
+  nam.cost={cogs:[.25,.26842939563349555,.29],lc:[.11,.12,.14],mkt:[.03,.03271299322938834,.04],oce:[.075,.0827620201755216,.095]};
+  nam.chan={pIS:.85,p3:0,comm:.11,ac:78}; nam.ramp=[.5,.75,.8,.85,.9,.95];
+  nam.rates.in=[400,450,500]; nam.rates.out=[2.2,2.5,3.0]; nam.rates.facade=[1.5,1.7,2.0];
+  nam.lt.ri=[0,0,.1,0,.1,0,.1,0,.1,0];
+  const bac=clone(tn); Object.assign(bac,{ver:1,eff:'2026-07-01'}); bac.rates.in=[350,380,420];
+  const kiosk=clone(nam); Object.assign(kiosk,{ver:1,eff:'2026-07-01'});
+  kiosk.equip={Equipment:[600,650,700],Tools:[25,30,35],Setup:[80,90,100],IT:[150,170,190]}; kiosk.chan.ac=65;
+  kiosk.thr.sc={on:1,v:2.5,w:2.7};
+  const master={formats:['Core','Kiosk','Flagship','Drive-thru'],regions:['Bắc','Trung','Tây Nguyên','Nam'],
+    combos:{'Core|Tây Nguyên':tn,'Core|Nam':nam,'Core|Bắc':bac,'Kiosk|Nam':kiosk}};
+  const dp=(p,tu)=>p.map((x,i)=>({pct:x,turns:tu[i]}));
+  const kt={id:'kt',code:'30897',name:'Bưu Điện Kon Tum',entity:'HC',format:'Core',region:'Tây Nguyên',trade:'Residential',
+    address:'70 Lê Hồng Phong, P. Kon Tum, Quảng Ngãi',handover:'2026-08-13',firstPay:'2026-09-17',opening:'2026-09-17',leaseYears:5,
+    rentReview:'Năm 1–2: 30 tr/tháng; năm 3–5: 33 tr/tháng',status:'draft',ver:4,
+    adtc:203,ac:78,pIS:.85,p3:.05,comm:.11,groupSize:1.7,
+    leaseArea:300,inArea:150,outArea:50,boh:.28,dead:.15,sqmPax:1.5,util:.8,
+    dayparts:dp([.17,.2,.18,.13,.13,.17,.02],[2,1,1,2,2,1,1]),
+    ramp:[.8,.9,.95,1,.9,.95],cost:{cogs:.2880317184056853,lc:.14177683077049819,mkt:.033944909504533466,oce:.0926269207471917},
+    reasons:{'cost.lc':'Thị trường Kon Tum thiếu nhân sự, phải trả cao hơn mặt bằng','equip.Tools':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm','equip.Setup':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm','equip.IT':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm'},
+    rent:30,key:0,
+    cons:[{k:'in',qty:150,rate:343,inc:1},{k:'out',qty:50,rate:3.25,inc:1},{k:'ship',qty:200,rate:.75,inc:1},{k:'fsc',qty:1,rate:50,inc:1},
+      {k:'facade',qty:18,rate:2.05,inc:1},{k:'glass',qty:36,rate:2.6,inc:1},{k:'demo',qty:1,rate:75,inc:0},{k:'stair',qty:1,rate:100,inc:0},
+      {k:'other',qty:1,rate:471.336326,inc:1,note:'Add-in – đang gộp, cần tách chi tiết'}],
+    equip:{Equipment:1203,Tools:0,Setup:0,IT:0},land:{inRate:.16,outRate:.22,trees:0,treeRate:20},
+    pre:[{name:'Phí marketing khai trương',grp:'MKT',amt:25,opex:1},{name:'Phí giấy phép xây dựng',grp:'OCE',amt:20,opex:0},{name:'PCCC',grp:'OCE',amt:0,opex:1},
+      {name:'Phí mở rộng',grp:'OCE',amt:0,opex:1},{name:'Công chứng hợp đồng',grp:'OCE',amt:0,opex:1},{name:'Công tác phí',grp:'OCE',amt:113,opex:1},
+      {name:'Lương nhân sự pre-opening',grp:'LC',amt:50,opex:1},{name:'Nâng cấp điện nước',grp:'OCE',amt:0,opex:1},{name:'Tiền thuê trước khai trương',grp:'Rent',amt:0,opex:1},
+      {name:'Phí thiết kế',grp:'OCE',amt:75,opex:0},{name:'Quan hệ',grp:'OCE',amt:0,opex:0},{name:'Hoa hồng NSO',grp:'LC',amt:50,opex:.5},{name:'Khác',grp:'OCE',amt:0,opex:1}],
+    lt:clone(tn.lt),fin:{...tn.fin},versions:[]};
+  const da={...clone(kt),id:'da',code:'HCSBDU0037',name:'Nguyễn Tri Phương Dĩ An',region:'Nam',address:'501a Đ. Nguyễn Tri Phương, P. Dĩ An, TP. Hồ Chí Minh',
+    handover:'2025-12-10',firstPay:'2026-01-10',opening:'2026-01-10',leaseYears:6,rentReview:'Tăng 10% sau mỗi 2 năm',status:'locked',ver:2,
+    adtc:160,p3:0,leaseArea:224.7,inArea:188,outArea:36.7,boh:.25,dayparts:dp([.18,.17,.17,.14,.12,.2,.02],[2,2,2.5,2,2,1,1]),
+    ramp:[.5,.75,.8,.85,.9,.95],cost:{cogs:.26842939563349555,lc:.14,mkt:.03271299322938834,oce:.0827620201755216},
+    reasons:{'cost.lc':'Theo mức lương thực tế khu vực Bình Dương cũ','equip.Tools':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm','equip.Setup':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm','equip.IT':'File Excel gốc chỉ có tổng thiết bị, chưa tách nhóm'},rent:60,
+    cons:[{k:'in',qty:188,rate:450,inc:1},{k:'out',qty:36.7,rate:2.5,inc:1},{k:'fsc',qty:1,rate:50,inc:1},{k:'facade',qty:20,rate:1.7,inc:1},
+      {k:'demo',qty:1,rate:75,inc:0},{k:'power',qty:1,rate:25,inc:0},{k:'struct',qty:1,rate:1.75,inc:0},{k:'stair',qty:1,rate:225,inc:0},{k:'roof',qty:1,rate:.625,inc:0}],
+    equip:{Equipment:1220,Tools:0,Setup:0,IT:0},
+    pre:[{name:'Phí marketing khai trương',grp:'MKT',amt:25,opex:1},{name:'Phí giấy phép xây dựng',grp:'OCE',amt:25,opex:0},{name:'Công chứng hợp đồng',grp:'OCE',amt:5.8,opex:1},
+      {name:'Công tác phí',grp:'OCE',amt:67.13,opex:1},{name:'Lương nhân sự pre-opening',grp:'LC',amt:52.416,opex:1},{name:'Phí thiết kế',grp:'OCE',amt:75,opex:0},
+      {name:'Hoa hồng NSO',grp:'LC',amt:50,opex:.5}],
+    lt:clone(nam.lt),fin:{...nam.fin},versions:[]};
+  da.snapshot={combo:'Core|Nam',ver:nam.ver,eff:nam.eff,thr:clone(nam.thr),lockedAt:'2025-12-18'};
+  // version history for Kon Tum (computed live, figures v1–v3 are illustrative)
+  const v=(n,date,note,mod)=>{const c=clone(kt);mod(c);delete c.versions;return {v:n,ts:date,note,by:'Finance · A',data:c}};
+  kt.versions=[v(1,'2026-08-12','Bản đầu',c=>{c.adtc=230;c.ac=75;c.cost.lc=.12;c.cons.find(x=>x.k=='other').rate=300;}),
+               v(2,'2026-08-25','Cập nhật báo giá XD',c=>{c.adtc=215;c.ac=75;c.cost.lc=.12;}),
+               v(3,'2026-09-02','Điều chỉnh LC',c=>{c.adtc=215;})];
+  return {master,boes:[kt,da],ui:{screen:'list',tab:'in',ptab:'thr',combo:'Core|Tây Nguyên',cur:'kt'}};
+}
+
+/* ---------- persistence ---------- */
+function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));localStorage.setItem(LS_KEY+'.lang',LANG);}catch(e){} }
+function load(){ try{const s=localStorage.getItem(LS_KEY); LANG=localStorage.getItem(LS_KEY+'.lang')||'vi'; if(s)return JSON.parse(s);}catch(e){} return null; }
+
+/* ---------- model helpers ---------- */
+const comboKey=b=>b.format+'|'+b.region;
+const comboOf=b=>S.master.combos[comboKey(b)]||null;
+const catOf=k=>CATALOG.find(c=>c.k==k)||{k,name:k,unit:'gói',cur:'M',grp:'site'};
+function consQty(b,it){const c=catOf(it.k); if(c.auto=='in')return b.inArea; if(c.auto=='out')return b.outArea; if(c.auto=='all')return (+b.inArea||0)+(+b.outArea||0); return it.qty;}
+function consAmt(b,it){const c=catOf(it.k),q=+consQty(b,it)||0,r=+it.rate||0; return c.cur=='USD'? q*r*(b.fin.fx||25000)/1e6 : q*r;}
+function landAmt(b){return {in:(+b.inArea||0)*b.land.inRate, out:(+b.outArea||0)*b.land.outRate, tree:(+b.land.trees||0)*b.land.treeRate};}
+function toCalc(b,scale){ const sA=scale?scale.a:1, sB=scale?scale.b:1;
+  const cons=b.cons.filter(x=>x.inc).reduce((a,x)=>a+consAmt(b,x),0);
+  const eq=EQ_GROUPS.reduce((a,[g])=>a+(+b.equip[g]||0),0), la=landAmt(b);
+  return {adtc:b.adtc*sA, ac:b.ac*sB, p3:b.p3, comm:b.comm, ramp:b.ramp, cogs:b.cost.cogs, lc:b.cost.lc, mkt:b.cost.mkt, oce:b.cost.oce,
+    rent:b.rent, depMonths:b.fin.depMonths, depUtil:b.fin.depUtil, key:+b.key||0, cons, eqland:eq+la.in+la.out+la.tree, eqP5:b.fin.eqP5, closeSave:b.fin.closeSave,
+    pre:b.pre, g:b.lt.g, ri:b.lt.ri, w:b.lt.w, rrr:b.lt.rrr, cit:b.fin.cit, rate:b.fin.rate, debt:b.fin.debt, tenor:b.fin.tenor,
+    mktFee:(b.pre.find(x=>x.grp=='MKT')||{}).amt||0};
+}
+const calc=(b,scale)=>{ try{ return boeEngine(toCalc(b,scale)); }catch(e){ console.error(e); return null; } };
+function thrOf(b){ if(b.status=='locked'&&b.snapshot) return b.snapshot.thr; const c=comboOf(b); return c?c.thr:null; }
+function kStat(k,v,thr){ const d=KPI_DEF.find(x=>x.k==k), th=thr&&thr[k]; if(!th||!th.on) return 'na'; if(v==null) return 'bad';
+  const ok=d.dir=='≥'?v>=th.v:v<=th.v; if(!ok) return 'bad'; const near=d.dir=='≥'?v<th.w:v>th.w; return near?'warn':'ok'; }
+const showK=(v,type)=>v==null?'–':type=='pct'?pct(v,1):type=='yr'?fmt(v,2)+' '+t('năm'):fmt(v,2)+'x';
+
+/* standard / range lookup for a bound field: returns {std, min, max} or null */
+function stdInfo(b,path){ const c=comboOf(b); if(!c) return null; const r=a=>({min:a[0],std:a[1],max:a[2]}); let m;
+  if(m=path.match(/^cost\.(\w+)$/)) return r(c.cost[m[1]]);
+  if(m=path.match(/^ramp\.(\d)$/)) {const s=c.ramp[+m[1]];return {std:s,min:Math.max(0,s-.15),max:Math.min(1.2,s+.15)};}
+  if(m=path.match(/^lt\.(\w+)\.(\d+)$/)) return {std:c.lt[m[1]][+m[2]]};
+  if(m=path.match(/^fin\.(\w+)$/)) return c.fin[m[1]]==null?null:{std:c.fin[m[1]]};
+  if(m=path.match(/^equip\.(\w+)$/)) return r(c.equip[m[1]]);
+  if(m=path.match(/^cons\.(\d+)\.rate$/)) { const it=b.cons[+m[1]]; const a=it&&c.rates[it.k]; return a?r(a):null; }
+  if(path=='land.inRate') return r(c.rates.landIn); if(path=='land.outRate') return r(c.rates.landOut); if(path=='land.treeRate') return r(c.rates.tree);
+  if(path=='p3'||path=='comm'||path=='pIS') return {std:c.chan[path]};
+  return null; }
+function fieldStat(b,path){ const s=stdInfo(b,path); if(!s) return ''; const v=getP(b,path); if(v==null) return '';
+  if(s.min!=null&&(v<s.min-1e-9||v>s.max+1e-9)) return 'out'; if(Math.abs(v-s.std)>1e-9) return 'ovr'; return 'std'; }
+const LABELS={'cost.cogs':'% COGS','cost.lc':'% LC (Labor)','cost.mkt':'% MKT','cost.oce':'% OCE','p3':'% 3P (Grab, ShopeeFood…)','comm':'Hoa hồng 3P bình quân','pIS':'% In-store',
+  'land.inRate':'Cảnh quan trong nhà','land.outRate':'Cảnh quan ngoài trời','land.treeRate':'Cây lớn'};
+function fieldLabel(b,path){ let m; if(LABELS[path]) return t(LABELS[path]);
+  if(m=path.match(/^ramp\.(\d)$/)) return 'Ramp-up '+t('T')+(+m[1]+1);
+  if(m=path.match(/^lt\.(\w+)\.(\d+)$/)) return t({g:'Tăng trưởng sales',ri:'Tăng giá thuê',w:'Tăng lương',rrr:'Tái đầu tư (% CAPEX ban đầu)'}[m[1]])+' Y'+(+m[2]+1);
+  if(m=path.match(/^fin\.(\w+)$/)) return t(FIN_LABEL[m[1]]||m[1]);
+  if(m=path.match(/^equip\.(\w+)$/)) return t('Thiết bị')+' – '+t((EQ_GROUPS.find(g=>g[0]==m[1])||[0,m[1]])[1]);
+  if(m=path.match(/^cons\.(\d+)\.rate$/)) return t('Đơn giá')+' – '+t(catOf(b.cons[+m[1]].k).name);
+  return path; }
+const FIN_LABEL={fx:'Tỷ giá USD/VND',cit:'Thuế TNDN',rate:'Lãi suất vay',debt:'Tỷ lệ nợ',tenor:'Kỳ hạn vay (năm)',ar:'Số ngày AR',ap:'Số ngày AP',inv:'Số ngày tồn kho',
+  eqP5:'Thiết bị & cảnh quan: % khấu hao 5 năm',depMonths:'Đặt cọc: số tháng tiền thuê',depUtil:'Đặt cọc điện nước (tr)',closeSave:'Năm tái đầu tư: % LC & OCE tiết kiệm khi đóng 1 tháng'};
+const isPctPath=p=>/^(cost\.|ramp\.|lt\.)/.test(p)||['p3','comm','pIS','boh','dead','util','fin.cit','fin.rate','fin.debt','fin.eqP5','fin.closeSave'].includes(p)||/^dayparts\.\d+\.pct$/.test(p)||/^pre\.\d+\.opex$/.test(p);
+
+/* ============ BoE Studio prototype — rendering ============ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const cur=()=>S.boes.find(b=>b.id==S.ui.cur)||S.boes[0];
+let R=null;   // last calc result for current BoE
+
+/* ---------- bound inputs ---------- */
+function I(path,o={}){ const b=o.m?S.master.combos[S.ui.combo]:cur(); const v=getP(b,path); const k=o.k||(isPctPath(path)?'p':'n');
+  const dis=(o.dis||(!o.m&&b.status=='locked'))?'disabled':''; const st=o.m?'':fieldStat(b,path);
+  let tip=''; if(!o.m){const s=stdInfo(b,path); if(s){const f=x=>k=='p'?pct(x,2):fmt(x,2); tip=t('Chuẩn')+': '+f(s.std)+(s.min!=null?' ('+f(s.min)+' – '+f(s.max)+')':'');}}
+  const attr=`data-b="${path}" data-k="${k}" ${o.m?'data-m="1"':''} ${o.re?'data-re="1"':''} ${dis} title="${esc(tip)}" style="${o.w?'width:'+o.w+'px':''}"`;
+  if(k=='t') return `<input class="fi" type="text" ${attr} value="${esc(v)}">`;
+  if(k=='d') return `<input class="fi" type="date" ${attr} value="${esc(v)}">`;
+  if(k=='sel') return `<select class="fi" ${attr}>${o.opts.map(x=>`<option value="${esc(x)}" ${x==v?'selected':''}>${esc(t(x))}</option>`).join('')}</select>`;
+  if(k=='chk') return `<input type="checkbox" class="cb" ${attr} ${v?'checked':''}>`;
+  const shown=k=='p'?raw(v==null?null:v*100,2):raw(v);
+  return `<span class="fiw ${st}"><input class="fi num ${st}" type="text" inputmode="decimal" ${attr} value="${shown}">${k=='p'?'<i>%</i>':''}</span>`; }
+function F(label,path,unit,o={}){ return `<div class="f"><label>${t(label)}${unit?` <span class="u">${t(unit)}</span>`:''}</label>${I(path,o)}</div>`; }
+function O(key,label,unit){ return `<div class="f"><label>${t(label)}${unit?` <span class="u">${t(unit)}</span>`:''}</label><div class="in calc" data-o="${key}">–</div></div>`; }
+function rng(min,std,max,val){ if(min==null) return '<span class="note">'+t('báo giá')+'</span>'; const lo=min-(max-min)*.6,hi=max+(max-min)*.6;
+  const p=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100)); const out=val<min-1e-9||val>max+1e-9;
+  return `<span class="rng"><b style="left:${p(min)}%;width:${p(max)-p(min)}%"></b><i style="left:calc(${p(std)}% - 1px);background:#98a2b3"></i><i class="${out?'out':''}" style="left:calc(${p(val)}% - 1px)"></i></span>`; }
+
+/* ---------- computed outputs for the detail screen ---------- */
+function outVals(b,R){ const o={}; if(!R) return o; const c=R.cap;
+  o.ads=fmt(b.adtc*b.ac/1000,2); o.revM=fmt(R.revT,1); o.p1=pct(1-b.pIS-b.p3,0); o.spend=fmt(b.ac/b.groupSize,1); o.cms=pct(R.cmsPct,2); o.lcM=fmt(R.lcM,1);
+  const inv=(+b.inArea||0)+(+b.outArea||0), foh=inv*(1-b.boh)*(1-b.dead), seats=foh/b.sqmPax; o.inv=fmt(inv,1); o.foh=fmt(foh,1); o.seats=fmt(seats,0);
+  o.rentSqm=fmt(b.rent*1e6/b.leaseArea,0); o.rentPct=pct(b.rent/R.revT,1);
+  const dine=b.adtc*b.pIS; let mx=0;
+  b.dayparts.forEach((d,i)=>{const tc=dine*d.pct,g=tc*b.groupSize,s=g/d.turns/b.util; mx=Math.max(mx,s); o['dp'+i+'tc']=fmt(tc,1); o['dp'+i+'g']=fmt(g,1); o['dp'+i+'s']=fmt(s,1);
+    o['dp'+i+'bar']=`<div class="bar"><div style="width:${Math.min(100,s/seats*100)}%;background:${s/seats>.85?'#9a6700':'#1f5fbf'}"></div></div>`;});
+  o.dpMax=fmt(mx,0)+' / '+fmt(seats,0)+' '+t('ghế')+' → '+(mx<=seats?`<span class="tag t-ok">${t('Đủ ghế')}</span>`:`<span class="tag t-bad">${t('Thiếu ghế')}</span>`);
+  let excl=0; b.cons.forEach((it,i)=>{const a=consAmt(b,it); o['c'+i+'q']=fmt(consQty(b,it),1); o['c'+i+'a']=fmt(a,1); if(!it.inc&&a>0)excl+=a;});
+  o.consTot=fmt(c.cons,1); o.consExcl=excl;
+  const comb=comboOf(b); let eq=0; EQ_GROUPS.forEach(([g])=>{eq+=+b.equip[g]||0;}); o.eqTot=fmt(eq,1);
+  const la=landAmt(b); o.lIn=fmt(la.in,1); o.lOut=fmt(la.out,1); o.lTree=fmt(la.tree,1); o.lTot=fmt(la.in+la.out+la.tree,1);
+  o.capex=fmt(c.capex,1); o.key=fmt(+b.key||0,1);
+  let po=0,pc=0; b.pre.forEach((x,i)=>{o['p'+i+'o']=fmt(x.amt*x.opex,1); o['p'+i+'c']=fmt(x.amt*(1-x.opex),1); po+=x.amt*x.opex; pc+=x.amt*(1-x.opex);});
+  o.preTot=fmt(c.preTotal,1); o.preO=fmt(po,1); o.preC=fmt(pc,1); o.dep=fmt(c.deposit,1); o.depRent=fmt(b.rent*b.fin.depMonths,1); o.cash=fmt(c.totalCash,1);
+  R.Y.forEach((y,i)=>{ if(i>0) o['ri'+i]=fmt(y.reinv,1); });
+  return o; }
+
+function kpiCards(b,R,compact){ const thr=thrOf(b);
+  return KPI_DEF.map(d=>{ const v=R?R.kpi[d.k]:null, st=kStat(d.k,v,thr), th=thr&&thr[d.k];
+    const tag=st=='na'?`<span class="tag t-grey">${t('Không áp dụng')}</span>`:`<span class="tag ${st=='ok'?'t-ok':st=='warn'?'t-warn':'t-bad'}">${t(st=='ok'?'Đạt':st=='warn'?'Sát ngưỡng':'Không đạt')}</span>`;
+    if(compact) return `<div class="ks ${st}"><span>${t(d.n)}</span><b>${showK(v,d.type)}</b>${tag}</div>`;
+    return `<div class="kpi ${st=='ok'||st=='na'?'':st}"><div class="l">${t(d.n)}</div><div class="v">${showK(v,d.type)}</div>
+      <div class="s"><span>${th&&th.on?t('Ngưỡng')+' '+d.dir+' '+showK(th.v,d.type):''}</span>${tag}</div>
+      <div class="fx">= ${t(d.fx)}${d.pending?`<br><span style="color:#9a6700">${t('Định nghĩa đề xuất, chờ kế toán')}${d.k=='roic'&&R?' · '+t('Cách tính Excel cũ')+': '+pct(R.kpi.roicXL,1):''}</span>`:''}</div></div>`; }).join(''); }
+
+/* ---------- layout ---------- */
+function render(){ document.documentElement.lang=LANG;
+  $('#app').innerHTML=`<aside>${sidebar()}</aside><main id="main">${screen()}</main>`;
+  if(S.ui.screen=='detail') refresh(); save(); }
+function sidebar(){ const n=(s,l,dis)=>`<a data-nav="${s}" class="${S.ui.screen==s?'active':''} ${dis?'dis':''}">${t(l)}</a>`;
+  return `<div class="brand"><i></i>BoE Studio</div>
+  <div class="lang"><a data-lang="vi" class="${LANG=='vi'?'active':''}">VI</a><a data-lang="en" class="${LANG=='en'?'active':''}">EN</a></div>
+  <div class="nav">${n('list','Danh sách BoE')}${n('detail','Hồ sơ BoE')}<div class="sec">${t('Cấu hình')}</div>${n('master','Bảng tham chiếu Format × Vùng')}${n('kpidef','Định nghĩa KPI')}${n('mapping','Ánh xạ tài khoản Netsuite')}
+  <div class="sec">Phase 2</div>${n('actual','Đối chiếu thực tế vs BoE',1)}</div>
+  <div class="side-foot"><div class="sec">${t('Dữ liệu')}</div>
+   <a class="lnk" data-act="export">⭳ ${t('Xuất dữ liệu (JSON)')}</a><a class="lnk" data-act="import">⭱ ${t('Nhập dữ liệu (JSON)')}</a><a class="lnk" data-act="reset">↺ ${t('Khôi phục dữ liệu mẫu')}</a>
+   <input type="file" id="fileIn" accept=".json" style="display:none">
+   <div class="note" style="margin-top:8px">${t('Prototype: dữ liệu lưu trong trình duyệt của máy này.')}</div></div>`; }
+function screen(){ const s=S.ui.screen; return s=='list'?scrList():s=='detail'?scrDetail():s=='master'?scrMaster():s=='kpidef'?scrKpiDef():s=='mapping'?scrMapping():scrActual(); }
+
+/* ---------- LIST ---------- */
+function scrList(){ const f=S.ui.filter||{}; const opts=(arr,v,all)=>`<option value="">${t(all)}</option>`+arr.map(x=>`<option ${x==v?'selected':''} value="${esc(x)}">${esc(t(x))}</option>`).join('');
+  const rows=S.boes.filter(b=>(!f.q||(b.code+' '+b.name).toLowerCase().includes(f.q.toLowerCase()))&&(!f.format||b.format==f.format)&&(!f.region||b.region==f.region)&&(!f.status||b.status==f.status)).map(b=>{
+    const r=calc(b), thr=thrOf(b); const st=KPI_DEF.map(d=>kStat(d.k,r&&r.kpi[d.k],thr)).filter(x=>x!='na'); const pass=st.filter(x=>x!='bad').length;
+    return `<tr class="clk" data-open="${b.id}"><td><b>${esc(b.code)} ${esc(b.name)}</b></td><td class="l">${esc(b.format)} · ${esc(t(b.region))}${comboOf(b)?'':` <span class="tag t-bad">${t('Chưa có bảng tham chiếu')}</span>`}</td><td>${dmy(b.opening)}</td>
+      <td>${fmt(r&&r.cap.totalCash,0)}</td><td>${fmt(b.adtc*b.ac/1000,2)}</td><td>${showK(r&&r.kpi.irr10,'pct')}</td><td>${showK(r&&r.kpi.roic,'pct')}</td><td>${showK(r&&r.kpi.pb,'yr')}</td><td>${showK(r&&r.kpi.sc,'x')}</td>
+      <td class="l"><span class="tag ${pass==st.length?'t-ok':pass>=st.length-1?'t-warn':'t-bad'}">${pass}/${st.length} KPI</span></td>
+      <td class="l"><span class="tag ${b.status=='locked'?'t-acc':'t-grey'}">${t(b.status=='locked'?'Đã chốt':'Nháp')}</span></td><td>v${b.ver}</td>
+      <td class="l nowrap"><a class="ic" data-act="dup" data-id="${b.id}" title="${t('Nhân bản')}">⧉</a> <a class="ic" data-act="del" data-id="${b.id}" title="${t('Xóa')}">✕</a></td></tr>`; }).join('');
+  return `<div class="top"><div><div class="crumb">BoE Studio</div><h1>${t('Danh sách BoE')}</h1></div>
+    <div class="btns"><button class="btn" data-act="exportList">${t('Xuất danh sách (CSV)')}</button><button class="btn pri" data-act="new">+ ${t('Tạo BoE mới')}</button></div></div>
+  <div class="filters"><input class="fi" style="width:240px" placeholder="${t('Tìm store / mã Netsuite…')}" data-flt="q" value="${esc(f.q||'')}">
+    <select class="fi" data-flt="format">${opts(S.master.formats,f.format,'Format: Tất cả')}</select><select class="fi" data-flt="region">${opts(S.master.regions,f.region,'Vùng: Tất cả')}</select>
+    <select class="fi" data-flt="status"><option value="">${t('Trạng thái: Tất cả')}</option><option value="draft" ${f.status=='draft'?'selected':''}>${t('Nháp')}</option><option value="locked" ${f.status=='locked'?'selected':''}>${t('Đã chốt')}</option></select></div>
+  <div class="card" style="padding:0"><table><thead><tr><th>Store</th><th class="l">${t('Format · Vùng')}</th><th>${t('Khai trương')}</th><th>${t('Tổng vốn (tr)')}</th><th>${t('ADS (tr)')}</th><th>IRR 10Y</th><th>ROIC 1Y</th><th>Payback</th><th>Sales/CAPEX</th><th class="l">${t('Đạt ngưỡng')}</th><th class="l">${t('Trạng thái')}</th><th>${t('Phiên bản')}</th><th></th></tr></thead>
+  <tbody>${rows||`<tr><td colspan="13" class="l muted">${t('Không có BoE nào.')}</td></tr>`}</tbody></table></div>
+  <div class="note">${t('KPI được tính trực tiếp bằng engine khi mở danh sách. BoE đã chốt dùng ngưỡng đã chụp lại tại thời điểm chốt; BoE nháp dùng ngưỡng hiện hành của Bảng tham chiếu.')}</div>
+  ${S.ui.modal=='new'?modalNew():''}`; }
+function modalNew(){ const m=S.ui.nb||(S.ui.nb={code:'',name:'',format:'Core',region:'Tây Nguyên',opening:today()});
+  const ok=S.master.combos[m.format+'|'+m.region];
+  return `<div class="modal-bg"><div class="modal"><h2>${t('Tạo BoE mới')}</h2>
+   <div class="form" style="grid-template-columns:1fr 1fr">
+    <div class="f"><label>${t('Mã Netsuite')}</label><input class="fi" data-nb="code" value="${esc(m.code)}"></div>
+    <div class="f"><label>${t('Tên store')}</label><input class="fi" data-nb="name" value="${esc(m.name)}"></div>
+    <div class="f"><label>Format</label><select class="fi" data-nb="format">${S.master.formats.map(x=>`<option ${x==m.format?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="f"><label>${t('Vùng')}</label><select class="fi" data-nb="region">${S.master.regions.map(x=>`<option value="${esc(x)}" ${x==m.region?'selected':''}>${esc(t(x))}</option>`).join('')}</select></div>
+    <div class="f"><label>${t('Ngày khai trương')}</label><input class="fi" type="date" data-nb="opening" value="${m.opening}"></div></div>
+   <div class="alert ${ok?'i':'w'}" style="margin-top:12px">${ok?t('Các giá trị mặc định (đơn giá xây dựng, gói thiết bị, % chi phí, ramp-up, giả định 10 năm, tài chính) sẽ được lấy từ Bảng tham chiếu')+' '+esc(m.format)+' × '+esc(t(m.region))+' (v'+ok.ver+').'
+      :t('Chưa có Bảng tham chiếu cho tổ hợp này. Hãy tạo trong màn hình Bảng tham chiếu trước.')}</div>
+   <div class="btns" style="justify-content:flex-end;margin-top:14px"><button class="btn" data-act="cancelNew">${t('Hủy')}</button><button class="btn pri" data-act="createNew" ${ok&&m.code&&m.name?'':'disabled'}>${t('Tạo BoE')}</button></div></div></div>`; }
+function createBoE(m){ const c=S.master.combos[m.format+'|'+m.region]; const md=c.rates;
+  const b={id:uid(),code:m.code,name:m.name,entity:'HC',format:m.format,region:m.region,trade:'Residential',address:'',handover:'',firstPay:m.opening,opening:m.opening,leaseYears:5,rentReview:'',status:'draft',ver:1,
+    adtc:0,ac:c.chan.ac,pIS:c.chan.pIS,p3:c.chan.p3,comm:c.chan.comm,groupSize:1.7,leaseArea:0,inArea:0,outArea:0,boh:.28,dead:.15,sqmPax:1.5,util:.8,
+    dayparts:[.17,.2,.18,.13,.13,.17,.02].map((p,i)=>({pct:p,turns:[2,1,1,2,2,1,1][i]})),ramp:[...c.ramp],cost:{cogs:c.cost.cogs[1],lc:c.cost.lc[1],mkt:c.cost.mkt[1],oce:c.cost.oce[1]},
+    reasons:{},rent:0,key:0,cons:['in','out','ship','fsc','facade','glass'].map(k=>({k,qty:k=='fsc'?1:0,rate:md[k]?md[k][1]:50,inc:1})),
+    equip:Object.fromEntries(EQ_GROUPS.map(([g])=>[g,c.equip[g][1]])),land:{inRate:md.landIn[1],outRate:md.landOut[1],trees:0,treeRate:md.tree[1]},
+    pre:[{name:'Phí marketing khai trương',grp:'MKT',amt:25,opex:1},{name:'Phí giấy phép xây dựng',grp:'OCE',amt:20,opex:0},{name:'Công tác phí',grp:'OCE',amt:0,opex:1},
+      {name:'Lương nhân sự pre-opening',grp:'LC',amt:0,opex:1},{name:'Phí thiết kế',grp:'OCE',amt:75,opex:0},{name:'Hoa hồng NSO',grp:'LC',amt:50,opex:.5}],
+    lt:clone(c.lt),fin:{...c.fin},versions:[]};
+  S.boes.unshift(b); return b; }
+
+/* ---------- DETAIL ---------- */
+function scrDetail(){ const b=cur(); if(!b) return `<div class="ph">${t('Chưa có BoE.')}</div>`; const c=comboOf(b), L=b.status=='locked';
+  const tabs=[['in','1. Giả định đầu vào'],['capex','2. CAPEX & Pre-opening'],['lt','3. Giả định 10 năm & Tài chính'],['res','4. Kết quả'],['sens','5. Độ nhạy'],['ver','6. Phiên bản']];
+  return `<div class="top"><div><div class="crumb"><a data-nav="list">${t('Danh sách BoE')}</a> / ${esc(b.code)}</div>
+    <h1>${esc(b.code)} ${esc(b.name)} <span class="tag ${L?'t-acc':'t-grey'}" style="vertical-align:3px">v${b.ver} · ${t(L?'Đã chốt':'Nháp')}</span></h1>
+    <div class="muted" style="margin-top:4px">${esc(b.format)} · ${esc(t(b.region))} · ${esc(b.entity)} · ${t('Khai trương')} ${dmy(b.opening)} · ${t('Bảng tham chiếu')}:
+     ${L&&b.snapshot?`<span class="tag t-acc">${esc(b.snapshot.combo.replace('|',' × '))} v${b.snapshot.ver} (${t('đã chụp lại')} ${dmy(b.snapshot.lockedAt)})</span>`
+      :c?`<span class="tag t-acc">${esc(b.format)} × ${esc(t(b.region))} v${c.ver} (${t('hiệu lực')} ${dmy(c.eff)})</span>`:`<span class="tag t-bad">${t('Chưa có bảng tham chiếu cho tổ hợp này')}</span>`}</div></div>
+    <div class="btns"><button class="btn" data-act="dup" data-id="${b.id}">${t('Nhân bản')}</button><button class="btn" data-act="csv">${t('Xuất Excel (CSV)')}</button>
+     ${L?`<button class="btn" data-act="unlock">${t('Mở khóa')}</button>`:`<button class="btn pri" data-act="lock">${t('Chốt BoE')}</button>`}</div></div>
+  <div class="kstrip" id="kstrip"></div>
+  ${L?`<div class="alert i">${t('BoE đã chốt: dữ liệu bị khóa, ngưỡng KPI lấy từ bản chụp Bảng tham chiếu tại thời điểm chốt. Bấm “Mở khóa” để sửa.')}</div>`:''}
+  <div class="tabs">${tabs.map(([k,l])=>`<a data-tab="${k}" class="${S.ui.tab==k?'active':''}">${t(l)}</a>`).join('')}</div>
+  <div id="tabBody">${tabBody()}</div>`; }
+function tabBody(){ const k=S.ui.tab; return k=='in'?tabIn():k=='capex'?tabCapex():k=='lt'?tabLT():k=='res'?'<div id="resBody"></div>':k=='sens'?tabSens():tabVer(); }
+
+function tabIn(){ const b=cur(), L=b.status=='locked';
+  return `<div id="exc"></div>
+  <div class="legend" style="margin-bottom:12px"><span><span class="sw" style="background:#fff;border:1px solid var(--line)"></span>${t('Nhập tay')}</span><span><span class="sw" style="background:#f7f8fa;border:1px solid var(--line)"></span>${t('Tự tính')}</span>
+    <span><span class="sw" style="background:var(--ovr-soft);border:1px solid #cdb4ec"></span>${t('Khác giá trị chuẩn')}</span><span><span class="sw" style="background:var(--warn-soft);border:1px solid #f2dca6"></span>${t('Ngoài khoảng – cần lý do')}</span></div>
+  <div class="card"><h2>${t('Thông tin store & hợp đồng')}</h2><div class="form">
+    ${F('Mã Netsuite','code','',{k:'t'})}${F('Tên store','name','',{k:'t'})}${F('Entity','entity','',{k:'sel',opts:['HC','GB']})}
+    ${F('Format','format','',{k:'sel',opts:S.master.formats,re:1})}${F('Vùng','region','',{k:'sel',opts:S.master.regions,re:1})}${F('Khu vực thương mại','trade','',{k:'sel',opts:['Residential','CBD','Non CBD','Office','Mall','Highway']})}
+    ${F('Địa chỉ','address','',{k:'t'})}${F('Ngày bàn giao','handover','',{k:'d'})}${F('Ngày khai trương','opening','',{k:'d'})}
+    ${F('Thời hạn hợp đồng','leaseYears','năm')}${F('Giá thuê tháng','rent','tr')}${F('Điều khoản tăng giá thuê','rentReview','',{k:'t'})}</div></div>
+  <div class="grid g2">
+   <div class="card"><h2>${t('Doanh thu & kênh bán')} <span class="tag t-acc">${t('Finance ước tính')}</span></h2><div class="form" style="grid-template-columns:repeat(2,1fr)">
+     ${F('ADTC (bill/ngày)','adtc','')}${F('AC (nghìn VND)','ac','')}${O('ads','ADS','tr/ngày')}${O('revM','Doanh thu tháng mục tiêu','tr')}
+     ${F('% In-store','pIS','')}${F('% 3P (Grab, ShopeeFood…)','p3','')}${O('p1','% 1P')}${F('Hoa hồng 3P bình quân','comm','')}
+     ${F('Group size / bill dine-in','groupSize','')}${O('spend','Chi tiêu / khách','nghìn')}</div></div>
+   <div class="card"><h2>${t('Cơ cấu chi phí (% doanh thu)')}</h2>
+     <table><thead><tr><th>${t('Chỉ tiêu')}</th><th style="text-align:center">${t('Khoảng Min – Chuẩn – Max')}</th><th>${t('Store này')}</th></tr></thead><tbody>
+     ${['cogs','lc','mkt','oce'].map(k=>{const s=stdInfo(b,'cost.'+k);return `<tr><td>${t(LABELS['cost.'+k])}</td><td style="text-align:center">${s?rng(s.min,s.std,s.max,b.cost[k])+`<div class="note">${pct(s.min)} – ${pct(s.std)} – ${pct(s.max)}</div>`:'–'}</td><td>${I('cost.'+k,{w:80})}</td></tr>`}).join('')}
+     <tr class="sub"><td>% CMS (= %3P × ${t('hoa hồng')})</td><td style="text-align:center">–</td><td data-o="cms"></td></tr>
+     <tr class="sub"><td>${t('LC tháng (cố định theo doanh thu mục tiêu)')}</td><td style="text-align:center">–</td><td><span data-o="lcM"></span> ${t('tr')}</td></tr>
+     <tr class="sub"><td>${t('Rent (số tuyệt đối)')}</td><td style="text-align:center">–</td><td><span data-o="rentPct"></span> ${t('DT')}</td></tr></tbody></table></div></div>
+  <div class="grid g2">
+   <div class="card"><h2>${t('Mặt bằng & sức chứa')}</h2><div class="form" style="grid-template-columns:repeat(3,1fr)">
+     ${F('DT thuê','leaseArea','m²')}${F('DT đầu tư – trong','inArea','m²')}${F('DT đầu tư – ngoài','outArea','m²')}${F('% BOH','boh','')}${F('% Dead space FOH','dead','')}${F('m²/khách','sqmPax','')}
+     ${O('rentSqm','Giá thuê/m²','VND')}${O('foh','FOH net','m²')}${O('seats','Số ghế')}</div>
+     <div class="hint">${t('DT đầu tư trong/ngoài tự cập nhật khối lượng hạng mục hoàn thiện và cảnh quan ở tab CAPEX.')}</div></div>
+   <div class="card"><h2>${t('Ramp-up 6 tháng đầu (% ADS mục tiêu)')}</h2>
+     <div class="ramp">${b.ramp.map((r,i)=>`<div><div class="rb"><div style="height:${Math.max(0,Math.min(1.2,r))/1.2*100}%"></div></div>${I('ramp.'+i,{w:62})}<div class="note">${t('T')}${i+1}</div></div>`).join('')}</div>
+     <div class="hint">${t('Mặc định từ Bảng tham chiếu, sửa được theo store (±15 điểm % so với chuẩn). Từ tháng 7: 100%.')}</div></div></div>
+  <div class="card"><h2>${t('Daypart – kiểm tra sức chứa giờ cao điểm')}</h2>
+   <table><thead><tr><th>${t('Khung giờ')}</th><th>% traffic</th><th>${t('Bill dine-in')}</th><th>${t('Lượt khách')}</th><th>${t('Vòng quay')}</th><th>${t('Ghế cần')}</th><th class="l" style="width:200px">${t('so với số ghế')}</th></tr></thead><tbody>
+   ${b.dayparts.map((d,i)=>`<tr><td>${t(DAYPARTS[i])}</td><td>${I('dayparts.'+i+'.pct',{w:70})}</td><td data-o="dp${i}tc"></td><td data-o="dp${i}g"></td><td>${I('dayparts.'+i+'.turns',{w:60,k:'n'})}</td><td data-o="dp${i}s"></td><td class="l" data-o="dp${i}bar"></td></tr>`).join('')}</tbody></table>
+   <div class="hint">${t('Utilization')} ${I('util',{w:60})} · ${t('Ghế cần lớn nhất')} = <span data-o="dpMax"></span></div></div>`; }
+
+function tabCapex(){ const b=cur(), L=b.status=='locked', c=comboOf(b);
+  const consRow=(it,i)=>{const ct=catOf(it.k), s=stdInfo(b,'cons.'+i+'.rate'), auto=!!ct.auto;
+    return `<tr class="${it.inc?'':'off'}"><td>${t(ct.name)}${it.note?` <span class="tag t-warn">${t(it.note)}</span>`:''}</td><td>${t(ct.unit)}</td>
+     <td>${auto?`<span data-o="c${i}q"></span> <span class="note" title="${t('Tự lấy từ diện tích')}">⟲</span>`:I('cons.'+i+'.qty',{w:56,k:'n'})}</td>
+     <td class="nowrap">${I('cons.'+i+'.rate',{w:70,k:'n'})} <span class="u">${ct.cur=='USD'?'USD':t('tr')}</span></td>
+     <td style="text-align:center">${s?rng(s.min,s.std,s.max,it.rate):rng(null)}</td><td data-o="c${i}a"></td>
+     <td style="text-align:center">${I('cons.'+i+'.inc',{k:'chk'})}</td><td>${L?'':`<a class="ic" data-act="delCons" data-i="${i}">✕</a>`}</td></tr>`;};
+  const grp=g=>b.cons.map((it,i)=>[it,i]).filter(([it])=>catOf(it.k).grp==g).map(([it,i])=>consRow(it,i)).join('');
+  return `<div id="capWarn"></div>
+  <div class="grid" style="grid-template-columns:minmax(0,1fr) 330px"><div>
+   <div class="card"><h2>A. ${t('Xây dựng cơ bản')} <span class="tag t-grey">${t('Khấu hao 5 năm')}</span></h2>
+    <table><thead><tr><th>${t('Hạng mục')}</th><th>${t('ĐVT')}</th><th>${t('KL')}</th><th>${t('Đơn giá')}</th><th style="text-align:center">${t('Khoảng chuẩn')}</th><th>${t('Thành tiền (tr)')}</th><th style="text-align:center">${t('Tính CAPEX')}</th><th></th></tr></thead><tbody>
+    <tr class="grp"><td colspan="8">${t('Hoàn thiện')}</td></tr>${grp('fit')}<tr class="grp"><td colspan="8">${t('Xử lý hiện trạng (theo báo giá)')}</td></tr>${grp('site')}
+    <tr class="hl"><td>${t('Tổng xây dựng (tính CAPEX)')}</td><td></td><td></td><td></td><td></td><td data-o="consTot"></td><td></td><td></td></tr></tbody></table>
+    ${L?'':`<div class="addrow"><select class="fi" id="addCons">${CATALOG.map(x=>`<option value="${x.k}">${t(x.name)}</option>`).join('')}</select><button class="btn" data-act="addCons">+ ${t('Thêm hạng mục')}</button></div>`}</div>
+   <div class="card"><h2>B. ${t('Gói thiết bị chuẩn')} – ${esc(b.format)} × ${esc(t(b.region))} <span class="tag t-acc">${t('Từ Bảng tham chiếu')}</span></h2>
+    <table><thead><tr><th>${t('Nhóm')}</th><th>${t('Min – Chuẩn – Max (tr)')}</th><th style="text-align:center">${t('Khoảng')}</th><th>${t('Store này (tr)')}</th></tr></thead><tbody>
+    ${EQ_GROUPS.map(([g,n])=>{const s=stdInfo(b,'equip.'+g);return `<tr><td>${t(n)}</td><td>${s?fmt(s.min)+' – '+fmt(s.std)+' – '+fmt(s.max):'–'}</td><td style="text-align:center">${s?rng(s.min,s.std,s.max,b.equip[g]):''}</td><td>${I('equip.'+g,{w:90,k:'n'})}</td></tr>`}).join('')}
+    <tr class="hl"><td>${t('Tổng thiết bị')}</td><td></td><td></td><td data-o="eqTot"></td></tr></tbody></table>
+    <div class="hint">${t('Thiết bị & cảnh quan khấu hao theo tỷ lệ 5 năm / 3 năm trong mục Tài chính (mặc định 50/50 như file Excel).')}</div></div>
+   <div class="card"><h2>C. ${t('Cảnh quan')}</h2><table><thead><tr><th>${t('Hạng mục')}</th><th>${t('KL')}</th><th>${t('Đơn giá (tr)')}</th><th>${t('Thành tiền (tr)')}</th></tr></thead><tbody>
+    <tr><td>${t('Cảnh quan trong nhà')}</td><td>${fmt(b.inArea,1)} m²</td><td>${I('land.inRate',{w:80,k:'n'})}</td><td data-o="lIn"></td></tr>
+    <tr><td>${t('Cảnh quan ngoài trời')}</td><td>${fmt(b.outArea,1)} m²</td><td>${I('land.outRate',{w:80,k:'n'})}</td><td data-o="lOut"></td></tr>
+    <tr><td>${t('Cây lớn')}</td><td>${I('land.trees',{w:60,k:'n'})}</td><td>${I('land.treeRate',{w:80,k:'n'})}</td><td data-o="lTree"></td></tr>
+    <tr class="hl"><td>${t('Tổng CAPEX (A + B + C)')}</td><td></td><td></td><td data-o="capex"></td></tr></tbody></table></div></div>
+   <div><div class="card"><h2>${t('Tổng tiền cần')}</h2><div id="donut"></div></div>
+    <div class="card"><h2>${t('Đặt cọc & Key money')}</h2><table><tbody>
+     <tr><td>${t('Tiền thuê')} × ${I('fin.depMonths',{w:46,k:'n'})} ${t('tháng')}</td><td data-o="depRent"></td></tr>
+     <tr><td>${t('Điện & nước (cố định)')}</td><td>${I('fin.depUtil',{w:70,k:'n'})}</td></tr>
+     <tr class="hl"><td>${t('Tổng đặt cọc')}</td><td data-o="dep"></td></tr>
+     <tr><td>Key money (${t('tr')})</td><td>${I('key',{w:70,k:'n'})}</td></tr></tbody></table></div></div></div>
+  <div class="card"><h2>${t('Chi phí pre-opening (phân bổ Opex / vốn hóa)')}</h2>
+   <table><thead><tr><th>${t('Khoản mục')}</th><th>${t('Nhóm')}</th><th>${t('Số tiền (tr)')}</th><th>% Opex</th><th>${t('Opex – tháng 1 (tr)')}</th><th>${t('Vốn hóa – KH 3 năm (tr)')}</th><th></th></tr></thead><tbody>
+   ${b.pre.map((x,i)=>`<tr><td>${I('pre.'+i+'.name',{k:'t',w:280})}</td><td>${I('pre.'+i+'.grp',{k:'sel',opts:PRE_GROUPS})}</td><td>${I('pre.'+i+'.amt',{w:80,k:'n'})}</td><td>${I('pre.'+i+'.opex',{w:64})}</td><td data-o="p${i}o"></td><td data-o="p${i}c"></td><td>${L?'':`<a class="ic" data-act="delPre" data-i="${i}">✕</a>`}</td></tr>`).join('')}
+   <tr class="hl"><td>${t('Tổng')}</td><td></td><td data-o="preTot"></td><td></td><td data-o="preO"></td><td data-o="preC"></td><td></td></tr></tbody></table>
+   ${L?'':`<div class="addrow"><button class="btn" data-act="addPre">+ ${t('Thêm khoản mục')}</button></div>`}</div>`; }
+
+function tabLT(){ const b=cur(); const rows=[['g','Tăng trưởng sales'],['ri','Tăng giá thuê'],['w','Tăng lương'],['rrr','Tái đầu tư (% CAPEX ban đầu)']];
+  const warn=(+b.leaseYears||0)<10?`<div class="alert w">⚠ ${t('Hợp đồng')} ${fmt(+b.leaseYears,0)} ${t('năm nhưng mô hình chạy 10 năm – các năm sau hợp đồng là giả định gia hạn.')} ${b.rentReview?t('Điều khoản tăng giá')+': “'+esc(b.rentReview)+'” – '+t('đối chiếu với dòng “Tăng giá thuê”.'):''}</div>`:'';
+  return `${warn}<div class="card"><h2>${t('Giả định 10 năm')}</h2><div class="scroll"><table><thead><tr><th>${t('Giả định')}</th>${[...Array(10)].map((_,i)=>`<th>Y${i+1}</th>`).join('')}</tr></thead><tbody>
+   ${rows.map(([k,n])=>`<tr><td>${t(n)}</td>${b.lt[k].map((_,i)=>`<td>${I('lt.'+k+'.'+i,{w:62})}</td>`).join('')}</tr>`).join('')}
+   <tr class="sub"><td>→ ${t('Số tiền tái đầu tư (tr)')}</td>${[...Array(10)].map((_,i)=>`<td data-o="ri${i+1}"></td>`).join('')}</tr></tbody></table></div>
+   <div class="hint">${t('Logic giữ như Excel: giả định “Y1” của tăng trưởng/giá thuê/lương không dùng (năm 1 lấy từ P&L tháng); tái đầu tư năm N = CAPEX ban đầu × tỷ lệ năm N, khấu hao 5 năm; năm có tái đầu tư tính đóng cửa 1 tháng.')}</div></div>
+  <div class="card"><h2>${t('Tài chính')}</h2><div class="form" style="grid-template-columns:repeat(4,1fr)">
+   ${['fx','cit','rate','debt','tenor','ar','ap','inv','eqP5','closeSave'].map(k=>F(FIN_LABEL[k],'fin.'+k,'')).join('')}</div>
+   <div class="hint">${t('Mặc định lấy từ Bảng tham chiếu; ô tím là giá trị khác chuẩn.')}</div></div>`; }
+
+/* ---------- results ---------- */
+function resBody(b,R){ if(!R) return `<div class="ph">${t('Không tính được – kiểm tra dữ liệu đầu vào.')}</div>`; const Y=R.Y,M=R.M;
+  const y1=Y[1], r=k=>fmt(y1[k],1), p=k=>pct(y1[k]/y1.rev,1);
+  const pl=[['Doanh thu','rev',1],['COGS','cogs'],['Lợi nhuận gộp','gp',1],['Rent','rent'],['LC','lc'],['MKT','mkt'],['CMS','cms'],['OCE','oce'],['EBITDA','ebitda',1],['Khấu hao','dep'],['NOI','noi',1]];
+  const mrows=[['ADTC','adtc',0],['ADS','ads',2],['Doanh thu','rev',1,'b'],['COGS','cogs',1],['GP','gp',1,'hl'],['Rent','rent',1],['LC','lc',1],['MKT','mkt',1],['CMS','cms',1],['OCE','oce',1],['EBITDA','ebitda',1,'hl'],['Khấu hao','dep',1],['NOI','noi',1,'hl']];
+  const yrows=[['ADTC','adtc',0],['Doanh thu','rev',0,'b'],['COGS','cogs',0],['Rent','rent',0],['LC','lc',0],['EBITDA','ebitda',0,'hl'],['Khấu hao','dep',0],['NOI','noi',0],['Chi phí lãi vay','int',0],['Thuế TNDN','cit',0],
+    ['Lợi nhuận ròng','ni',0,'hl'],['Ảnh hưởng đóng cửa tái đầu tư','eff',0],['CFO','cfo',0],['CFI','cfi',0],['FCF','fcf',0,'hl'],['FCF lũy kế','cum',0,'b']];
+  const cell=(v,d)=>`<td class="${v<0?'neg':''}">${fmt(v,d)}</td>`;
+  const sum=(k)=>M.slice(6).reduce((a,m)=>a+m[k],0);
+  return `<div class="grid g6">${kpiCards(b,R)}</div><div style="height:16px"></div>
+  <div class="grid g-3-2"><div class="card"><h2>${t('Doanh thu, EBITDA & dòng tiền lũy kế 10 năm (tr VND)')}</h2>
+    <div class="legend" style="margin-bottom:6px"><span><span class="sw" style="background:#c9dbf4"></span>${t('Doanh thu')}</span><span><span class="sw" style="background:#1f5fbf"></span>EBITDA</span><span><span class="sw" style="background:#147a4b"></span>${t('FCF lũy kế')}</span></div>${chart10(R)}</div>
+   <div class="card"><h2>${t('P&L năm 1 (12 tháng ổn định)')}</h2><table><thead><tr><th>${t('Chỉ tiêu')}</th><th>${t('tr VND')}</th><th>% ${t('DT')}</th></tr></thead><tbody>
+    ${pl.map(x=>`<tr class="${x[2]?'hl':''}"><td>${t(x[0])}</td><td>${r(x[1])}</td><td>${p(x[1])}</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card"><h2>${t('P&L theo tháng – 6 tháng ramp-up (Y0) + 12 tháng năm 1')}</h2><div class="scroll"><table><thead><tr><th>${t('tr VND')}</th>
+   ${M.map((m,i)=>`<th>${i<6?t('T')+(i+1):'Y1·'+t('T')+(i-5)}</th>`).join('')}<th>${t('Năm 1')}</th></tr></thead><tbody>
+   ${mrows.map(x=>`<tr class="${x[3]||''}"><td>${t(x[0])}</td>${M.map(m=>cell(m[x[1]],x[2])).join('')}<td><b>${fmt(['adtc','ads'].includes(x[1])?sum(x[1])/12:sum(x[1]),x[2])}</b></td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card"><h2>${t('Dự phóng 10 năm & dòng tiền')}</h2><div class="scroll"><table><thead><tr><th>${t('tr VND')}</th>${Y.map((_,i)=>`<th>${i==0?t('Y0 (6T)'):'Y'+i}</th>`).join('')}</tr></thead><tbody>
+   ${yrows.map(x=>`<tr class="${x[3]||''}"><td>${t(x[0])}</td>${Y.map(y=>cell(y[x[1]],x[2])).join('')}</tr>`).join('')}</tbody></table></div>
+   <details><summary>${t('Chi tiết: khấu hao, tái đầu tư, lịch vay nợ, kịch bản chỉ đầu tư ban đầu')}</summary><div class="scroll"><table><tbody>
+   ${[['Khấu hao – đầu tư ban đầu','depInit'],['Khấu hao – tái đầu tư','depRe'],['Tái đầu tư','reinv']].map(x=>`<tr><td>${t(x[0])}</td>${Y.map(y=>cell(y[x[1]],0)).join('')}</tr>`).join('')}
+   ${[['Dư nợ đầu kỳ','ob'],['Vay thêm','add'],['Trả gốc','repay'],['Dư nợ cuối kỳ','cb']].map(x=>`<tr><td>${t(x[0])}</td>${Y.map(y=>cell(y.debt[x[1]],0)).join('')}</tr>`).join('')}
+   ${[['NOI (chỉ đầu tư ban đầu)','noiI'],['FCF (chỉ đầu tư ban đầu)','fcfI'],['FCF lũy kế (chỉ đầu tư ban đầu)','accI']].map(x=>`<tr><td>${t(x[0])}</td>${Y.map(y=>cell(y[x[1]],0)).join('')}</tr>`).join('')}
+   </tbody></table></div></details></div>`; }
+function chart10(R){ const Y=R.Y,W=640,H=260,l=52,r=14,tp=12,bt=34,n=11,bw=(W-l-r)/n;
+  const vals=[...Y.map(y=>y.rev),...Y.map(y=>y.acc),...Y.map(y=>y.ebitda),0]; let max=Math.max(...vals),min=Math.min(...vals);
+  const raw5=(max-min)/5,mag=Math.pow(10,Math.floor(Math.log10(Math.max(1,raw5)))),nrm=raw5/mag,step=(nrm<=1?1:nrm<=2?2:nrm<=5?5:10)*mag; max=Math.ceil(max/step)*step; min=Math.floor(min/step)*step;
+  const y=v=>tp+(max-v)/(max-min)*(H-tp-bt); let h='';
+  for(let g=min;g<=max+1e-9;g+=step) h+=`<line x1="${l}" x2="${W-r}" y1="${y(g)}" y2="${y(g)}" stroke="${Math.abs(g)<1e-9?'#c8ced8':'#eef0f3'}"/><text x="${l-6}" y="${y(g)+4}" font-size="10" fill="#98a2b3" text-anchor="end">${fmt(g/1000,0)}k</text>`;
+  Y.forEach((o,i)=>{const x=l+i*bw+bw*.15;h+=`<rect x="${x}" y="${Math.min(y(o.rev),y(0))}" width="${bw*.35}" height="${Math.abs(y(0)-y(o.rev))}" fill="#c9dbf4" rx="2"/><rect x="${x+bw*.35}" y="${Math.min(y(o.ebitda),y(0))}" width="${bw*.35}" height="${Math.abs(y(0)-y(o.ebitda))}" fill="#1f5fbf" rx="2"/><text x="${l+i*bw+bw/2}" y="${H-12}" font-size="10" fill="#667085" text-anchor="middle">Y${i}</text>`});
+  const cum=[];Y.reduce((a,o)=>{a+=o.fcf;cum.push(a);return a},0);
+  h+=`<polyline points="${cum.map((v,i)=>`${l+i*bw+bw/2},${y(v)}`).join(' ')}" fill="none" stroke="#147a4b" stroke-width="2"/>`+cum.map((v,i)=>`<circle cx="${l+i*bw+bw/2}" cy="${y(v)}" r="3" fill="#fff" stroke="#147a4b" stroke-width="2"/>`).join('');
+  if(R.kpi.pb!=null){const px=l+(R.kpi.pb+1.5)*bw-bw;h+=`<line x1="${l+(R.kpi.pb+1)*bw}" x2="${l+(R.kpi.pb+1)*bw}" y1="${tp}" y2="${H-bt}" stroke="#147a4b" stroke-dasharray="3 3"/><text x="${l+(R.kpi.pb+1)*bw+4}" y="${tp+10}" font-size="10" fill="#147a4b">${t('Hoàn vốn')} ${fmt(R.kpi.pb,2)} ${t('năm')}</text>`;}
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}">${h}</svg>`; }
+function donut(R){ const c=R.cap, parts=[['Xây dựng',c.cons,'#1f5fbf'],['Thiết bị & cảnh quan',c.eqland,'#6f9be0'],['Pre-opening',c.preTotal,'#b8cdee'],['Đặt cọc',c.deposit,'#dfe7f3']];
+  if(R&&toCalc(cur()).key>0) parts.push(['Key money',toCalc(cur()).key,'#98a2b3']);
+  const tot=parts.reduce((a,p)=>a+Math.max(0,p[1]),0)||1; let a0=-Math.PI/2,h='';const cx=150,cy=90,r=75,ri=50;
+  parts.forEach((p,i)=>{const a1=a0+Math.max(0,p[1])/tot*2*Math.PI-1e-6,lg=a1-a0>Math.PI?1:0,P=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const [x1,y1]=P(a0,r),[x2,y2]=P(a1,r),[x3,y3]=P(a1,ri),[x4,y4]=P(a0,ri);
+   if(p[1]>0)h+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg} 1 ${x2},${y2} L${x3},${y3} A${ri},${ri} 0 ${lg} 0 ${x4},${y4} Z" fill="${p[2]}" stroke="#fff" stroke-width="2"/>`;
+   h+=`<rect x="20" y="${190+i*24}" width="10" height="10" rx="2" fill="${p[2]}"/><text x="36" y="${199+i*24}" font-size="12" fill="#667085">${t(p[0])}</text><text x="285" y="${199+i*24}" font-size="12" text-anchor="end" fill="#1d2433">${fmt(p[1],1)}</text>`;a0=a1;});
+  h+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="15" font-weight="600" fill="#1d2433">${fmt(c.totalCash,1)}</text><text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="10" fill="#667085">${t('tr VND')}</text>`;
+  return `<svg width="100%" viewBox="0 0 300 ${200+parts.length*24}">${h}</svg>`; }
+
+/* ---------- sensitivity ---------- */
+function tabSens(){ const s=S.ui.sens||(S.ui.sens={a:0,b:0});
+  return `<div class="alert i">${t('Kéo thanh trượt: engine tính lại đầy đủ (P&L, dòng tiền 10 năm, KPI) với ADTC / AC thay đổi. Dữ liệu BoE không bị sửa.')}</div>
+  <div class="grid g2"><div class="card"><h2>${t('Kịch bản nhanh')}</h2>
+   <div class="slider"><span style="width:90px">ADTC</span><input type="range" id="sA" min="-30" max="30" step="5" value="${s.a}"><b id="vA"></b></div>
+   <div class="slider"><span style="width:90px">AC</span><input type="range" id="sB" min="-20" max="20" step="5" value="${s.b}"><b id="vB"></b></div>
+   <div class="muted" id="sDesc" style="margin:4px 0 14px"></div><div class="grid g3" id="sK"></div>
+   <div style="margin-top:12px"><button class="btn" data-act="applySens">${t('Áp dụng vào BoE')}</button></div></div>
+   <div class="card"><h2>${t('Ma trận IRR 10Y theo ADTC × AC')}</h2><table class="heat" id="heat"></table><div class="hint">${t('Xanh: đạt ngưỡng. Vàng: sát ngưỡng. Đỏ: không đạt. Ô viền đậm là phương án hiện tại.')}</div></div></div>`; }
+function updSens(){ const b=cur(), s=S.ui.sens, a=s.a/100, bb=s.b/100, r=calc(b,{a:1+a,b:1+bb});
+  $('#vA').textContent=(a>0?'+':'')+s.a+'%'; $('#vB').textContent=(bb>0?'+':'')+s.b+'%';
+  $('#sDesc').innerHTML=`ADTC ${fmt(b.adtc*(1+a),0)} · AC ${fmt(b.ac*(1+bb),1)}k → ADS ${fmt(b.adtc*(1+a)*b.ac*(1+bb)/1000,2)} ${t('tr/ngày')} · ${t('DT năm 1')} ${fmt(r&&r.Y[1].rev,0)} ${t('tr')}`;
+  $('#sK').innerHTML=kpiCards(b,r).replace(/<div class="fx">[\s\S]*?<\/div><\/div>/g,'</div>');
+  const A=[-.2,-.1,0,.1,.2],B=[-.1,-.05,0,.05,.1],thr=thrOf(b);
+  let h=`<thead><tr><th>ADTC \\ AC</th>${B.map(x=>`<th style="text-align:center">${fmt(b.ac*(1+x),1)}k</th>`).join('')}</tr></thead><tbody>`;
+  A.forEach(x=>{h+=`<tr><td>${fmt(b.adtc*(1+x),0)} (${x>0?'+':''}${x*100}%)</td>`+B.map(y=>{const v=(calc(b,{a:1+x,b:1+y})||{kpi:{}}).kpi.irr10,st=kStat('irr10',v,thr);
+    return `<td style="background:${st=='ok'?'#e6f4ec':st=='warn'?'#fff6e0':st=='bad'?'#fdecea':'#fff'};color:${st=='ok'?'#147a4b':st=='warn'?'#9a6700':'#b42318'};${x==0&&y==0?'outline:2px solid #1d2433;outline-offset:-2px':''}">${showK(v,'pct')}</td>`}).join('')+'</tr>'});
+  $('#heat').innerHTML=h+'</tbody>'; }
+
+/* ---------- versions ---------- */
+function tabVer(){ const b=cur(); const vs=[...b.versions,{v:b.ver,ts:'',note:b.status=='locked'?'Bản đã chốt':'Hiện tại (chưa lưu)',by:'',data:b,current:1}];
+  const ui=S.ui.cmp||(S.ui.cmp={a:vs.length>1?vs[vs.length-2].v:b.ver,b:b.ver}); const A=vs.find(x=>x.v==ui.a)||vs[0], B=vs.find(x=>x.v==ui.b)||vs[vs.length-1];
+  const ra=calc(A.data), rb=calc(B.data);
+  const rows=[['ADTC',d=>d.adtc,0],['AC (nghìn)',d=>d.ac,1],['% COGS',d=>d.cost.cogs,'p'],['% LC',d=>d.cost.lc,'p'],['% OCE',d=>d.cost.oce,'p'],['Giá thuê tháng',d=>d.rent,1],
+    ['Tổng xây dựng (tính CAPEX)',(d,r)=>r&&r.cap.cons,1],['Thiết bị & cảnh quan',(d,r)=>r&&r.cap.eqland,1],['Pre-opening',(d,r)=>r&&r.cap.preTotal,1],['Tổng tiền cần',(d,r)=>r&&r.cap.totalCash,1],
+    ...KPI_DEF.map(k=>[k.n,(d,r)=>r&&r.kpi[k.k],k.type])];
+  const show=(v,f)=>f=='p'||f=='pct'?pct(v,1):f=='yr'?showK(v,'yr'):f=='x'?showK(v,'x'):fmt(v,f);
+  const opt=sel=>vs.map(x=>`<option value="${x.v}" ${x.v==sel?'selected':''}>v${x.v}${x.current?' · '+t('hiện tại'):' · '+dmy(x.ts)}</option>`).join('');
+  return `<div class="grid g2"><div class="card"><h2>${t('Lịch sử phiên bản')}</h2><table><thead><tr><th>${t('Phiên bản')}</th><th class="l">${t('Ngày')}</th><th class="l">${t('Ghi chú')}</th><th class="l">${t('Người sửa')}</th><th></th></tr></thead><tbody>
+   ${vs.map(x=>`<tr><td>v${x.v}</td><td class="l">${x.current?'–':dmy(x.ts)}</td><td class="l">${esc(t(x.note))}</td><td class="l">${esc(x.by)}</td><td>${x.current||b.status=='locked'?'':`<a class="lnk" data-act="restore" data-v="${x.v}">${t('Khôi phục')}</a>`}</td></tr>`).join('')}</tbody></table>
+   ${b.status=='locked'?'':`<div class="addrow"><input class="fi" id="verNote" placeholder="${t('Ghi chú phiên bản…')}" style="flex:1"><button class="btn pri" data-act="saveVer">${t('Lưu phiên bản')}</button></div>`}</div>
+  <div class="card"><h2>${t('So sánh phiên bản')}</h2><div class="addrow" style="margin:0 0 10px"><select class="fi" data-cmp="a">${opt(A.v)}</select> ↔ <select class="fi" data-cmp="b">${opt(B.v)}</select></div>
+   <table><thead><tr><th>${t('Chỉ tiêu')}</th><th>v${A.v}</th><th>v${B.v}</th></tr></thead><tbody>
+   ${rows.map(([n,f,d])=>{const va=f(A.data,ra),vb=f(B.data,rb),df=Math.abs((va||0)-(vb||0))>1e-6;return `<tr><td>${t(n)}</td><td>${show(va,d)}</td><td class="${df?'diff':''}">${show(vb,d)}</td></tr>`}).join('')}</tbody></table>
+   <div class="hint">${t('Ô vàng = khác nhau giữa hai phiên bản. KPI được tính lại bằng engine từ dữ liệu đã lưu của từng phiên bản.')}</div></div></div>`; }
+
+/* ---------- refresh computed parts of the detail screen ---------- */
+function refresh(){ const b=cur(); R=calc(b); const o=outVals(b,R);
+  $$('[data-o]').forEach(el=>{const v=o[el.dataset.o]; if(v!==undefined) el.innerHTML=v;});
+  $$('#main [data-b]').forEach(el=>{ if(el.dataset.m) return; const st=fieldStat(b,el.dataset.b); el.classList.remove('ovr','out','std'); if(st) el.classList.add(st);
+    const w=el.parentElement; if(w&&w.classList.contains('fiw')){w.classList.remove('ovr','out','std'); if(st) w.classList.add(st);} });
+  const ks=$('#kstrip'); if(ks) ks.innerHTML=kpiCards(b,R,1);
+  const ex=$('#exc'); if(ex) ex.innerHTML=excPanel(b);
+  const cw=$('#capWarn'); if(cw){ const items=b.cons.filter(x=>!x.inc&&consAmt(b,x)>0); cw.innerHTML=items.length?`<div class="alert w">⚠ ${items.length} ${t('hạng mục có giá trị nhưng đang')} <b>${t('không tính vào CAPEX')}</b>: ${items.map(x=>t(catOf(x.k).name)+' '+fmt(consAmt(b,x),1)+' '+t('tr')).join(', ')}. ${t('Tick “Tính CAPEX” để đưa vào.')}</div>`:''; }
+  const dn=$('#donut'); if(dn&&R) dn.innerHTML=donut(R);
+  const rb=$('#resBody'); if(rb) rb.innerHTML=resBody(b,R);
+  if($('#sK')) updSens(); }
+function excPanel(b){ const paths=[]; const add=p=>{const s=fieldStat(b,p); if(s=='out'||s=='ovr') paths.push([p,s]);};
+  ['cost.cogs','cost.lc','cost.mkt','cost.oce','pIS','p3','comm','land.inRate','land.outRate','land.treeRate'].forEach(add); b.ramp.forEach((_,i)=>add('ramp.'+i));
+  EQ_GROUPS.forEach(([g])=>add('equip.'+g)); b.cons.forEach((_,i)=>add('cons.'+i+'.rate')); ['g','ri','w','rrr'].forEach(k=>b.lt[k].forEach((_,i)=>add('lt.'+k+'.'+i))); Object.keys(b.fin).forEach(k=>add('fin.'+k));
+  if(!paths.length) return `<div class="alert ok">✓ ${t('Tất cả giá trị đang theo chuẩn của Bảng tham chiếu.')}</div>`;
+  const out=paths.filter(x=>x[1]=='out'), ovr=paths.filter(x=>x[1]=='ovr'), L=b.status=='locked';
+  const f=(p)=>{const s=stdInfo(b,p),v=getP(b,p),pp=isPctPath(p),g=x=>pp?pct(x,2):fmt(x,2);return [g(v),g(s.std),s.min!=null?g(s.min)+' – '+g(s.max):'–']};
+  return `<div class="card exc"><h2>${t('Khác chuẩn')} <span class="tag t-warn">${out.length} ${t('ngoài khoảng')}</span> <span class="tag t-ovr">${ovr.length} ${t('ghi đè trong khoảng')}</span></h2>
+   <table><thead><tr><th>${t('Trường')}</th><th>${t('Store')}</th><th>${t('Chuẩn')}</th><th>${t('Khoảng')}</th><th class="l">${t('Lý do (bắt buộc nếu ngoài khoảng)')}</th><th></th></tr></thead><tbody>
+   ${[...out,...ovr].map(([p,s])=>{const [v,sd,rg]=f(p);const need=s=='out'&&!(b.reasons||{})[p];return `<tr><td class="l">${esc(fieldLabel(b,p))} ${s=='out'?`<span class="tag t-warn">${t('Ngoài khoảng')}</span>`:''}</td><td><b>${v}</b></td><td>${sd}</td><td>${rg}</td>
+     <td class="l"><input class="fi ${need?'need':''}" style="width:100%" data-reason="${p}" value="${esc((b.reasons||{})[p]||'')}" placeholder="${s=='out'?t('Nhập lý do…'):t('Không bắt buộc')}" ${L?'disabled':''}></td>
+     <td>${L?'':`<a class="lnk" data-act="resetStd" data-p="${p}" title="${t('Lấy lại giá trị chuẩn')}">↺ ${t('Chuẩn')}</a>`}</td></tr>`}).join('')}</tbody></table></div>`; }
+
+/* ---------- MASTER ---------- */
+function scrMaster(){ const M=S.master, key=S.ui.combo, c=M.combos[key]; const [fm,rg]=key.split('|');
+  const used=S.boes.filter(b=>comboKey(b)==key);
+  const tabs=[['thr','Ngưỡng KPI'],['cost','Chi phí & kênh'],['rates','Đơn giá xây dựng & cảnh quan'],['eq','Gói thiết bị'],['lt','Ramp-up & 10 năm'],['fin','Tài chính']];
+  const mi=(path,o={})=>I(path,{...o,m:1});
+  const r3=(base,label,unit,isP)=>`<tr><td>${t(label)} ${unit?`<span class="u">${t(unit)}</span>`:''}</td>${[0,1,2].map(i=>`<td>${mi(base+'.'+i,{w:84,k:isP?'p':'n'})}</td>`).join('')}</tr>`;
+  let body='';
+  if(!c) body=`<div class="ph">${t('Chưa có bộ tham số cho tổ hợp này.')}<br><br><button class="btn pri" data-act="mkCombo">+ ${t('Tạo từ bộ gần nhất')}</button></div>`;
+  else if(S.ui.ptab=='thr') body=`<table><thead><tr><th>KPI</th><th style="text-align:center">${t('Áp dụng')}</th><th style="text-align:center">${t('Chiều')}</th><th>${t('Ngưỡng đạt')}</th><th>${t('Biên “sát ngưỡng”')}</th><th class="l">${t('Công thức (xem Định nghĩa KPI)')}</th></tr></thead><tbody>
+     ${KPI_DEF.map(d=>`<tr><td>${t(d.n)}</td><td style="text-align:center">${mi('thr.'+d.k+'.on',{k:'chk'})}</td><td style="text-align:center">${d.dir}</td><td>${mi('thr.'+d.k+'.v',{w:84,k:d.type=='pct'?'p':'n'})}</td><td>${mi('thr.'+d.k+'.w',{w:84,k:d.type=='pct'?'p':'n'})}</td><td class="fxcell">${t(d.fx)}</td></tr>`).join('')}</tbody></table>
+     <div class="hint">${t('Ngưỡng là giá trị cố định theo Format × Vùng. BoE nháp dùng ngưỡng hiện hành; BoE đã chốt giữ ngưỡng tại thời điểm chốt. “Sát ngưỡng”: KPI đạt nhưng chưa vượt biên này → hiển thị màu vàng.')}</div>`;
+  else if(S.ui.ptab=='cost') body=`<table><thead><tr><th>${t('Chỉ tiêu')}</th><th>Min</th><th>${t('Chuẩn')}</th><th>Max</th></tr></thead><tbody>
+     ${['cogs','lc','mkt','oce'].map(k=>r3('cost.'+k,LABELS['cost.'+k],'',1)).join('')}</tbody></table><div style="height:14px"></div>
+     <div class="form" style="grid-template-columns:repeat(4,1fr)">${F('% In-store','chan.pIS','',{m:1,k:'p'})}${F('% 3P (Grab, ShopeeFood…)','chan.p3','',{m:1,k:'p'})}${F('Hoa hồng 3P bình quân','chan.comm','',{m:1,k:'p'})}${F('AC mặc định (nghìn VND)','chan.ac','',{m:1,k:'n'})}</div>`;
+  else if(S.ui.ptab=='rates') body=`<table><thead><tr><th>${t('Hạng mục')}</th><th>Min</th><th>${t('Chuẩn')}</th><th>Max</th></tr></thead><tbody>${RATE_KEYS.map(([k,n,u])=>r3('rates.'+k,n,u)).join('')}</tbody></table>
+     <div class="hint">${t('Danh mục hạng mục dùng chung cho mọi store. Hạng mục xử lý hiện trạng (phá dỡ, cầu thang, điện, gia cố, mái…) không có đơn giá chuẩn, nhập theo báo giá trong từng BoE.')}</div>`;
+  else if(S.ui.ptab=='eq') body=`<table><thead><tr><th>${t('Nhóm thiết bị')}</th><th>Min (${t('tr')})</th><th>${t('Chuẩn')} (${t('tr')})</th><th>Max (${t('tr')})</th></tr></thead><tbody>${EQ_GROUPS.map(([g,n])=>r3('equip.'+g,n,'')).join('')}
+     <tr class="hl"><td>${t('Tổng')}</td>${[0,1,2].map(i=>`<td>${fmt(EQ_GROUPS.reduce((a,[g])=>a+c.equip[g][i],0),1)}</td>`).join('')}</tr></tbody></table>`;
+  else if(S.ui.ptab=='lt') body=`<div class="scroll"><table><thead><tr><th></th>${[1,2,3,4,5,6].map(i=>`<th>${t('T')}${i}</th>`).join('')}</tr></thead><tbody><tr><td>Ramp-up (% ADS)</td>${c.ramp.map((_,i)=>`<td>${mi('ramp.'+i,{w:62,k:'p'})}</td>`).join('')}</tr></tbody></table></div><div style="height:14px"></div>
+     <div class="scroll"><table><thead><tr><th>${t('Giả định')}</th>${[...Array(10)].map((_,i)=>`<th>Y${i+1}</th>`).join('')}</tr></thead><tbody>
+     ${[['g','Tăng trưởng sales'],['ri','Tăng giá thuê'],['w','Tăng lương'],['rrr','Tái đầu tư (% CAPEX ban đầu)']].map(([k,n])=>`<tr><td>${t(n)}</td>${c.lt[k].map((_,i)=>`<td>${mi('lt.'+k+'.'+i,{w:58,k:'p'})}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  else body=`<div class="form" style="grid-template-columns:repeat(4,1fr)">${Object.keys(FIN_LABEL).map(k=>F(FIN_LABEL[k],'fin.'+k,'',{m:1,k:['cit','rate','debt','eqP5','closeSave'].includes(k)?'p':'n'})).join('')}</div>`;
+  return `<div class="top"><div><div class="crumb">${t('Cấu hình')}</div><h1>${t('Bảng tham chiếu Format × Vùng')}</h1></div>
+   <div class="btns">${c?`<button class="btn pri" data-act="newVer">${t('Lưu thành phiên bản hiệu lực mới')}</button>`:''}</div></div>
+  <div class="grid" style="grid-template-columns:330px minmax(0,1fr)"><div><div class="card"><h2>Format × ${t('Vùng')}</h2>
+   <table><thead><tr><th>Format</th>${M.regions.map(r=>`<th style="text-align:center">${esc(t(r))}</th>`).join('')}</tr></thead><tbody>
+   ${M.formats.map(f=>`<tr><td>${esc(f)}</td>${M.regions.map(r=>{const k=f+'|'+r,has=M.combos[k];return `<td class="clk mx ${k==key?'sel':''}" data-combo="${esc(k)}" style="text-align:center">${has?'✓':'<span class="muted">+</span>'}</td>`}).join('')}</tr>`).join('')}</tbody></table>
+   <div class="hint" style="margin-top:8px">${t('Bấm ô để xem / sửa. Ô “+” chưa có bộ tham số.')}</div>
+   <div class="addrow"><input class="fi" id="newFmt" placeholder="${t('Thêm format…')}" style="width:120px"><button class="btn" data-act="addFmt">+</button><input class="fi" id="newReg" placeholder="${t('Thêm vùng…')}" style="width:110px"><button class="btn" data-act="addReg">+</button></div></div>
+   <div class="card"><h2>${t('BoE đang dùng bộ này')}</h2>${used.length?used.map(b=>`<div class="clk lnk" data-open="${b.id}" style="padding:4px 0">${esc(b.code)} ${esc(b.name)} <span class="tag ${b.status=='locked'?'t-acc':'t-grey'}">${t(b.status=='locked'?'Đã chốt':'Nháp')}</span></div>`).join(''):`<div class="muted">${t('Chưa có.')}</div>`}
+   <div class="hint" style="margin-top:8px">${t('Sửa bảng tham chiếu không làm thay đổi số đã nhập trong BoE; BoE sẽ hiển thị trường nào đang khác chuẩn để người lập quyết định có áp lại hay không.')}</div></div></div>
+  <div class="card"><h2>${esc(fm)} × ${esc(t(rg))} ${c?`<span class="tag t-ok">${t('Hiệu lực từ')} ${dmy(c.eff)}</span> <span class="tag t-grey">${t('Phiên bản')} ${c.ver}</span>`:''}</h2>
+   ${c?`<div class="stabs">${tabs.map(([k,l])=>`<a data-ptab="${k}" class="${S.ui.ptab==k?'active':''}">${t(l)}</a>`).join('')}</div>`:''}${body}</div></div>`; }
+
+/* ---------- static screens ---------- */
+function scrKpiDef(){ return `<div class="top"><div><div class="crumb">${t('Cấu hình')}</div><h1>${t('Định nghĩa KPI')}</h1></div></div>
+  <div class="alert i">${t('Công thức KPI áp dụng chung cho mọi store; chỉ Admin Finance sửa được và mỗi lần sửa tạo phiên bản mới. Ngưỡng đạt thiết lập riêng theo Format × Vùng trong Bảng tham chiếu.')}</div>
+  <div class="card" style="padding:0"><table><thead><tr><th>KPI</th><th class="l">${t('Công thức (phiên bản 1)')}</th><th class="l">${t('Trạng thái')}</th></tr></thead><tbody>
+  ${KPI_DEF.map(k=>`<tr><td><b>${t(k.n)}</b></td><td class="fxcell">${t(k.fx)}</td><td class="l">${k.pending?`<span class="tag t-warn">${t('Chờ kế toán xác nhận')}</span>`:`<span class="tag t-ok">${t('Đang áp dụng')}</span>`}</td></tr>`).join('')}
+  <tr><td><b>CAPEX</b></td><td class="fxcell">${t('Σ Xây dựng (hoàn thiện + xử lý hiện trạng được tick) + Σ Gói thiết bị + Cảnh quan')}</td><td class="l"><span class="tag t-ok">${t('Đang áp dụng')}</span></td></tr>
+  <tr><td><b>${t('Tổng tiền cần')}</b></td><td class="fxcell">CAPEX + Key money + Pre-opening + ${t('Đặt cọc')}</td><td class="l"><span class="tag t-ok">${t('Đang áp dụng')}</span></td></tr></tbody></table></div>
+  <div class="card"><h2>${t('Tham khảo: cách tính trong file Excel cũ (không thống nhất)')}</h2><table><thead><tr><th>KPI</th><th class="l">Kon Tum v4</th><th class="l">Dĩ An v2</th></tr></thead><tbody>
+   <tr><td>ROIC 1Y</td><td class="fxcell">${t('EBITDA Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)')}</td><td class="fxcell">${t('EBITDA Y1 ÷ (Xây dựng + Thiết bị)')}</td></tr>
+   <tr><td>Sales/CAPEX</td><td class="fxcell">${t('Doanh thu Y1 ÷ (Key money + Xây dựng + Thiết bị + Pre-opening − phí MKT)')}</td><td class="fxcell">${t('Doanh thu Y1 ÷ (Xây dựng + Thiết bị)')}</td></tr></tbody></table>
+   <div class="hint">${t('Kiểm chứng engine: với dữ liệu của hai file Excel, IRR 10Y, IRR 5Y, Payback và toàn bộ dòng P&L / dòng tiền 10 năm khớp file gốc (sai số < 0,000001 tr).')}</div></div>`; }
+function scrMapping(){ const r=[['Revenue','511x – Doanh thu bán hàng',6,'ok'],['COGS','632x – Giá vốn',4,'ok'],['Rent','6417 – Thuê mặt bằng',2,'ok'],['LC','6411, 6412 – Lương, BHXH',5,'ok'],['MKT','6418x – Marketing',1,'warn'],['CMS','–',0,'bad'],['OCE','6413–6419 – Chi phí vận hành khác',12,'ok'],['Depreciation','6414 – Khấu hao',1,'ok']];
+  return `<div class="top"><div><div class="crumb">${t('Cấu hình')}</div><h1>${t('Ánh xạ tài khoản Netsuite → dòng BoE')}</h1></div></div>
+  <div class="alert i">${t('Chuẩn bị cho Phase 2. Mỗi tài khoản P&L của Netsuite gán vào 1 dòng BoE, để sau này kéo số thực tế theo mã store và so sánh.')}</div>
+  <div class="card" style="padding:0"><table><thead><tr><th>${t('Dòng BoE')}</th><th class="l">${t('Tài khoản Netsuite (ví dụ)')}</th><th>${t('Số TK đã gán')}</th><th class="l">${t('Trạng thái')}</th></tr></thead><tbody>
+  ${r.map(x=>`<tr><td>${x[0]}</td><td class="l">${t(x[1])}</td><td>${x[2]}</td><td class="l"><span class="tag t-${x[3]}">${t(x[3]=='ok'?'Đủ':x[3]=='warn'?'Cần xác nhận':'Chưa gán')}</span></td></tr>`).join('')}</tbody></table></div>
+  <div class="note">${t('Mã tài khoản trong bảng chỉ là minh họa.')}</div>`; }
+function scrActual(){ return `<div class="top"><div><div class="crumb">Phase 2</div><h1>${t('Đối chiếu thực tế vs BoE')}</h1></div></div><div class="ph">
+  <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px">${t('Phase 2 – chưa làm trong bản này')}</div>${t('Store mở trong 24 tháng gần nhất · KPI theo tháng: ADTC, AC, ADS (POS) · Revenue, %COGS, %LC, Rent, EBITDA, NOI (Netsuite) · CAPEX thực chi · Ngày khai trương thực tế')}</div>`; }
+
+/* ============ BoE Studio prototype — events & actions ============ */
+function dl(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+text],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500); }
+const csvRow=a=>a.map(x=>{x=x==null?'':typeof x=='number'?String(+x.toFixed(4)):String(x);return /[",\n;]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x}).join(',');
+function exportCsv(b){ const r=calc(b); if(!r) return; const L=[];
+  L.push(csvRow(['BoE',b.code+' '+b.name])); L.push(csvRow(['Format × Region',b.format+' × '+b.region])); L.push('');
+  L.push(csvRow(['KPI','Value'])); KPI_DEF.forEach(k=>L.push(csvRow([k.n,r.kpi[k.k]]))); L.push('');
+  L.push(csvRow(['Cash required','',r.cap.totalCash])); L.push(csvRow(['CAPEX','',r.cap.capex])); L.push('');
+  const keys=['adtc','rev','cogs','gp','rent','lc','mkt','cms','oce','ebitda','dep','noi','int','cit','ni','eff','cfo','cfi','fcf','acc'];
+  L.push(csvRow(['Yearly (M VND)',...r.Y.map((_,i)=>'Y'+i)])); keys.forEach(k=>L.push(csvRow([k,...r.Y.map(y=>y[k])]))); L.push('');
+  L.push(csvRow(['Monthly (M VND)',...r.M.map((_,i)=>i<6?'M'+(i+1):'Y1-M'+(i-5))])); ['adtc','ads','rev','cogs','rent','lc','mkt','cms','oce','ebitda','dep','noi'].forEach(k=>L.push(csvRow([k,...r.M.map(m=>m[k])])));
+  dl(`BoE_${b.code}_v${b.ver}.csv`,L.join('\n'),'text/csv'); }
+function exportList(){ const L=[csvRow(['Code','Name','Format','Region','Status','Version','Opening','Total cash','CAPEX',...KPI_DEF.map(k=>k.n)])];
+  S.boes.forEach(b=>{const r=calc(b);L.push(csvRow([b.code,b.name,b.format,b.region,b.status,b.ver,b.opening,r&&r.cap.totalCash,r&&r.cap.capex,...KPI_DEF.map(k=>r&&r.kpi[k.k])]))});
+  dl('BoE_list.csv',L.join('\n'),'text/csv'); }
+
+document.addEventListener('click',e=>{ const el=e.target.closest('[data-nav],[data-lang],[data-tab],[data-ptab],[data-open],[data-act],[data-combo]'); if(!el) return; const b=cur();
+  if(el.dataset.nav){ S.ui.screen=el.dataset.nav; if(S.ui.screen=='actual') return; render(); window.scrollTo(0,0); return; }
+  if(el.dataset.lang){ LANG=el.dataset.lang; render(); return; }
+  if(el.dataset.tab){ S.ui.tab=el.dataset.tab; render(); return; }
+  if(el.dataset.ptab){ S.ui.ptab=el.dataset.ptab; render(); return; }
+  if(el.dataset.combo){ S.ui.combo=el.dataset.combo; render(); return; }
+  if(el.dataset.open&&!e.target.closest('[data-act]')){ S.ui.cur=el.dataset.open; S.ui.screen='detail'; S.ui.cmp=null; render(); window.scrollTo(0,0); return; }
+  const a=el.dataset.act;
+  if(a=='new'){ S.ui.modal='new'; S.ui.nb=null; render(); }
+  else if(a=='cancelNew'){ S.ui.modal=null; render(); }
+  else if(a=='createNew'){ const nb=createBoE(S.ui.nb); S.ui.modal=null; S.ui.cur=nb.id; S.ui.screen='detail'; S.ui.tab='in'; render(); }
+  else if(a=='dup'){ const src=S.boes.find(x=>x.id==el.dataset.id), c=clone(src); Object.assign(c,{id:uid(),code:src.code+'-copy',status:'draft',ver:1,versions:[]}); delete c.snapshot; S.boes.unshift(c); S.ui.cur=c.id; S.ui.screen='detail'; render(); }
+  else if(a=='del'){ const x=S.boes.find(y=>y.id==el.dataset.id); if(confirm(t('Xóa BoE')+' '+x.code+' '+x.name+'?')){ S.boes=S.boes.filter(y=>y!==x); render(); } }
+  else if(a=='lock'){ const c=comboOf(b); if(!c){alert(t('Chưa có bảng tham chiếu cho tổ hợp này'));return;}
+    const miss=excMissing(b); if(miss.length){ alert(t('Cần nhập lý do cho các trường ngoài khoảng trước khi chốt')+':\n• '+miss.map(p=>fieldLabel(b,p)).join('\n• ')); S.ui.tab='in'; render(); return; }
+    b.versions.push({v:b.ver,ts:today(),note:'Chốt BoE',by:'Finance',data:(()=>{const d=clone(b);delete d.versions;return d})()});
+    b.status='locked'; b.snapshot={combo:comboKey(b),ver:c.ver,eff:c.eff,thr:clone(c.thr),lockedAt:today()}; render(); }
+  else if(a=='unlock'){ if(confirm(t('Mở khóa BoE để sửa? Ngưỡng KPI sẽ quay về theo Bảng tham chiếu hiện hành.'))){ b.status='draft'; delete b.snapshot; b.ver++; render(); } }
+  else if(a=='csv') exportCsv(b);
+  else if(a=='exportList') exportList();
+  else if(a=='addCons'){ const k=$('#addCons').value, c=comboOf(b), cat=catOf(k); b.cons.push({k,qty:1,rate:c&&c.rates[k]?c.rates[k][1]:0,inc:1}); render(); }
+  else if(a=='delCons'){ b.cons.splice(+el.dataset.i,1); render(); }
+  else if(a=='addPre'){ b.pre.push({name:t('Khoản mục mới'),grp:'OCE',amt:0,opex:1}); render(); }
+  else if(a=='delPre'){ b.pre.splice(+el.dataset.i,1); render(); }
+  else if(a=='resetStd'){ const p=el.dataset.p, s=stdInfo(b,p); if(s){ setP(b,p,s.std); delete b.reasons[p]; render(); } }
+  else if(a=='saveVer'){ const d=clone(b); delete d.versions; b.versions.push({v:b.ver,ts:today(),note:$('#verNote').value||t('Lưu phiên bản'),by:'Finance',data:d}); b.ver++; S.ui.cmp=null; render(); }
+  else if(a=='restore'){ const v=b.versions.find(x=>x.v==+el.dataset.v); if(v&&confirm(t('Khôi phục dữ liệu của')+' v'+v.v+'?')){ const keep={id:b.id,versions:b.versions,ver:b.ver}; Object.keys(b).forEach(k=>delete b[k]); Object.assign(b,clone(v.data),keep); render(); } }
+  else if(a=='applySens'){ const s=S.ui.sens; if(!s.a&&!s.b) return; if(confirm(t('Áp dụng ADTC / AC của kịch bản vào BoE?'))){ b.adtc=+(b.adtc*(1+s.a/100)).toFixed(2); b.ac=+(b.ac*(1+s.b/100)).toFixed(2); S.ui.sens={a:0,b:0}; render(); } }
+  else if(a=='newVer'){ const c=S.master.combos[S.ui.combo]; c.ver++; c.eff=today(); render(); }
+  else if(a=='mkCombo'){ const [f,r]=S.ui.combo.split('|'); const src=Object.keys(S.master.combos).find(k=>k.startsWith(f+'|'))||'Core|Tây Nguyên'; const c=clone(S.master.combos[src]); c.ver=1; c.eff=today(); S.master.combos[S.ui.combo]=c; render(); }
+  else if(a=='addFmt'){ const v=$('#newFmt').value.trim(); if(v&&!S.master.formats.includes(v)){S.master.formats.push(v);render();} }
+  else if(a=='addReg'){ const v=$('#newReg').value.trim(); if(v&&!S.master.regions.includes(v)){S.master.regions.push(v);render();} }
+  else if(a=='export'){ dl('BoE_Studio_data_'+today()+'.json',JSON.stringify(S,null,1),'application/json'); }
+  else if(a=='import'){ $('#fileIn').click(); }
+  else if(a=='reset'){ if(confirm(t('Xóa toàn bộ dữ liệu đang có và nạp lại dữ liệu mẫu (Kon Tum, Dĩ An)?'))){ S=seed(); render(); } }
+});
+function excMissing(b){ const out=[]; const chk=p=>{ if(fieldStat(b,p)=='out'&&!(b.reasons||{})[p]) out.push(p); };
+  ['cost.cogs','cost.lc','cost.mkt','cost.oce','land.inRate','land.outRate','land.treeRate'].forEach(chk); b.ramp.forEach((_,i)=>chk('ramp.'+i)); EQ_GROUPS.forEach(([g])=>chk('equip.'+g)); b.cons.forEach((_,i)=>chk('cons.'+i+'.rate')); return out; }
+
+document.addEventListener('change',e=>{ const el=e.target;
+  if(el.id=='fileIn'){ const f=el.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(!d.master||!d.boes) throw 0; S=d; render(); }catch(x){ alert(t('File không hợp lệ.')); } }; rd.readAsText(f); return; }
+  if(el.dataset.nb!=null){ S.ui.nb[el.dataset.nb]=el.value; render(); return; }
+  if(el.dataset.flt!=null){ S.ui.filter=S.ui.filter||{}; S.ui.filter[el.dataset.flt]=el.value; render(); const q=$('[data-flt=q]'); if(el.dataset.flt=='q'&&q){q.focus();} return; }
+  if(el.dataset.cmp){ S.ui.cmp[el.dataset.cmp]=+el.value; render(); return; }
+  if(el.dataset.reason!=null){ const b=cur(); b.reasons=b.reasons||{}; if(el.value.trim()) b.reasons[el.dataset.reason]=el.value.trim(); else delete b.reasons[el.dataset.reason]; save(); el.classList.toggle('need',fieldStat(b,el.dataset.reason)=='out'&&!el.value.trim()); return; }
+  if(!el.dataset.b) return;
+  const tgt=el.dataset.m?S.master.combos[S.ui.combo]:cur(), k=el.dataset.k, p=el.dataset.b; let v;
+  if(k=='chk') v=el.checked?1:0; else if(k=='t'||k=='d'||k=='sel') v=el.value;
+  else { v=parseNum(el.value); if(v==null){ el.value=raw(k=='p'?getP(tgt,p)*100:getP(tgt,p)); return; } if(k=='p') v=v/100; }
+  setP(tgt,p,v);
+  if(el.dataset.re||el.dataset.m||/^(inArea|outArea)$/.test(p)&&S.ui.tab=='capex'){ render(); return; }
+  if(k!='t'&&k!='d'&&k!='sel'){ el.value=k=='p'?raw(v*100,2):raw(v); }
+  refresh(); save(); });
+document.addEventListener('input',e=>{ const el=e.target; if(el.id=='sA'||el.id=='sB'){ S.ui.sens[el.id=='sA'?'a':'b']=+el.value; updSens(); } });
+document.addEventListener('keydown',e=>{ if(e.key=='Enter'&&e.target.matches('input.fi')) e.target.blur(); });
+
+S=load()||seed(); render();
+
+</script></body></html>
